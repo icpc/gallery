@@ -5,10 +5,10 @@ import Footer from "./Footer";
 import {current_year} from "../consts";
 
 
-export const MainLayout = () => {
+export const MainLayout = ({setSearchParams}) => {
 
     return <div style={{width: "100%", height: "100%"}}>
-        <Header/>
+        <Header setSearchParams={setSearchParams}/>
         <Body />
         <Footer/>
     </div>;

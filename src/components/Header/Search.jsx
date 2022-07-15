@@ -3,7 +3,7 @@ import {AppContext} from "../AppContext";
 import MyInput from "../UI/Input/MyInput";
 import MyButton from "../UI/Button/MyButton";
 
-const Search = () => {
+const Search = ({setSearchParams}) => {
 
     const {setText, setYear, setEvent, setTeam, setPerson} = useContext(AppContext);
 
@@ -17,8 +17,9 @@ const Search = () => {
             setYear("");
             setEvent("");
             setTeam("");
-
             setInputText("");
+            console.log(inputText.replaceAll(" ", "%20"));
+            setSearchParams({"query": inputText});
         }
     }
 

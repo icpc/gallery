@@ -6,15 +6,15 @@ import Seleclor from "./Seleclor";
 import Search from "./Search";
 
 
-export const Header = () => {
+export const Header = ({setSearchParams}) => {
 
     return <div>
         {/*<div>
             {events}
         </div>*/}
         {/*<img className={"logo"} src={"/logo512.png"}/>*/}
-        <Search/>
-        <Seleclor/>
+        <Search setSearchParams={setSearchParams}/>
+        <Seleclor setSearchParams={setSearchParams}/>
     </div>
 }
 export default Header;

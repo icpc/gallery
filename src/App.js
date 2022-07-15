@@ -3,6 +3,7 @@ import MainLayout from "./components/MainLayout";
 import "./styles/App.css"
 import {AppContext} from "./components/AppContext";
 import {current_year} from "./consts";
+import { useSearchParams } from "react-router-dom";
 
 function App() {
     const [year, setYear] = useState(current_year);
@@ -10,26 +11,29 @@ function App() {
     const [team, setTeam] = useState("");
     const [person, setPerson] = useState("");
     const [text, setText] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
 
-  /*  useEffect(() => {
-        if (localStorage.getItem('year')) {
-            setYear(localStorage.getItem('year'))
+    useEffect(() => {
+        if (searchParams.has('album')) {
+            setYear(searchParams.get('album').replaceAll("+", " "))
         }
-        if (localStorage.getItem('event')) {
-            setEvent(localStorage.getItem('event'))
+        if (searchParams.has('event')) {
+            setEvent(searchParams.get('event').replaceAll("+", " "))
         }
-        if (localStorage.getItem('team')) {
-            setTeam(localStorage.getItem('team'))
+        if (searchParams.has('team')) {
+            setEvent("");
+            setTeam(searchParams.get('team').replaceAll("+", " "))
         }
-        if (localStorage.getItem('person')) {
-            setPerson(localStorage.getItem('person'))
+        if (searchParams.has('person')) {
+            setEvent("");
+            setPerson(searchParams.get('person').replaceAll("+", " "))
         }
-        if (localStorage.getItem('text')) {
-            setText(localStorage.getItem('text'))
+        if (searchParams.has('query')) {
+            setEvent("");
+            setText(searchParams.get('query').replaceAll("+", " "))
         }
     }, [])
 
-*/
     return (
         <AppContext.Provider value={{
             year,
@@ -43,7 +47,7 @@ function App() {
             text,
             setText
         }}>
-            <MainLayout/>
+            <MainLayout setSearchParams={setSearchParams}/>
         </AppContext.Provider>
     );
 }

@@ -39,7 +39,16 @@ const Body = () => {
     }
 
     async function getTotal() {
-        const response = await PhotoService.getAllWithEvent(year, event.replaceAll(" ", "%20"), page);
+        let response;
+        if (event !== "") {
+            response = await PhotoService.getAllWithEvent(year, event.replaceAll(" ", "%20"), page)
+        } else if (team !== "") {
+            response = await PhotoService.getAllWithTeam(year, team.replaceAll(" ", "%20"), page)
+        } else if (person !== "") {
+            response = await PhotoService.getAllWithPerson(year, person.replaceAll(" ", "%20"), page)
+        } else {
+            response = await PhotoService.getAllWithText(text.replaceAll(" ", "%20"));
+        }
         setTotalPages(response.data.photos.pages)
     }
 
@@ -47,12 +56,16 @@ const Body = () => {
         if (year !== "") {
             setPhotos([])
             setPage(1)
+            if (person !== "" || event !== "" || team !== "") {
+                getTotal();
+            }
         }
         },
         [year]
     )
 
     useEffect(() => {
+            console.log("total" + person)
             setPhotos([])
             setPage(1)
             getTotal();
