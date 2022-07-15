@@ -2,31 +2,31 @@ import {api_key, user_id} from "../consts";
 import axios from "axios";
 
 export default class PhotoService {
-    static async getAllWithEvent(year, event = "Photo%20Tour", page = 1) {
-        try {
-            const response = await axios.get(`https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=${api_key}&user_id=${user_id}&tags=event$${event},Album$${year}&tag_mode=all&per_page=10&extras=tags,url_m,url_c,url_l,url_o,description&format=json&nojsoncallback=?&page=${page}`);
-            console.log(response.data);
-            return response;
-        } catch (e) {
-            console.log(e);
-        }
+    static getAllWithEvent(year, event = "Photo%20Tour", page = 1) {
+        return this.getAll(`https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=${api_key}&user_id=${user_id}&tags=event$${event},Album$${year}&tag_mode=all&per_page=10&extras=tags,url_m,url_c,url_l,url_o,description&format=json&nojsoncallback=?&page=${page}`);
     }
 
-    static async getAllWithTeam(year, event, team, person, page = 1) {
-        try {
-            const response = await axios.get(`https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=${api_key}&user_id=${user_id}&tags=Album$${year}&tag_mode=all&per_page=10&extras=tags,url_m,url_c,url_l,url_o,description&format=json&nojsoncallback=?&page=${page}`);
-            console.log(response.data);
-            return response;
-        } catch (e) {
-            console.log(e);
-        }
+    static getAllWithTeam(year, team, page = 1) {
+        return this.getAll(`https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=${api_key}&user_id=${user_id}&tags=Album$${year},team$${team}&tag_mode=all&per_page=10&extras=tags,url_m,url_c,url_l,url_o,description&format=json&nojsoncallback=?&page=${page}`);
     }
 
 
-    static async getAllWithPerson(year, event, team, person, page = 1) {
+    static getAllWithPerson(year, person, page = 1) {
+        return PhotoService.getAll(`https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=${api_key}&user_id=${user_id}&tags=Album$${year}&tag_mode=all&per_page=10&extras=tags,url_m,url_c,url_l,url_o,description&format=json&nojsoncallback=?&page=${page}&text=${person}`);
+    }
+
+    static getAllWithText(text, page = 1) {
+        return PhotoService.getAll(`https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=${api_key}&user_id=${user_id}&per_page=10&extras=tags,url_m,url_c,url_l,url_o,description&format=json&nojsoncallback=?&page=${page}&text=${text}%20and%20Album$`);
+    }
+
+    static getPhotoInfo(id) {
+        return PhotoService.getAll(`https://api.flickr.com/services/rest?method=flickr.photos.getInfo&api_key=${api_key}&user_id=${user_id}&format=json&nojsoncallback=?&photo_id=${id}`);
+
+    }
+
+    static async getAll(link) {
         try {
-            const response = await axios.get(`https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=${api_key}&user_id=${user_id}&tags=Album$${year}&tag_mode=all&per_page=10&extras=tags,url_m,url_c,url_l,url_o,description&format=json&nojsoncallback=?&page=${page}`);
-            console.log(response.data);
+            const response = await axios.get(link);
             return response;
         } catch (e) {
             console.log(e);

@@ -6,7 +6,7 @@ const License = styled.div`
     vertical-align: middle;
     text-align: center;
     font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Helvetica, Arial, sans-serif;
-    font-size: 75%;
+    font-size: 85%;
 `;
 
 export const Footer = ({}) => {

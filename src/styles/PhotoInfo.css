@@ -1,0 +1,13 @@
+.photoInfo {
+    width: 100%;
+    background: black;
+    opacity: 70%;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    padding-left: 20px;
+    padding-bottom: 50px;
+    padding-top: 10px;
+    box-sizing: border-box;
+    text-align: left;
+}

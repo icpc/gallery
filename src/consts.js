@@ -5,3 +5,10 @@ export const years = [
 export const current_year = "2020";
 export const api_key = "d30033b3d833adaace90f8487da70bba";
 export const user_id = "141939107@N06";
+
+export const TAG_EVENT = "event";
+export const TAG_TEAM = "team";
+export const TAG_ALBUM = "album";
+
+export const SVG_WIDTH = 60;
+export const SVG_HEIGHT = 60;
