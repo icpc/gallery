@@ -117,7 +117,7 @@ const Seleclor = ({setSearchParams}) => {
                     team: selectedTeam.label
                 });
                 updData();
-            }} name={"Select team"} value={data.team}/>}
+            }} name={"Select team"} value={team}/>}
             {data.year && <MySelect options={getOptionObj(people)} onChange={selectedPerson => {
                 setData({
                     "year": data.year,
