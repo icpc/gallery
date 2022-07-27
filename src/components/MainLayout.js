@@ -3,6 +3,8 @@ import Header from "./Header/Header";
 import Body from "./Body/Body";
 import Footer from "./Footer";
 import {current_year} from "../consts";
+import "../styles/App.css"
+
 
 
 export const MainLayout = ({setSearchParams}) => {

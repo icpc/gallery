@@ -12,3 +12,6 @@ export const TAG_ALBUM = "album";
 
 export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
+
+export const PER_PAGE = 25;
+export const LAST_YEAR = "2020";

@@ -9,7 +9,8 @@ import {AppContext} from "../AppContext";
 
 const Body = () => {
 
-    const {event, team, person, year, text} = useContext(AppContext);
+    const {data} = useContext(AppContext);
+    const [isSlideShow, setIsSlideShow] = useState(false);
 
     const [photos, setPhotos] = useState([]);
     const [page, setPage] = useState(1);
@@ -23,54 +24,60 @@ const Body = () => {
 
     async function uploadGallery() {
         let response;
-        if (event !== "") {
-            response = await PhotoService.getAllWithEvent(year, event.replaceAll(" ", "%20"), page)
-        } else if (team !== "") {
-            response = await PhotoService.getAllWithTeam(year, team.replaceAll(" ", "%20"), page)
-        } else if (person !== "") {
-            response = await PhotoService.getAllWithPerson(year, person.replaceAll(" ", "%20"), page)
-        } else {
-            response = await PhotoService.getAllWithText(text.replaceAll(" ", "%20"));
+        if (data?.event !== undefined) {
+            response = await PhotoService.getAllWithEvent(data.year, data.event.replaceAll(" ", "%20"), page)
+        } else if (data?.team !== undefined) {
+            response = await PhotoService.getAllWithTeam(data.year, data.team.replaceAll(" ", "%20"), page)
+        } else if (data?.person !== undefined) {
+            response = await PhotoService.getAllWithPerson(data.year, data.person.replaceAll(" ", "%20"), page)
+        } else if (data?.text !== undefined) {
+            response = await PhotoService.getAllWithText(data.text.replaceAll(" ", "%20"), page);
         }
-        setPhotos([...photos, ...response.data.photos.photo.map(photo => {return {url_preview:photo?.url_m, url:photo?.url_l, id:photo?.id, origin:photo?.url_o}})].filter(onlyUnique));
-        setPage(page + 1);
-        setTotalPages(response.data.photos.pages)
-        setTotal(response.data.photos.total)
+        if (response) {
+            setPhotos([...photos, ...response.data.photos.photo.map(photo => {
+                return {url_preview: photo?.url_m, url: photo?.url_l, id: photo?.id, origin: photo?.url_o}
+            })].filter(onlyUnique));
+            setPage(page + 1);
+            setTotalPages(response.data.photos.pages)
+            setTotal(response.data.photos.total)
+        }
     }
 
     async function getTotal() {
         let response;
-        if (event !== "") {
-            response = await PhotoService.getAllWithEvent(year, event.replaceAll(" ", "%20"), page)
-        } else if (team !== "") {
-            response = await PhotoService.getAllWithTeam(year, team.replaceAll(" ", "%20"), page)
-        } else if (person !== "") {
-            response = await PhotoService.getAllWithPerson(year, person.replaceAll(" ", "%20"), page)
+        if (data?.event !== undefined) {
+            response = await PhotoService.getAllWithEvent(data.year, data.event.replaceAll(" ", "%20"), page)
+        } else if (data?.team !== undefined) {
+            response = await PhotoService.getAllWithTeam(data.year, data.team.replaceAll(" ", "%20"), page)
+        } else if (data?.person !== undefined) {
+            response = await PhotoService.getAllWithPerson(data.year, data.person.replaceAll(" ", "%20"), page)
+        } else if (data?.text !== undefined) {
+            response = await PhotoService.getAllWithText(data.text.replaceAll(" ", "%20"), page);
         } else {
-            response = await PhotoService.getAllWithText(text.replaceAll(" ", "%20"));
+            return;
         }
         setTotalPages(response.data.photos.pages)
     }
 
     useEffect(() => {
-        if (year !== "") {
+
+        if (data?.year !== undefined) {
             setPhotos([])
             setPage(1)
-            if (person !== "" || event !== "" || team !== "") {
+            if (data.person !== undefined || data.event !== undefined || data.team !== undefined) {
                 getTotal();
             }
         }
         },
-        [year]
+        [data.year]
     )
 
     useEffect(() => {
-            console.log("total" + person)
             setPhotos([])
             setPage(1)
             getTotal();
         },
-        [event, team, person, text]
+        [data.event, data.text, data.team, data.person]
     )
 
     const [shown, setShown] = useState(null);
@@ -100,14 +107,11 @@ const Body = () => {
 
     async function getPhotoInfo(id) {
         let response = await PhotoService.getPhotoInfo(id);
-        console.log("lol", response);
         let curInfo = {
             "photographer": response.data.photo.description._content,
-            "team": "",
-            "event": ""
         };
         if (response.data.photo.tags.tag) {
-            let person = [];
+            let person = [], team = [], event = [];
             for (let i = 0; i < response.data.photo.tags.tag.length; i++) {
                 if (response.data.photo.tags.tag[i] === null) {
                     continue;
@@ -121,22 +125,22 @@ const Body = () => {
                     person.push({name: name, position: getPosition(tag.substr(tag.indexOf('(') + 1,tag.indexOf(')',tag.indexOf('(')) - tag.indexOf('(') - 1))});
                 }
                 if (tag.startsWith("event")) {
-                    curInfo["event"] += (tag.replaceAll("event$", "")) + ", ";
+                    event.push(tag.replaceAll("event$", ""));
                 }
                 if (tag.startsWith("team")) {
-                    curInfo["team"] += (tag.replaceAll("team$", "")) + ", ";
+                    team.push(tag.replaceAll("team$", ""));
                 }
                 if (tag.startsWith("person")) {
                     person.push({name: tag.replaceAll("person$", "")});
                 }
             }
-            curInfo["team"] = curInfo["team"].substring(0, curInfo["team"].length - 2);
-            curInfo["event"] = curInfo["event"].substring(0, curInfo["event"].length - 2);
+            curInfo["team"] = team;
+            curInfo["event"] = event;
             curInfo["person"] = person;
         }
 
         setPhotoInfo(curInfo);
-        console.log(curInfo)
+
     }
 
     const handelClick = (photo, index) => {
@@ -156,6 +160,28 @@ const Body = () => {
         }
     };
 
+    const handleKey = (e) => {
+        if (shown) {
+            switch (e.key) {
+                case "ArrowLeft":
+                    if (leftArrow) {
+                        handelRotationLeft();
+                    }
+                    break;
+                case "ArrowRight":
+                    if (rightArrow) {
+                        handelRotationRight()
+                    }
+                    break;
+                case "Escape":
+                    setShown(null);
+                    setIsSlideShow(false);
+                    setPhotoInfo(null);
+                    break;
+            }
+        }
+    }
+
     const handelRotationRight = () => {
         handelClick(photos[currentIndex + 1], currentIndex + 1);
     }
@@ -165,11 +191,13 @@ const Body = () => {
     }
 
     return (
-        <div className="body">
-            <h1>Year: {year}</h1>
-            {event && <h1>Event: {event}</h1>}
-            <h1>Total: {total}</h1>
-            {text}
+        <div className="body" onKeyDown={handleKey} tabIndex="0">
+            {data.year && <h1>Year: {data.year}</h1>}
+            {data.event && <h1>Event: {data.event}</h1>}
+            {data.person && <h1>Person: {data.person}</h1>}
+            {data.team && <h1>Team: {data.team}</h1>}
+            <h1>(total: {total})</h1>
+            {data.text && <h1>{data.text}</h1>}
             <InfiniteScroll
                 loadMore={uploadGallery}
                 hasMore={page <= totalPages}
@@ -188,6 +216,8 @@ const Body = () => {
                                leftArrow={leftArrow}
                                photoInfo={photoInfo}
                                setPhotoInfo={setPhotoInfo}
+                               isSlideShow={isSlideShow}
+                               setIsSlideShow={setIsSlideShow}
             />}
         </div>
     );

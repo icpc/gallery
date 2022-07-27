@@ -5,18 +5,15 @@ import MyButton from "../UI/Button/MyButton";
 
 const Search = ({setSearchParams}) => {
 
-    const {setText, setYear, setEvent, setTeam, setPerson} = useContext(AppContext);
+    const {data, setData} = useContext(AppContext);
 
     const [inputText, setInputText] = useState("");
-
+    console.log("header", data);
     const set = (e) => {
         e.preventDefault()
         if (inputText !== "") {
-            setText(inputText);
-            setPerson("");
-            setYear("");
-            setEvent("");
-            setTeam("");
+            setData({"text": inputText});
+
             setInputText("");
             console.log(inputText.replaceAll(" ", "%20"));
             setSearchParams({"query": inputText});

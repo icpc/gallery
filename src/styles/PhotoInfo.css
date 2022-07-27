@@ -11,3 +11,11 @@
     box-sizing: border-box;
     text-align: left;
 }
+
+
+.photoInfo a{
+    color:white;
+}
+.photoInfo a:visited{
+    color:white;
+}

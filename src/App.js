@@ -2,50 +2,42 @@ import {useEffect, useState} from 'react'
 import MainLayout from "./components/MainLayout";
 import "./styles/App.css"
 import {AppContext} from "./components/AppContext";
-import {current_year} from "./consts";
+import {current_year, LAST_YEAR} from "./consts";
 import { useSearchParams } from "react-router-dom";
 
 function App() {
-    const [year, setYear] = useState(current_year);
-    const [event, setEvent] = useState("Photo Tour");
-    const [team, setTeam] = useState("");
-    const [person, setPerson] = useState("");
-    const [text, setText] = useState("");
+
+    const [data, setData] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        if (searchParams.has('album')) {
-            setYear(searchParams.get('album').replaceAll("+", " "))
-        }
-        if (searchParams.has('event')) {
-            setEvent(searchParams.get('event').replaceAll("+", " "))
-        }
-        if (searchParams.has('team')) {
-            setEvent("");
-            setTeam(searchParams.get('team').replaceAll("+", " "))
-        }
-        if (searchParams.has('person')) {
-            setEvent("");
-            setPerson(searchParams.get('person').replaceAll("+", " "))
-        }
+        let obj = {};
         if (searchParams.has('query')) {
-            setEvent("");
-            setText(searchParams.get('query').replaceAll("+", " "))
+            obj["text"] = searchParams.get('query').replaceAll("+", " ");
+        } else {
+            if (searchParams.has('album')) {
+                obj["year"] = searchParams.get('album').replaceAll("+", " ");
+            } else {
+                obj["year"] = LAST_YEAR;
+            }
+            if (searchParams.has('event')) {
+                obj["event"] = searchParams.get('event').replaceAll("+", " ");
+            } else if (searchParams.has('team')) {
+                obj["team"] = searchParams.get('team').replaceAll("+", " ");
+
+            } else if (searchParams.has('person')) {
+                obj["person"] = searchParams.get('person').replaceAll("+", " ");
+            } else {
+                obj["event"] = "Photo Tour";
+            }
         }
+        setData(obj);
     }, [])
 
     return (
         <AppContext.Provider value={{
-            year,
-            setYear,
-            event,
-            setEvent,
-            team,
-            setTeam,
-            person,
-            setPerson,
-            text,
-            setText
+            data,
+            setData
         }}>
             <MainLayout setSearchParams={setSearchParams}/>
         </AppContext.Provider>

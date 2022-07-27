@@ -10,14 +10,31 @@ const Seleclor = ({setSearchParams}) => {
     const [teams, setTeams] = useState([]);
     const [people, setPeople] = useState([]);
 
-    const {event, setEvent, team, setTeam, person, setPerson, year, setYear, setText} = useContext(AppContext);
+    const {data, setData} = useContext(AppContext);
+    const [year, setYear] = useState("");
+    const [event, setEvent] = useState("");
+    const [person, setPerson] = useState("");
+    const [team, setTeam] = useState("");
+
+
+    function updData() {
+        setYear(data.year === undefined ? "" : data.year);
+        setEvent(data.event === undefined ? "" : data.event);
+        setTeam(data.team === undefined ? "" : data.team);
+        setPerson(data.person === undefined ? "" : data.person);
+    }
 
 
     useEffect(() => {
-        if (year !== "") {
+        updData();
+        if (data.year !== undefined) {
             getMenu()
         }
-    }, [year]);
+    }, [data.year]);
+
+    useEffect(() => {
+        updData();
+    }, [data])
 
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -31,36 +48,16 @@ const Seleclor = ({setSearchParams}) => {
         return a.map(x => {return {label: x}});
     }
 
-    function setPersonLocal(s) {
-        setPerson(s);
-
-    }
-
-    function setYearLocal(s) {
-        setYear(s);
-    }
-
-    function setEventLocal(s) {
-        setEvent(s);
-    }
-
-    function setTeamLocal(s) {
-        setTeam(s);
-    }
-
-    function setTextLocal(s) {
-        setText(s);
-    }
-
     async function getMenu() {
-        const response = await axios.get(`http://localhost:3000/${year}.html`);
+        const response = await axios.get(`http://localhost:3000/${data.year}.html`);
         const menu = response.data;
         const split = menu.split("\n", 3);
-        setTeamLocal("");
-        if (event === "" && team === "" && person === "") {
-            setEvent("Photo Tour");
+        let obj = data;
+        if (data.event === undefined && data.team === undefined && data.person === undefined) {
+            obj["event"] = "Photo Tour";
         }
-        setText("");
+        delete obj.text;
+        setData(obj);
         setEvents(parseOptions(split[0]));
         setTeams(parseOptions(split[1]));
         setPeople(parseOptions(split[2]));
@@ -68,65 +65,70 @@ const Seleclor = ({setSearchParams}) => {
 
 
     return (
-        <div>
-            <div>
-                {year}
-                {event}
-                {team}
-            </div>
+        <div className="selector-wrapper">
             <MySelect options={getOptionObj(years)} onChange={selectedYear => {
-                setYearLocal(selectedYear.label);
-                if (event !== "") {
+                let obj = data;
+                obj["year"] = selectedYear.label;
+                if (data.event !== undefined) {
                     setSearchParams({
                         album: selectedYear.label,
-                        event: event
+                        event: data.event
                     });
-                } else if (team !== "") {
+                } else if (data.team !== undefined) {
                     setSearchParams({
                         album: selectedYear.label,
-                        team: team
+                        team: data.team
                     });
-                } else if (person !== "") {
+                } else if (data.person !== undefined) {
                     setSearchParams({
                         album: selectedYear.label,
-                        person: person
+                        person: data.person
                     });
                 } else {
                     setSearchParams({
-                        album: selectedYear.label
+                        album: selectedYear.label,
+                        event: "Photo Tour"
                     });
+                    obj["event"] = "Photo Tour";
+                    delete obj.text;
                 }
+                setData(obj);
+                updData();
             }} name={"Select year"} value={year}/>
-            <MySelect options={getOptionObj(events)} onChange={selectedEvent => {
-                setEventLocal(selectedEvent.label)
-                setTeamLocal("");
-                setPersonLocal("");
-                setTextLocal("");
+            {data.year && <MySelect options={getOptionObj(events)} onChange={selectedEvent => {
+                setData({
+                    "year": data.year,
+                    "event": selectedEvent.label
+                })
+
                 setSearchParams({
-                    album: year,
+                    album: data.year,
                     event: selectedEvent.label
                 });
-            }} name={"Select event"} value={event}/>
-            <MySelect options={getOptionObj(teams)} onChange={selectedTeam => {
-                setTeamLocal(selectedTeam.label)
-                setEventLocal("");
-                setPersonLocal("");
-                setTextLocal("");
+                updData();
+            }} name={"Select event"} value={event}/>}
+            {data.year && <MySelect options={getOptionObj(teams)} onChange={selectedTeam => {
+                setData({
+                    "year": data.year,
+                    "team": selectedTeam.label
+                })
                 setSearchParams({
-                    album: year,
+                    album: data.year,
                     team: selectedTeam.label
                 });
-            }} name={"Select team"} value={team}/>
-            <MySelect options={getOptionObj(people)} onChange={selectedPerson => {
-                setPersonLocal(selectedPerson.label)
-                setTeamLocal("");
-                setEventLocal("");
-                setTextLocal("");
+                updData();
+            }} name={"Select team"} value={data.team}/>}
+            {data.year && <MySelect options={getOptionObj(people)} onChange={selectedPerson => {
+                setData({
+                    "year": data.year,
+                    "person": selectedPerson.label
+                })
                 setSearchParams({
-                    album: year,
+                    album: data.year,
                     person: selectedPerson.label
                 });
-            }} name={"Select person"} value={person}/>
+                updData();
+            }} name={"Select person"} value={person}/>}
         </div>
     );
 };

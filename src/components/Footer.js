@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import "../styles/App.css"
 
 const License = styled.div`
     width: 100%;

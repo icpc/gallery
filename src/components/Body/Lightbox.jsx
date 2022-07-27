@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {createRef, useEffect, useMemo, useRef, useState} from 'react';
 import "../../styles/Body.css"
 import PhotoInfo from "./PhotoInfo";
-import Person from "./Person";
+import FaceDiv from "./FaceDiv";
 
 
 const Lightbox = ({photo, setPhoto, handelRotationLeft, handelRotationRight, leftArrow, rightArrow, photoInfo}) => {
@@ -13,24 +13,13 @@ const Lightbox = ({photo, setPhoto, handelRotationLeft, handelRotationRight, lef
 
     const [isLoaded, setIsLoaded] = useState(false);
 
-   /* document.addEventListener('keydown', (e) => {
-        switch (e.key) {
-            case "ArrowLeft":
-                if (leftArrow) {
-                    handelRotationLeft();
-                }
-                break;
-            case "ArrowRight":
-                if (rightArrow) {
-                    handelRotationRight()
-                }
-                break;
-        }
-    })*/
+
+
+
+    const [face, setFace] = useState(null);
 
     return (
         <div className="dismiss" onClick={handelClick}>
-
             <div className="wrapper">
                 <img
                     className="full"
@@ -38,8 +27,8 @@ const Lightbox = ({photo, setPhoto, handelRotationLeft, handelRotationRight, lef
                     alt={"bigger picture"}
                     onLoad={() => setIsLoaded(true)}
                 />
-                <PhotoInfo photoInfo={photoInfo}/>
-               {/* {photoInfo.person && photoInfo.person.map(person => <Person person/>)}*/}
+                <PhotoInfo photoInfo={photoInfo} setFace={setFace}/>
+                {photoInfo?.person?.map(person => (<FaceDiv person={person} face={face} setFace={setFace}/>))}
             </div>
 
             {leftArrow && <div onClick={handelRotationLeft} className="overlay-arrows_left"> <div>

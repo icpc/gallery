@@ -4,12 +4,13 @@ import Lightbox from "./Lightbox";
 import Slideshow from "./Slideshow";
 import Control from "./Control";
 
-const MyModal = ({photo, setPhoto, handelRotationLeft, handelRotationRight, leftArrow, rightArrow, photoInfo, setPhotoInfo}) => {
-    const [isSlideShow, setIsSlideShow] = useState(false);
+const MyModal = ({photo, setPhoto, handelRotationLeft, handelRotationRight, leftArrow, rightArrow, photoInfo, setPhotoInfo,isSlideShow, setIsSlideShow}) => {
 
     const slideShow = () => {
         setIsSlideShow(isSlideShow ^ 1);
     }
+
+
 
     const handelClick = (e) => {
         if (e.target.classList.contains("dismiss")) {

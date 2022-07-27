@@ -7,8 +7,9 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+a{
+    color:black;
+}
+a:visited{
+    color: black;
 }

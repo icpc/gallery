@@ -1,0 +1,9 @@
+.header-input-wrapper {
+    display: flex;
+    justify-content: space-around;
+}
+
+.selector-wrapper {
+    display: flex;
+    justify-content: space-around;
+}
