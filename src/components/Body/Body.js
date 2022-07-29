@@ -160,27 +160,6 @@ const Body = () => {
         }
     };
 
-    const handleKey = (e) => {
-        if (shown) {
-            switch (e.key) {
-                case "ArrowLeft":
-                    if (leftArrow) {
-                        handelRotationLeft();
-                    }
-                    break;
-                case "ArrowRight":
-                    if (rightArrow) {
-                        handelRotationRight()
-                    }
-                    break;
-                case "Escape":
-                    setShown(null);
-                    setIsSlideShow(false);
-                    setPhotoInfo(null);
-                    break;
-            }
-        }
-    }
 
     const handelRotationRight = () => {
         handelClick(photos[currentIndex + 1], currentIndex + 1);
@@ -189,25 +168,53 @@ const Body = () => {
     const handelRotationLeft = () => {
         handelClick(photos[currentIndex - 1], currentIndex - 1);
     }
-
+    useEffect(() => {
+        const target = document.getElementsByTagName("body")[0];
+        const listener = (e) => {
+            if (shown) {
+                switch (e.key) {
+                    case "ArrowLeft":
+                        if (leftArrow) {
+                            handelRotationLeft();
+                        }
+                        break;
+                    case "ArrowRight":
+                        if (rightArrow) {
+                            handelRotationRight()
+                        }
+                        break;
+                    case "Escape":
+                        setShown(null);
+                        setIsSlideShow(false);
+                        setPhotoInfo(null);
+                        break;
+                }
+            }
+        };
+        target.onkeydown = listener;
+        return () => {
+            target.removeEventListener("onkeydown", listener);
+        }
+    }, [shown]);
     return (
-        <div className="body" onKeyDown={handleKey} tabIndex="0">
+        <div className="body">
             {data.year && <h1>Year: {data.year}</h1>}
             {data.event && <h1>Event: {data.event}</h1>}
             {data.person && <h1>Person: {data.person}</h1>}
             {data.team && <h1>Team: {data.team}</h1>}
             <h1>(total: {total})</h1>
             {data.text && <h1>{data.text}</h1>}
-            <InfiniteScroll
-                loadMore={uploadGallery}
-                hasMore={page <= totalPages}
-                initialLoad={true}
-                loader={<div className="loader" key={0}>Loading ...</div>}
-            >
-                {photos.map((photo, index) => {
-                    return <div style={{display:"contents"}} key={photo?.id + index} className="wrapper-images"><img className="preview" src={photo?.url_preview} alt={photo.url_preview} onClick={() => handelClick(photo, index)}/></div>
-                })}
-            </InfiniteScroll>
+                <InfiniteScroll
+                    className="masonry"
+                    loadMore={uploadGallery}
+                    hasMore={page <= totalPages}
+                    initialLoad={true}
+                    loader={<div className="loader" key={0}>Loading ...</div>}
+                >
+                    {photos.map((photo, index) => {
+                        return <figure key={photo?.id + index} className="masonry-brick"><img className="preview" src={photo?.url_preview} alt={photo.url_preview} onClick={() => handelClick(photo, index)}/></figure>
+                    })}
+                </InfiniteScroll>
             {shown && <MyModal photo={shown}
                                handelRotationRight={handelRotationRight}
                                handelRotationLeft={handelRotationLeft}
