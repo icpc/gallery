@@ -39,7 +39,7 @@ const Slideshow = ({setIsSlideShow, isSlideshow, photo, setPhoto, handelRotation
     }, [photo]);
 
     return (
-        <div className="dismiss" onClick={handelClick}>
+        <div className="dismiss wrapper" onClick={handelClick}>
             <img
                 className="full"
                 src={photo.url}

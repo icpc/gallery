@@ -17,7 +17,7 @@
 .masonry {
     display: flex;
     flex-flow: row wrap;
-    gap: 8px; /* Adjustment for the gutter */
+    gap: 3px; /* Adjustment for the gutter */
     width: 100%;
 }
 
@@ -25,7 +25,8 @@
     flex: auto;
     height: 250px;
     min-width: 150px;
-    margin: 0 8px 8px 0; /* Some gutter */
+    max-width: 50%;
+    margin: 0 3px 3px 0; /* Some gutter */
 }
 
 .body .preview {
@@ -53,8 +54,13 @@
 }
 
 .body .wrapper{
+    display: flex;
+    align-items: center;
     position: relative;
-    text-align: center;
+    justify-content: center;
+    margin: auto;
+    height: 100%;
+    width: 100%;
 }
 
 .body .face {
@@ -74,7 +80,9 @@
     justify-content: space-around;
 }
 .overlay .full {
-    margin: 10px auto 20px;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
     display: block;
     box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.5);
 }

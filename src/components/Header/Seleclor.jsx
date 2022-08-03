@@ -49,7 +49,7 @@ const Seleclor = ({setSearchParams}) => {
     }
 
     async function getMenu() {
-        const response = await axios.get(`http://localhost:3000/${data.year}.html`);
+        const response = await axios.get(`/${data.year}.html`);
         const menu = response.data;
         const split = menu.split("\n", 3);
         let obj = data;
