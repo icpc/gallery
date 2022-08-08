@@ -6,7 +6,6 @@ import {current_year, LAST_YEAR} from "./consts";
 import { useSearchParams } from "react-router-dom";
 
 function App() {
-
     const [data, setData] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
 

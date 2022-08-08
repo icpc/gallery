@@ -9,7 +9,7 @@ import "../../styles/Header.css"
 
 export const Header = ({setSearchParams}) => {
     return <div>
-        <img className={"logo"} src={"/logo192.png"} style={{width:"100px"}}/>
+        <img className={"logo"} src={process.env.PUBLIC_URL + "/logo192.png"} style={{width:"100px"}}/>
         <div className={"header-input-wrapper"}>
             <Seleclor setSearchParams={setSearchParams}/>
             <Search setSearchParams={setSearchParams}/>

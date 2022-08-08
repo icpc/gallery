@@ -23,9 +23,9 @@
 
 .masonry-brick {
     flex: auto;
-    height: 250px;
-    min-width: 150px;
-    max-width: 50%;
+    height: min(200px, 20vh);
+    min-width: min(150px, 30%);
+    max-width: 35%;
     margin: 0 3px 3px 0; /* Some gutter */
 }
 
