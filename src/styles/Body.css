@@ -23,7 +23,7 @@
 
 .masonry-brick {
     flex: auto;
-    height: min(200px, 20vh);
+    height: 300px;
     min-width: min(150px, 30%);
     max-width: 35%;
     margin: 0 3px 3px 0; /* Some gutter */
@@ -40,17 +40,27 @@
     color:#000 !important;
     text-decoration:none;
 }
-.masonry-brick:nth-child(4n+1) {
+.masonry-brick:nth-child(7n+1) {
+    width: 30%;
+
+}
+.masonry-brick:nth-child(7n+2) {
+    width: 30%;
+}
+.masonry-brick:nth-child(7n+3) {
+    width: 30%;
+}
+.masonry-brick:nth-child(7n+4) {
+    width: 25%;
+}
+.masonry-brick:nth-child(7n+5) {
+    width: 25%;
+}
+.masonry-brick:nth-child(7n+6) {
+    width: 25%;
+}
+.masonry-brick:nth-child(7n+7) {
     width: 250px;
-}
-.masonry-brick:nth-child(4n+1):nth-child(4n+2) {
-    width: 325px;
-}
-.masonry-brick:nth-child(4n+1):nth-child(4n+3) {
-    width: 180px;
-}
-.masonry-brick:nth-child(4n+1):nth-child(4n+4) {
-    width: 380px;
 }
 
 .body .wrapper{

@@ -7,9 +7,14 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+    background: black;
+    color: white;
+}
+
 a{
-    color:black;
+    color:white;
 }
 a:visited{
-    color: black;
+    color: white;
 }

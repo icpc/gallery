@@ -1,10 +1,11 @@
 import React, {useEffect, useContext, useState} from 'react';
 import "../../consts"
-import PhotoService from "../../API/PhotoService";
+import PhotoService from "../../Util/PhotoService";
 import InfiniteScroll from 'react-infinite-scroller';
 import "../../styles/Body.css"
 import MyModal from "./MyModal";
 import {AppContext} from "../AppContext";
+import PhotoParser from "../../Util/PhotoParser";
 
 
 const Body = () => {
@@ -85,66 +86,8 @@ const Body = () => {
     const [rightArrow, setRightArrow] = useState(null);
     const [leftArrow, setLeftArrow] = useState(null);
 
-    const MAX = 65535;
-
-
-    function convertRel(text) {
-        return convertNum(text) / MAX;
-    }
-
-    function getPosition (position) {
-        return {
-            left: convertRel(position.substr(0,4)),
-            top : convertRel(position.substr(4,4)),
-            right: convertRel(position.substr(8,4)),
-            bottom: convertRel(position.substr(12,4)),
-        }
-    }
-
-    function convertNum(text) {
-        return parseInt("0x"+text);
-    }
-
-    async function getPhotoInfo(id) {
-        let response = await PhotoService.getPhotoInfo(id);
-        let curInfo = {
-            "photographer": response.data.photo.description._content,
-        };
-        if (response.data.photo.tags.tag) {
-            let person = [], team = [], event = [];
-            for (let i = 0; i < response.data.photo.tags.tag.length; i++) {
-                if (response.data.photo.tags.tag[i] === null) {
-                    continue;
-                }
-                let tag = response.data.photo.tags.tag[i].raw;
-                if (tag.indexOf('(') !== -1) {
-                    const name = tag.substr(0,tag.indexOf('('));
-                    if (name === "") {
-                        continue;
-                    }
-                    person.push({name: name, position: getPosition(tag.substr(tag.indexOf('(') + 1,tag.indexOf(')',tag.indexOf('(')) - tag.indexOf('(') - 1))});
-                }
-                if (tag.startsWith("event")) {
-                    event.push(tag.replaceAll("event$", ""));
-                }
-                if (tag.startsWith("team")) {
-                    team.push(tag.replaceAll("team$", ""));
-                }
-                if (tag.startsWith("person")) {
-                    person.push({name: tag.replaceAll("person$", "")});
-                }
-            }
-            curInfo["team"] = team;
-            curInfo["event"] = event;
-            curInfo["person"] = person;
-        }
-
-        setPhotoInfo(curInfo);
-
-    }
-
     const handelClick = (photo, index) => {
-        getPhotoInfo(photo.id)
+        PhotoParser.getPhotoInfo(photo.id, setPhotoInfo)
         setCurrentIndex(index);
         setShown(photo);
         if (index + 3 >= photos.length - 1 && photos.length !== total) {

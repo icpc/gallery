@@ -65,7 +65,7 @@ const Seleclor = ({setSearchParams}) => {
 
 
     return (
-        <div className="selector-wrapper">
+        <div className="selector-wrapper" style={{width: "100%"}}>
             <MySelect options={getOptionObj(years)} onChange={selectedYear => {
                 let obj = data;
                 obj["year"] = selectedYear.label;
