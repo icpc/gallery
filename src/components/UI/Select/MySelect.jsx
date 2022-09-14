@@ -62,7 +62,7 @@ const MySelect = ({options, name = "", onChange, value, link}) => {
             options={options}
             onChange={(event, newValue) => onChange(newValue)}
             sx={{
-                width: "33%", display: "flex", alignItems: "center", "& .MuiOutlinedInput-root": {
+                width: "100%", display: "flex", alignItems: "center", "& .MuiOutlinedInput-root": {
                     "& > fieldset": {
                         border: "none"
                     }
