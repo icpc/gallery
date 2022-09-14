@@ -5,7 +5,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import DownloadIcon from '@mui/icons-material/Download';
 
-const PhotoInfo = ({photoInfo, setFace, photo, slideShow}) => {
+const PhotoInfo = ({photoInfo, setFace, photo}) => {
     console.log(photoInfo);
 
     function set() {

@@ -18,12 +18,13 @@
 .masonry {
     display: flex;
     flex-flow: row wrap;
-    gap: 3px; /* Adjustment for the gutter */
+    gap: 3px;
     width: 100%;
 }
 
 .masonry-brick {
     flex: auto;
+    cursor: pointer;
     height: 300px;
     min-width: min(150px, 30%);
     max-width: 35%;
