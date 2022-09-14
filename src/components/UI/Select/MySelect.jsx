@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(
     createStyles({
         root: {
             "& .MuiAutocomplete-listbox": {
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) =>
 
 const CustomPopper = function (props) {
     const classes = useStyles();
-    return <Paper {...props} className={classes.root}/>;
+    return <Paper {...props} className={classes.root} style={{backgroundColor: "#2E2E2E", color: "#8A8A8A"}}/>;
 };
 
 
@@ -77,8 +77,6 @@ const MySelect = ({options, name = "", onChange, value, link}) => {
             }} className={classes.textfield}/>}
             popupIcon={<ExpandMoreIcon/>}
             PaperComponent={CustomPopper}
-            //required (as far as I can tell) in order to target popper elements for custom styling
-
         />
     );
 }

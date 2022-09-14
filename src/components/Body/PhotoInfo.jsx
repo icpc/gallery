@@ -19,20 +19,20 @@ const PhotoInfo = ({photoInfo, setFace, photo, slideShow}) => {
         <div className="photoInfo">
             {!hide && <div>{photoInfo?.photographer}</div>}
             {!hide && photoInfo?.event?.length !== 0 && <div>
-                Event: {photoInfo?.event?.map(event => <a key={event}
+                Event: {photoInfo?.event?.map(event => <a key={event + photo.url}
                                                           href={"?" + (data.year === undefined ? "query=" + event.replaceAll(' ', '+') : "album=" + data.year + "&event=" + event.replaceAll(' ', '+'))}
                                                           className={"event " + event}
                                                           style={{display: "inline", padding: "2px"}}>{event}</a>)}
             </div>}
 
             {!hide && photoInfo?.team?.length !== 0 && <div>
-                Team: {photoInfo?.team?.map(team => <a key={team}
+                Team: {photoInfo?.team?.map(team => <a key={team + photo.url}
                                                        href={"?" + (data.year === undefined ? "query=" + team.replaceAll(' ', '+') : "album=" + data.year + "&team=" + team.replaceAll(' ', '+'))}
                                                        className={"team " + team}
                                                        style={{display: "inline", padding: "2px"}}>{team}</a>)}
             </div>}
             {!hide && photoInfo?.person?.length !== 0 && <div>
-                Person: {photoInfo?.person?.map(person => <a key={person}
+                Person: {photoInfo?.person?.map(person => <a key={person.name + photo.url}
                                                              href={"?" + (data.year === undefined ? "query=" + person.name.replaceAll(' ', '+') : "album=" + data.year + "&person=" + person.name.replaceAll(' ', '+'))}
                                                              className={"name " + person.name}
                                                              onMouseLeave={() => setFace(null)}

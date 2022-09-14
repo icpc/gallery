@@ -12,6 +12,7 @@
     position: absolute;
     top: 0;
     right: 0;
+    cursor: pointer;
 }
 
 .masonry {
@@ -116,6 +117,7 @@
 }
 
 .overlay-arrows_left {
+    cursor: pointer;
     display: flex;
     background: black;
     opacity: 50%;
@@ -139,6 +141,7 @@
 }
 
 .overlay-arrows_right {
+    cursor: pointer;
     display: flex;
     background: black;
     opacity: 50%;

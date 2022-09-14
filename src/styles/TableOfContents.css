@@ -15,7 +15,7 @@ nav {
 }
 
 .year-wrapper {
-    cursor: default;
+    cursor: pointer;
 }
 
 .year {
