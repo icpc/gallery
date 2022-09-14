@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) =>
         textfield: {
             "& .MuiInputBase-input.MuiAutocomplete-input": {
                 color: "white",
+                fontSize: "21px",
                 marginLeft: "25px",
                 zIndex: 0
             },
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) =>
                 //or could be targeted through a class
                 color: "#8A8A8A",
                 marginLeft: "25px",
+                fontSize: "21px",
                 zIndex: 0
             },
             "& .MuiOutlinedInput-notchedOutline": {
@@ -73,7 +75,6 @@ const MySelect = ({options, name = "", onChange, value, link}) => {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "left 10px center"
             }} className={classes.textfield}/>}
-            style={{padding: "5px"}}
             popupIcon={<ExpandMoreIcon/>}
             PaperComponent={CustomPopper}
             //required (as far as I can tell) in order to target popper elements for custom styling

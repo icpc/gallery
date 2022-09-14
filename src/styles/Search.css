@@ -1,14 +1,18 @@
 .search {
-    padding: 30px 0
+    padding: 30px 0;
 }
 
 .search form {
+    display: flex;
+    align-items: center;
+    height: 63px;
+    border-radius: 8px;
     position: relative;
     margin: 0 auto;
 }
 
 .search form {
-    background: #A3D0C3;
+    background: #2E2E2E;
 }
 
 .search input, .search button {
@@ -18,6 +22,11 @@
 }
 
 .search input {
+    font-size: 21px;
+    color: #8A8A8A;
+    box-sizing: border-box;
+    padding-right: 40px;
+    padding-left: 10px;
     width: 100%;
     height: 42px;
 }

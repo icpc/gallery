@@ -1,12 +1,12 @@
 .header-input-wrapper {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-top: 20px;
 }
 
 .selector-wrapper {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 75%;
 }
 
