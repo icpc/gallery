@@ -1,5 +1,4 @@
 .body {
-    padding: 0 60px;
     display: flex;
     flex-wrap: wrap;
     gap: 2em;
@@ -26,13 +25,14 @@
     height: 300px;
     min-width: min(150px, 30%);
     max-width: 35%;
-    margin: 0 3px 3px 0; /* Some gutter */
+    margin: 0 0 3px 0; /* Some gutter */
 }
 
 .body .preview {
-    padding: 15px;
     object-fit: cover;
     width: 100%;
+
+    border-radius: 8px;
     height: 100%;
 }
 

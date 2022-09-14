@@ -6,6 +6,7 @@ import "../../styles/Body.css"
 import MyModal from "./MyModal";
 import {AppContext} from "../AppContext";
 import PhotoParser from "../../Util/PhotoParser";
+import {FIRST_YEAR, LAST_YEAR, years} from "../../consts";
 
 
 const Body = () => {
@@ -62,13 +63,13 @@ const Body = () => {
 
     useEffect(() => {
 
-        if (data?.year !== undefined) {
-            setPhotos([])
-            setPage(1)
-            if (data.person !== undefined || data.event !== undefined || data.team !== undefined) {
-                getTotal();
+            if (data?.year !== undefined) {
+                setPhotos([])
+                setPage(1)
+                if (data.person !== undefined || data.event !== undefined || data.team !== undefined) {
+                    getTotal();
+                }
             }
-        }
         },
         [data.year]
     )
@@ -139,25 +140,33 @@ const Body = () => {
             target.removeEventListener("onkeydown", listener);
         }
     }, [shown]);
+
+    const getMore = () => {
+        return page <= totalPages
+    }
+
     return (
         <div className="body">
-            {data.year && <h1>Year: {data.year}</h1>}
-            {data.event && <h1>Event: {data.event}</h1>}
-            {data.person && <h1>Person: {data.person}</h1>}
-            {data.team && <h1>Team: {data.team}</h1>}
-            <h1>(total: {total})</h1>
             {data.text && <h1>{data.text}</h1>}
+            <div style={{paddingBottom: "10px"}}>
                 <InfiniteScroll
                     className="masonry"
                     loadMore={uploadGallery}
-                    hasMore={page <= totalPages}
+                    hasMore={getMore()}
                     initialLoad={true}
                     loader={<div className="loader" key={0}>Loading ...</div>}
                 >
                     {photos.map((photo, index) => {
-                        return <figure key={photo?.id + index} className="masonry-brick"><img className="preview" src={photo?.url_preview} alt={photo.url_preview} onClick={() => handelClick(photo, index)}/></figure>
+                        return <figure key={photo?.id + index} className="masonry-brick">
+                            <img className="preview"
+                                 src={photo?.url_preview}
+                                 alt={photo.url_preview}
+                                 onClick={() => handelClick(photo, index)}/>
+                        </figure>
                     })}
                 </InfiniteScroll>
+            </div>
+            {total === 0 && <div style={{margin:"auto", fontSize: "30px"}}>No photo</div>}
             {shown && <MyModal photo={shown}
                                handelRotationRight={handelRotationRight}
                                handelRotationLeft={handelRotationLeft}

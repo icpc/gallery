@@ -4,6 +4,7 @@ import "./styles/App.css"
 import {AppContext} from "./components/AppContext";
 import {current_year, LAST_YEAR} from "./consts";
 import { useSearchParams } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
 
 function App() {
     const [data, setData] = useState({});
@@ -38,7 +39,10 @@ function App() {
             data,
             setData
         }}>
-            <MainLayout setSearchParams={setSearchParams}/>
+            <div className="content-layout">
+                <Sidebar setSearchParams={setSearchParams}/>
+                <MainLayout setSearchParams={setSearchParams}/>
+            </div>
         </AppContext.Provider>
     );
 }

@@ -14,6 +14,8 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "lightbox2": "^2.11.3",
+    "material-ui": "^0.20.2",
+    "material-ui-icons": "^1.0.0-beta.36",
     "react": "^18.2.0",
     "react-bidirectional-infinite-scroll": "^2.0.1",
     "react-dom": "^18.2.0",

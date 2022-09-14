@@ -2,6 +2,7 @@ import React, {useContext, useState} from 'react';
 import {AppContext} from "../AppContext";
 import MyButton from "../UI/Button/MyButton";
 import "../../styles/Search.css"
+import "../../styles/Header.css"
 
 const Search = ({setSearchParams}) => {
 

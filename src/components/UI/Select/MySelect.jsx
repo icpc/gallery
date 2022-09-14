@@ -4,6 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
+import AccountCircle from "material-ui-icons/AccountCircle";
 import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) =>
@@ -16,17 +17,29 @@ const useStyles = makeStyles((theme) =>
         },
         textfield: {
             "& .MuiInputBase-input.MuiAutocomplete-input": {
-                color: "#8A8A8A",
+                color: "white",
+                marginLeft: "25px",
                 zIndex: 0
             },
             "& #custom-autocomplete-label": {
                 //or could be targeted through a class
                 color: "#8A8A8A",
+                marginLeft: "25px",
                 zIndex: 0
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#2E2E2E"
+            },
+            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor:"#2E2E2E"
             },
             "& .MuiButtonBase-root.MuiAutocomplete-clearIndicator": {
                 color: "#8A8A8A"
+            },
+            "& .MuiInputLabel-shrink": {
+                display: "none"
             }
+
         }
     })
 );
@@ -37,8 +50,8 @@ const CustomPopper = function (props) {
 };
 
 
-const MySelect = ({options, name="", onChange, value}) => {
-
+const MySelect = ({options, name="", onChange, value, link}) => {
+    const path = process.env.PUBLIC_URL + link;
     const classes = useStyles();
     return (
         <Autocomplete
@@ -47,8 +60,12 @@ const MySelect = ({options, name="", onChange, value}) => {
             value={value}
             options={options}
             onChange={(event, newValue) => onChange(newValue)}
-            sx={{ width: "25%", color: "white" }}
-            renderInput={(params) => <TextField {...params} variant="outlined" label={name} style={{ backgroundColor: "#2E2E2E", borderRadius: "8px", color: "white"}} className={classes.textfield} />}
+            sx={{ width: "33%", "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                        border: "none"
+                    }
+                } }}
+            renderInput={(params) => <TextField {...params} variant="outlined" label={name} style={{ backgroundColor: "#2E2E2E", borderRadius: "8px", backgroundImage: `url(${path})`, backgroundRepeat: "no-repeat", backgroundPosition: "left 10px center"}} className={classes.textfield} />}
             style={{padding:"5px"}}
             popupIcon={<ExpandMoreIcon />}
             PaperComponent={CustomPopper}

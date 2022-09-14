@@ -11,14 +11,12 @@ const Seleclor = ({setSearchParams}) => {
     const [people, setPeople] = useState([]);
 
     const {data, setData} = useContext(AppContext);
-    const [year, setYear] = useState("");
     const [event, setEvent] = useState("");
     const [person, setPerson] = useState("");
     const [team, setTeam] = useState("");
 
 
     function updData() {
-        setYear(data.year === undefined ? "" : data.year);
         setEvent(data.event === undefined ? "" : data.event);
         setTeam(data.team === undefined ? "" : data.team);
         setPerson(data.person === undefined ? "" : data.person);
@@ -65,36 +63,7 @@ const Seleclor = ({setSearchParams}) => {
 
 
     return (
-        <div className="selector-wrapper" style={{width: "100%"}}>
-            <MySelect options={getOptionObj(years)} onChange={selectedYear => {
-                let obj = data;
-                obj["year"] = selectedYear.label;
-                if (data.event !== undefined) {
-                    setSearchParams({
-                        album: selectedYear.label,
-                        event: data.event
-                    });
-                } else if (data.team !== undefined) {
-                    setSearchParams({
-                        album: selectedYear.label,
-                        team: data.team
-                    });
-                } else if (data.person !== undefined) {
-                    setSearchParams({
-                        album: selectedYear.label,
-                        person: data.person
-                    });
-                } else {
-                    setSearchParams({
-                        album: selectedYear.label,
-                        event: "Photo Tour"
-                    });
-                    obj["event"] = "Photo Tour";
-                    delete obj.text;
-                }
-                setData(obj);
-                updData();
-            }} name={"Select year"} value={year}/>
+        <div className="selector-wrapper">
             {data.year && <MySelect options={getOptionObj(events)} onChange={selectedEvent => {
                 setData({
                     "year": data.year,
@@ -106,7 +75,7 @@ const Seleclor = ({setSearchParams}) => {
                     event: selectedEvent.label
                 });
                 updData();
-            }} name={"Select event"} value={event}/>}
+            }} name={"Select event"} value={event} link={`/event.svg`}/>}
             {data.year && <MySelect options={getOptionObj(teams)} onChange={selectedTeam => {
                 setData({
                     "year": data.year,
@@ -117,7 +86,7 @@ const Seleclor = ({setSearchParams}) => {
                     team: selectedTeam.label
                 });
                 updData();
-            }} name={"Select team"} value={team}/>}
+            }} name={"Select team"} value={team} link={`/team.svg`}/>}
             {data.year && <MySelect options={getOptionObj(people)} onChange={selectedPerson => {
                 setData({
                     "year": data.year,
@@ -128,7 +97,7 @@ const Seleclor = ({setSearchParams}) => {
                     person: selectedPerson.label
                 });
                 updData();
-            }} name={"Select person"} value={person}/>}
+            }} name={"Select person"} value={person} link={`/person.svg`}/>}
         </div>
     );
 };

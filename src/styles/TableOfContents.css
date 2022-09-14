@@ -1,0 +1,40 @@
+
+nav {
+    position: sticky;
+    position: -webkit-sticky; /* For Safari */
+    top: 24px; /* How far down the page you want your ToC to live */
+
+    /* Give table of contents a scrollbar */
+    max-height: calc(100vh - 40px);
+    overflow: auto;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 24px;
+    overflow: initial;
+}
+
+.year-wrapper {
+    cursor: default;
+}
+
+.year {
+    color: white;
+}
+
+.place {
+    color: #8A8A8A;
+    font-size: 15px;
+}
+
+.big-year  {
+    line-height: 42px;
+    font-size: 40px;
+    margin-top: 10px;
+}
+
+.big-place  {
+    line-height: 32px;
+    font-size: 30px;
+    margin-top: 10px;
+}
