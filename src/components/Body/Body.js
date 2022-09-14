@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import "../../consts"
 import PhotoService from "../../Util/PhotoService";
 import InfiniteScroll from 'react-infinite-scroller';
@@ -6,7 +6,6 @@ import "../../styles/Body.css"
 import MyModal from "./MyModal";
 import {AppContext} from "../AppContext";
 import PhotoParser from "../../Util/PhotoParser";
-import {FIRST_YEAR, LAST_YEAR, years} from "../../consts";
 
 
 const Body = () => {
@@ -166,7 +165,7 @@ const Body = () => {
                     })}
                 </InfiniteScroll>
             </div>
-            {total === 0 && <div style={{margin:"auto", fontSize: "30px"}}>No photo</div>}
+            {total === 0 && <div style={{margin: "auto", fontSize: "30px"}}>No photo</div>}
             {shown && <MyModal photo={shown}
                                handelRotationRight={handelRotationRight}
                                handelRotationLeft={handelRotationLeft}

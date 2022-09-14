@@ -1,6 +1,5 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import MySelect from "../UI/Select/MySelect";
-import {current_year, years} from "../../consts";
 import axios from "axios";
 import {AppContext} from "../AppContext";
 
@@ -43,7 +42,9 @@ const Seleclor = ({setSearchParams}) => {
     }
 
     function getOptionObj(a) {
-        return a.map(x => {return {label: x}});
+        return a.map(x => {
+            return {label: x}
+        });
     }
 
     async function getMenu() {

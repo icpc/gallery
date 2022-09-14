@@ -2,7 +2,7 @@ import "../styles/TableOfContents.css"
 import {places, years} from "../consts";
 import {AppContext} from "./AppContext";
 import {useContext} from "react";
-import MySelect from "./UI/Select/MySelect";
+
 const TableOfContents = ({setSearchParams}) => {
     const {data, setData} = useContext(AppContext);
 

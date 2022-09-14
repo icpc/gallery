@@ -7,10 +7,11 @@
 }
 
 .body .control {
-    position: fixed;
+    background: black;
+    opacity: 50%;
+    position: absolute;
     top: 0;
     right: 0;
-    padding: 50px;
 }
 
 .masonry {
@@ -37,33 +38,39 @@
 }
 
 .body .download {
-    color:#000 !important;
-    text-decoration:none;
+    text-decoration: none;
 }
+
 .masonry-brick:nth-child(7n+1) {
     width: 30%;
 
 }
+
 .masonry-brick:nth-child(7n+2) {
     width: 30%;
 }
+
 .masonry-brick:nth-child(7n+3) {
     width: 30%;
 }
+
 .masonry-brick:nth-child(7n+4) {
     width: 25%;
 }
+
 .masonry-brick:nth-child(7n+5) {
     width: 25%;
 }
+
 .masonry-brick:nth-child(7n+6) {
     width: 25%;
 }
+
 .masonry-brick:nth-child(7n+7) {
     width: 250px;
 }
 
-.body .wrapper{
+.body .wrapper {
     display: flex;
     align-items: center;
     position: relative;
@@ -89,6 +96,7 @@
     align-items: center;
     justify-content: space-around;
 }
+
 .overlay .full {
     height: 100%;
     width: 100%;
@@ -96,6 +104,7 @@
     display: block;
     box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.5);
 }
+
 .overlay > span {
     position: absolute;
     top: 20px;
@@ -105,9 +114,11 @@
     z-index: 999;
     cursor: pointer;
 }
+
 .overlay-arrows_left {
     display: flex;
-    background-color: #6d6d6d;
+    background: black;
+    opacity: 50%;
     justify-content: space-between;
     position: absolute;
     top: 50%;
@@ -129,7 +140,8 @@
 
 .overlay-arrows_right {
     display: flex;
-    background-color: #6d6d6d;
+    background: black;
+    opacity: 50%;
     justify-content: space-between;
     position: absolute;
     right: 0;
@@ -138,3 +150,4 @@
     top: 50%;
     z-index: 999;
 }
+

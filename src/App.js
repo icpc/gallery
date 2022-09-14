@@ -2,8 +2,8 @@ import {useEffect, useState} from 'react'
 import MainLayout from "./components/MainLayout";
 import "./styles/App.css"
 import {AppContext} from "./components/AppContext";
-import {current_year, LAST_YEAR} from "./consts";
-import { useSearchParams } from "react-router-dom";
+import {LAST_YEAR} from "./consts";
+import {useSearchParams} from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 
 function App() {

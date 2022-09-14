@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import "../../styles/Body.css"
+import Control from "./Control";
 
-
-const Slideshow = ({setIsSlideShow, isSlideshow, photo, setPhoto, handelRotationRight, rightArrow}) => {
+const Slideshow = ({setIsSlideShow, isSlideShow, photo, setPhoto, handelRotationRight, rightArrow}) => {
     const handelClick = (e) => {
         if (e.target.classList.contains("dismiss")) {
             setPhoto(null);
@@ -23,12 +23,12 @@ const Slideshow = ({setIsSlideShow, isSlideshow, photo, setPhoto, handelRotation
     React.useEffect(() => {
         resetTimeout();
         timeoutRef.current = setTimeout(
-            () =>
-            {if (rightArrow) {
-                handelRotationRight()}
-                else {
+            () => {
+                if (rightArrow) {
+                    handelRotationRight()
+                } else {
                     setIsSlideShow(false);
-            }
+                }
             },
             3000
         );
@@ -38,15 +38,21 @@ const Slideshow = ({setIsSlideShow, isSlideshow, photo, setPhoto, handelRotation
         };
     }, [photo]);
 
-    return (
-        <div className="dismiss wrapper" onClick={handelClick}>
-            <img
-                className="full"
-                src={photo.url}
-                alt={"bigger picture"}
-                onLoad={() => setIsLoaded(true)}
-            />
+    const slideShow = () => {
+        setIsSlideShow(isSlideShow ^ 1);
+    }
 
+    return (
+        <div className="dismiss" onClick={handelClick}>
+            <div className="wrapper">
+                <Control handelClick={handelClick} slideShow={slideShow} isSlideShow={isSlideShow}/>
+                <img
+                    className="full"
+                    src={photo.url}
+                    alt={"bigger picture"}
+                    onLoad={() => setIsLoaded(true)}
+                />
+            </div>
         </div>
     );
 };

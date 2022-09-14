@@ -1,4 +1,7 @@
-.search {padding: 30px 0}
+.search {
+    padding: 30px 0
+}
+
 .search form {
     position: relative;
     margin: 0 auto;
@@ -7,15 +10,18 @@
 .search form {
     background: #A3D0C3;
 }
+
 .search input, .search button {
     border: none;
     outline: none;
     background: transparent;
 }
+
 .search input {
     width: 100%;
     height: 42px;
 }
+
 .search button {
     height: 42px;
     width: 42px;
@@ -24,6 +30,7 @@
     right: 0;
     cursor: pointer;
 }
+
 .search button:before {
     font-size: 16px;
     color: #F9F0DA;

@@ -9,7 +9,6 @@ export default class PhotoParser {
     }
 
 
-
     static getPosition(position) {
         return {
             left: this.convertRel(position.substr(0, 4)),
@@ -23,7 +22,7 @@ export default class PhotoParser {
         return parseInt("0x" + text);
     }
 
-    static async getPhotoInfo (id, setPhotoInfo) {
+    static async getPhotoInfo(id, setPhotoInfo) {
         let response = await PhotoService.getPhotoInfo(id);
         let curInfo = {
             "photographer": response.data.photo.description._content,

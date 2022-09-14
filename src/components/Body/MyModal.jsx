@@ -1,15 +1,20 @@
-import React, {useState} from 'react';
+import React from 'react';
 import "../../styles/Body.css"
 import Lightbox from "./Lightbox";
 import Slideshow from "./Slideshow";
-import Control from "./Control";
 
-const MyModal = ({photo, setPhoto, handelRotationLeft, handelRotationRight, leftArrow, rightArrow, photoInfo, setPhotoInfo,isSlideShow, setIsSlideShow}) => {
-
-    const slideShow = () => {
-        setIsSlideShow(isSlideShow ^ 1);
-    }
-
+const MyModal = ({
+                     photo,
+                     setPhoto,
+                     handelRotationLeft,
+                     handelRotationRight,
+                     leftArrow,
+                     rightArrow,
+                     photoInfo,
+                     setPhotoInfo,
+                     isSlideShow,
+                     setIsSlideShow
+                 }) => {
 
 
     const handelClick = (e) => {
@@ -22,13 +27,14 @@ const MyModal = ({photo, setPhoto, handelRotationLeft, handelRotationRight, left
 
     return (
         <div className="overlay dismiss" onClick={handelClick}>
-            <Control slideShow={slideShow} isSlideShow={isSlideShow} photo={photo} handelClick={handelClick}/>
 
             {isSlideShow ?
-                <Slideshow setIsSlideShow={setIsSlideShow} isSlideshow={isSlideShow} photo={photo} setPhoto={setPhoto}
+                <Slideshow setIsSlideShow={setIsSlideShow} isSlideShow={isSlideShow} photo={photo} setPhoto={setPhoto}
                            handelRotationRight={handelRotationRight} rightArrow={rightArrow}/> :
-                <Lightbox photo={photo} setPhoto={setPhoto} handelRotationRight={handelRotationRight}
-                          handelRotationLeft={handelRotationLeft} leftArrow={leftArrow} rightArrow={rightArrow} photoInfo={photoInfo}/>
+                <Lightbox setIsSlideShow={setIsSlideShow} isSlideShow={isSlideShow} photo={photo} setPhoto={setPhoto}
+                          handelRotationRight={handelRotationRight}
+                          handelRotationLeft={handelRotationLeft} leftArrow={leftArrow} rightArrow={rightArrow}
+                          photoInfo={photoInfo}/>
             }
 
         </div>

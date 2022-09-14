@@ -7,25 +7,28 @@
     bottom: 0;
     padding-left: 20px;
     padding-bottom: 20px;
-    padding-top: 10px;
+    padding-top: 20px;
     box-sizing: border-box;
     text-align: left;
     transition: 1s;
 }
 
 
-.photoInfo a{
-    color:white;
-}
-.photoInfo a:visited{
-    color:white;
+.photoInfo a {
+    color: white;
 }
 
-.photoInfo-hide {
+.photoInfo a:visited {
+    color: white;
+}
+
+.control-bottom {
     right: 0;
-    padding-right: 30px;
+    padding-right: 20px;
     position: absolute;
+    display: flex;
+    flex-direction: row;
     bottom: 0;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
 }
