@@ -42,7 +42,7 @@ const Lightbox = ({
                     onLoad={() => setIsLoaded(true)}
                 />
                 <PhotoInfo photo={photo} photoInfo={photoInfo} setFace={setFace}/>
-                {photoInfo?.person?.map(person => (<FaceDiv person={person} face={face} setFace={setFace} key={person.name}/>))}
+                {photoInfo?.person?.map(person => (<FaceDiv person={person} face={face} setFace={setFace} key={person.name + "facediv" + person.position.top}/>))}
                 {leftArrow && <div onClick={handelRotationLeft} className="overlay-arrows_left">
                     <ArrowForwardIosIcon style={{transform: "rotate(180deg)"}}/>
                 </div>}

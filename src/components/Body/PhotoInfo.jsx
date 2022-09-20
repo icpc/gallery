@@ -32,7 +32,7 @@ const PhotoInfo = ({photoInfo, setFace, photo}) => {
                                                        style={{display: "inline", padding: "2px"}}>{team}</a>)}
             </div>}
             {!hide && photoInfo?.person?.length !== 0 && <div>
-                Person: {photoInfo?.person?.map(person => <a key={person.name + photo.url}
+                Person: {photoInfo?.person?.map(person => <a key={person.name + photo.url + person.position.top}
                                                              href={"?" + (data.year === undefined ? "query=" + person.name.replaceAll(' ', '+') : "album=" + data.year + "&person=" + person.name.replaceAll(' ', '+'))}
                                                              className={"name " + person.name}
                                                              onMouseLeave={() => setFace(null)}
