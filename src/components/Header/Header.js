@@ -4,6 +4,7 @@ import Search from "./Search";
 import "../../styles/Header.css"
 import {AppContext} from "../AppContext";
 import axios from "axios";
+import {LAST_YEAR} from "../../consts";
 
 
 export const Header = ({setSearchParams}) => {
@@ -27,21 +28,25 @@ export const Header = ({setSearchParams}) => {
     useEffect(() => {
         updData();
         if (data.year !== undefined) {
-            getMenu()
+            getMenu(data.year)
+        } else {
+            getMenu(LAST_YEAR)
         }
     }, [data.year]);
 
 
-    async function getMenu() {
-        const response = await axios.get(process.env.PUBLIC_URL + `/${data.year}.html`);
+    async function getMenu(year) {
+        const response = await axios.get(process.env.PUBLIC_URL + `/${year}.html`);
         const menu = response.data;
         const split = menu.split("\n", 3);
         let obj = data;
-        if (data.event === undefined && data.team === undefined && data.person === undefined) {
-            obj["event"] = "Photo Tour";
+        if (year === data.year) {
+            if (data.event === undefined && data.team === undefined && data.person === undefined) {
+                obj["event"] = "Photo Tour";
+            }
+            delete obj.text;
+            setData(obj);
         }
-        delete obj.text;
-        setData(obj);
         setEvents(parseOptions(split[0]));
         setTeams(parseOptions(split[1]));
         setPeople(parseOptions(split[2]));
@@ -68,6 +73,9 @@ export const Header = ({setSearchParams}) => {
     return <div>
         <div className={"header-input-wrapper"}>
             <Seleclor options={getOptionObj(events)} setSearchParams={setSearchParams} name={"Select event"} link={`/event.svg`} func={selectedEvent => {
+                if (data.year === undefined) {
+                    data.year = LAST_YEAR;
+                }
                 setData({
                     "year": data.year,
                     "event": selectedEvent.label
@@ -80,6 +88,9 @@ export const Header = ({setSearchParams}) => {
                 updData();
             }} value={event}/>
             <Seleclor options={getOptionObj(teams)} setSearchParams={setSearchParams} name={"Select team"} link={`/team.svg`} func={selectedTeam => {
+                if (data.year === undefined) {
+                    data.year = LAST_YEAR;
+                }
                 setData({
                     "year": data.year,
                     "team": selectedTeam.label
@@ -91,6 +102,9 @@ export const Header = ({setSearchParams}) => {
                 updData();
             }} value={team}/>
             <Seleclor options={getOptionObj(people)} setSearchParams={setSearchParams} name={"Select person"} link={`/person.svg`} func={selectedPerson => {
+                if (data.year === undefined) {
+                    data.year = LAST_YEAR;
+                }
                 setData({
                     "year": data.year,
                     "person": selectedPerson.label

@@ -146,8 +146,8 @@ const Body = () => {
 
     return (
         <div className="body">
-            {data.text && <h1>{data.text}</h1>}
-            <div style={{paddingBottom: "10px"}}>
+            {data.text && <h1 style={{width: "100%"}}>{data.text}</h1>}
+            <div style={{paddingBottom: "10px", width: "100%"}}>
                 <InfiniteScroll
                     className="masonry"
                     loadMore={uploadGallery}
