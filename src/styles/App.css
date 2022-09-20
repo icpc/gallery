@@ -1,3 +1,4 @@
+@import "./theme-variables.css";
 * {
     margin: 0;
     font-family: "helvetica", "Urbanist", serif;
@@ -6,16 +7,16 @@
 }
 
 body {
-    background: #1A1A1A;
-    color: white;
+    background-color: var(--mainBGColor);
+    color: var(--mainColor);
 }
 
 a {
-    color: white;
+    color: var(--mainColor);
 }
 
 a:visited {
-    color: white;
+    color: var(--mainColor);
 }
 
 .content-layout {

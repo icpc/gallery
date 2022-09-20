@@ -1,3 +1,4 @@
+@import "./theme-variables.css";
 .body {
     display: flex;
     flex-wrap: wrap;
@@ -7,8 +8,7 @@
 }
 
 .body .control {
-    background: black;
-    opacity: 50%;
+    background: var(--opacityBGColor);
     position: absolute;
     top: 0;
     right: 0;
@@ -93,7 +93,7 @@
     right: 0;
     width: 100%;
     height: 100%;
-    background: rgba(27, 27, 27, 0.541);
+    background: var(--opacityBGColor);
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -104,7 +104,7 @@
     width: 100%;
     object-fit: contain;
     display: block;
-    box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.5);
+    box-shadow: 3px 5px 7px var(--opacityBGColor);
 }
 
 .overlay > span {
@@ -112,7 +112,7 @@
     top: 20px;
     right: 20px;
     font-size: 30px;
-    color: #ffffff;
+    color: var(--mainColor);
     z-index: 999;
     cursor: pointer;
 }
@@ -120,8 +120,7 @@
 .overlay-arrows_left {
     cursor: pointer;
     display: flex;
-    background: black;
-    opacity: 50%;
+    background: var(--opacityBGColor);
     justify-content: space-between;
     position: absolute;
     top: 50%;
@@ -144,8 +143,7 @@
 .overlay-arrows_right {
     cursor: pointer;
     display: flex;
-    background: black;
-    opacity: 50%;
+    background: var(--opacityBGColor);
     justify-content: space-between;
     position: absolute;
     right: 0;

@@ -38,3 +38,5 @@ export const LAST_YEAR = "2020";
 export const FIRST_YEAR = "2003";
 
 export const DEBUG = process.env.NODE_ENV === "development";
+
+

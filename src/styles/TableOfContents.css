@@ -1,4 +1,4 @@
-
+@import "theme-variables.css";
 nav {
     position: sticky;
     position: -webkit-sticky; /* For Safari */
@@ -19,11 +19,11 @@ nav {
 }
 
 .year {
-    color: white;
+    color: var(--mainColor);
 }
 
 .place {
-    color: #8A8A8A;
+    color: var(--additionalColor);
     font-size: 15px;
 }
 

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
+import "../../styles/theme-variables.css"
 
 const Rectangle = styled.fieldset`
   top: ${props => props.top * 100 + "%"};
@@ -7,9 +8,9 @@ const Rectangle = styled.fieldset`
   left: ${props => props.left * 100 + "%"};
   right: ${props => (100 - props.right * 100) + "%"};
   position: absolute;
-  color: yellow;
+  color: var(--colorRectangle);
   padding: 3px 6px;
-  border: yellow solid 3px;
+  border: var(--borderRectangle) solid 3px;
   transform: rotatex(180deg);
 `;
 

@@ -1,8 +1,9 @@
+@import "theme-variables.css";
+
 .photoInfo {
     width: 100%;
-    background: black;
-    opacity: 70%;
-    color: white;
+    background: var(--opacityBGColor);
+    color: var(--mainColor);
     position: absolute;
     bottom: 0;
     padding-left: 20px;
@@ -15,7 +16,7 @@
 
 
 .photoInfo a {
-    color: white;
+    color: var(--mainColor);
 }
 
 .photoInfo a:visited {
