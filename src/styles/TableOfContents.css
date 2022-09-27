@@ -1,11 +1,13 @@
 @import "theme-variables.css";
 nav {
+
+    direction: rtl;
     position: sticky;
     position: -webkit-sticky; /* For Safari */
     top: 24px; /* How far down the page you want your ToC to live */
 
     /* Give table of contents a scrollbar */
-    max-height: calc(100vh - 40px);
+    max-height: calc(100vh - 120px);
     overflow: auto;
     font-style: normal;
     font-weight: 700;
@@ -13,8 +15,24 @@ nav {
     line-height: 24px;
 }
 
+nav::-webkit-scrollbar {
+    width: 10px;
+}
+
+nav::-webkit-scrollbar-track {
+    background-color: var(--additionalBGColor);
+}
+
+nav::-webkit-scrollbar-thumb {
+    background-color: var(--mainBGColor);
+    outline: 1px solid slategrey;
+}
+
 .year-wrapper {
+
+    direction: ltr;
     padding-top: 20px;
+    padding-left: 20px;
     cursor: pointer;
 }
 
