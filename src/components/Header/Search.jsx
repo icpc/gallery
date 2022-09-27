@@ -12,7 +12,11 @@ const Search = ({setSearchParams}) => {
     const set = (e) => {
         e.preventDefault()
         if (inputText !== "") {
-            setData({"text": inputText});
+            setData({
+                "text": inputText,
+                "year": data.year
+            });
+
 
             setInputText("");
             console.log(inputText.replaceAll(" ", "%20"));

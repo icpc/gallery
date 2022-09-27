@@ -88,26 +88,38 @@ export const Header = ({setSearchParams}) => {
         updData();
     }
 
-    return <div>
-        <div className={"header-input-wrapper"}>
-            <Seleclor options={getOptionObj(events)}
-                      setSearchParams={setSearchParams}
-                      name={"Select event"}
-                      link={`/event.svg`}
-                      func={selectedEvent => {setter(selectedEvent, "event")}}
-                      value={event}/>
-            <Seleclor options={getOptionObj(teams)}
-                      setSearchParams={setSearchParams}
-                      name={"Select team"}
-                      link={`/team.svg`}
-                      func={selectedTeam => {setter(selectedTeam, "team")}} value={team}/>
-            <Seleclor options={getOptionObj(people)}
-                      setSearchParams={setSearchParams}
-                      name={"Select person"}
-                      link={`/person.svg`}
-                      func={selectedPerson => {setter(selectedPerson, "person")}}
-                      value={person}/>
-            <Search setSearchParams={setSearchParams}/>
+    return <div className={"header-wrapper"}>
+        <div className={"header"}>
+            <a href={"?album=" + LAST_YEAR}  style={{width: "25%", marginLeft: "40px", marginTop: "40px", display:"flex", justifyContent:"center"}}>
+                <img className={"logo"} src={process.env.PUBLIC_URL + "/icpc_header.svg"}
+                                                  style={{height: "63px"}} alt={"go home page"}/></a>
+
+            <div className={"header-input-wrapper"}>
+                <Seleclor options={getOptionObj(events)}
+                          setSearchParams={setSearchParams}
+                          name={"Select event"}
+                          link={`/event.svg`}
+                          func={selectedEvent => {
+                              setter(selectedEvent, "event")
+                          }}
+                          value={event}/>
+                <Seleclor options={getOptionObj(teams)}
+                          setSearchParams={setSearchParams}
+                          name={"Select team"}
+                          link={`/team.svg`}
+                          func={selectedTeam => {
+                              setter(selectedTeam, "team")
+                          }} value={team}/>
+                <Seleclor options={getOptionObj(people)}
+                          setSearchParams={setSearchParams}
+                          name={"Select person"}
+                          link={`/person.svg`}
+                          func={selectedPerson => {
+                              setter(selectedPerson, "person")
+                          }}
+                          value={person}/>
+                <Search setSearchParams={setSearchParams}/>
+            </div>
         </div>
     </div>
 }

@@ -1,9 +1,10 @@
 @import "./theme-variables.css";
 .body {
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     gap: 2em;
-    margin: 2em auto;
+    margin: 2em 1rem;
 
 }
 

@@ -1,8 +1,21 @@
+.header-wrapper {
+    width: 100%;
+    background-color: var(--mainBGColor);
+    z-index: 100;
+    position: fixed;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
 .header-input-wrapper {
+    margin: 10px 1rem;
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
-
 }
 
 .selector-wrapper {
