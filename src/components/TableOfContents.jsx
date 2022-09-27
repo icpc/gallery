@@ -6,30 +6,26 @@ import {useContext} from "react";
 const TableOfContents = ({setSearchParams}) => {
     const {data, setData} = useContext(AppContext);
 
+
+    const setDataType = (type, element, year) => {
+        if (element !== undefined) {
+            setSearchParams({
+                album: year,
+                [type]: element
+            });
+            return true;
+        }
+        return false;
+    }
+
     const handleClick = (event, selectedYear) => {
         console.log("select", selectedYear);
         let obj = data;
         obj["year"] = selectedYear;
-        if (data.event !== undefined) {
-            setSearchParams({
-                album: selectedYear,
-                event: data.event
-            });
-        } else if (data.team !== undefined) {
-            setSearchParams({
-                album: selectedYear,
-                team: data.team
-            });
-        } else if (data.person !== undefined) {
-            setSearchParams({
-                album: selectedYear,
-                person: data.person
-            });
-        } else {
-            setSearchParams({
-                album: selectedYear,
-                event: "Photo Tour"
-            });
+        if (!setDataType("event", data.event, selectedYear) &&
+            !setDataType("team", data.team, selectedYear) &&
+            !setDataType("person", data.person, selectedYear)) {
+            setDataType("event", "Photo Tour", selectedYear);
             obj["event"] = "Photo Tour";
             delete obj.text;
         }

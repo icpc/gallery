@@ -70,51 +70,43 @@ export const Header = ({setSearchParams}) => {
         });
     }
 
+    const setter = (selectedTeam, type) => {
+        if (data.year === undefined) {
+            data.year = LAST_YEAR;
+        }
+        if (selectedTeam === null) {
+            return;
+        }
+        setData({
+            "year": data.year,
+            [type]: selectedTeam.label
+        })
+        setSearchParams({
+            album: data.year,
+            [type]: selectedTeam.label
+        });
+        updData();
+    }
+
     return <div>
         <div className={"header-input-wrapper"}>
-            <Seleclor options={getOptionObj(events)} setSearchParams={setSearchParams} name={"Select event"} link={`/event.svg`} func={selectedEvent => {
-                if (data.year === undefined) {
-                    data.year = LAST_YEAR;
-                }
-                setData({
-                    "year": data.year,
-                    "event": selectedEvent.label
-                })
-
-                setSearchParams({
-                    album: data.year,
-                    event: selectedEvent.label
-                });
-                updData();
-            }} value={event}/>
-            <Seleclor options={getOptionObj(teams)} setSearchParams={setSearchParams} name={"Select team"} link={`/team.svg`} func={selectedTeam => {
-                if (data.year === undefined) {
-                    data.year = LAST_YEAR;
-                }
-                setData({
-                    "year": data.year,
-                    "team": selectedTeam.label
-                })
-                setSearchParams({
-                    album: data.year,
-                    team: selectedTeam.label
-                });
-                updData();
-            }} value={team}/>
-            <Seleclor options={getOptionObj(people)} setSearchParams={setSearchParams} name={"Select person"} link={`/person.svg`} func={selectedPerson => {
-                if (data.year === undefined) {
-                    data.year = LAST_YEAR;
-                }
-                setData({
-                    "year": data.year,
-                    "person": selectedPerson.label
-                })
-                setSearchParams({
-                    album: data.year,
-                    person: selectedPerson.label
-                });
-                updData();
-            }} value={person}/>
+            <Seleclor options={getOptionObj(events)}
+                      setSearchParams={setSearchParams}
+                      name={"Select event"}
+                      link={`/event.svg`}
+                      func={selectedEvent => {setter(selectedEvent, "event")}}
+                      value={event}/>
+            <Seleclor options={getOptionObj(teams)}
+                      setSearchParams={setSearchParams}
+                      name={"Select team"}
+                      link={`/team.svg`}
+                      func={selectedTeam => {setter(selectedTeam, "team")}} value={team}/>
+            <Seleclor options={getOptionObj(people)}
+                      setSearchParams={setSearchParams}
+                      name={"Select person"}
+                      link={`/person.svg`}
+                      func={selectedPerson => {setter(selectedPerson, "person")}}
+                      value={person}/>
             <Search setSearchParams={setSearchParams}/>
         </div>
     </div>

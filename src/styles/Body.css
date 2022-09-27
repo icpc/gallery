@@ -10,8 +10,8 @@
 .body .control {
     background: var(--opacityBGColor);
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 40px;
+    right: 40px;
     cursor: pointer;
 }
 
@@ -153,3 +153,7 @@
     z-index: 999;
 }
 
+.dismiss {
+    height: 100%;
+    width: 100%;
+}
