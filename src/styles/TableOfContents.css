@@ -19,15 +19,18 @@ nav {
 
 nav::-webkit-scrollbar {
     width: 10px;
+    border-radius: 3px;
 }
 
 nav::-webkit-scrollbar-track {
     background-color: var(--additionalBGColor);
+    border-radius: 3px;
 }
 
 nav::-webkit-scrollbar-thumb {
     background-color: var(--mainBGColor);
     outline: 1px solid var(--additionalColor);
+    border-radius: 3px;
 }
 
 .year-wrapper {
