@@ -24,17 +24,7 @@ a:visited {
     flex-direction: column;
 }
 
-body::-webkit-scrollbar {
-    width: 10px;
-    border-radius: 3px;
-}
-
-body::-webkit-scrollbar-track {
-    background-color: var(--additionalBGColor);
-}
-
-body::-webkit-scrollbar-thumb {
-    background-color: var(--mainBGColor);
-    outline: 1px solid var(--additionalColor);
-    border-radius: 3px;
+.content-layout {
+    display: grid;
+    grid-template-columns: 20% 80%;
 }

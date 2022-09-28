@@ -1,8 +1,6 @@
 .header-wrapper {
     width: 100%;
     background-color: var(--mainBGColor);
-    z-index: 100;
-    position: fixed;
 }
 
 .header {

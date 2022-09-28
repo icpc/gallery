@@ -18,8 +18,8 @@ const TableOfContents = ({setSearchParams}) => {
         return false;
     }
 
+    console.log(document.querySelector(".masonry-brick"));
     const handleClick = (event, selectedYear) => {
-        console.log("select", selectedYear);
         let obj = data;
         obj["year"] = selectedYear;
         if (!setDataType("event", data.event, selectedYear) &&
@@ -30,13 +30,11 @@ const TableOfContents = ({setSearchParams}) => {
             delete obj.text;
         }
         setData(obj);
-        window.scrollTo({
+        document.querySelector(".body").scrollTo({
             top: 0,
-            left: 0,
             behavior: "smooth"
         });
     }
-    console.log(places);
     return (
         <nav aria-label="Table of contents">
             {years.map(year => {

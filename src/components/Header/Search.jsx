@@ -8,7 +8,6 @@ const Search = ({setSearchParams}) => {
     const {data, setData} = useContext(AppContext);
 
     const [inputText, setInputText] = useState("");
-    console.log("header", data);
     const set = (e) => {
         e.preventDefault()
         if (inputText !== "") {
@@ -19,8 +18,7 @@ const Search = ({setSearchParams}) => {
 
 
             setInputText("");
-            console.log(inputText.replaceAll(" ", "%20"));
-            setSearchParams({"query": inputText});
+             setSearchParams({"query": inputText});
         }
     }
 

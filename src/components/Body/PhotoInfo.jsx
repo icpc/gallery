@@ -6,7 +6,6 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import DownloadIcon from '@mui/icons-material/Download';
 
 const PhotoInfo = ({photoInfo, setFace, photo}) => {
-    console.log(photoInfo);
 
     function set() {
         setHide(hide ^ 1);
@@ -14,10 +13,12 @@ const PhotoInfo = ({photoInfo, setFace, photo}) => {
 
     const {data} = useContext(AppContext);
     const [hide, setHide] = useState(false);
-    console.log(photoInfo)
     return (
         <div className="photoInfo">
             {!hide && <div>{photoInfo?.photographer}</div>}
+            {!hide && data.year !== undefined && <div>
+                Year: {data.year}
+            </div>}
             {!hide && photoInfo?.event?.length !== 0 && <div>
                 Event: {photoInfo?.event?.map(event => <a key={event + photo.url}
                                                           href={"?" + (data.year === undefined ? "query=" + event.replaceAll(' ', '+') : "album=" + data.year + "&event=" + event.replaceAll(' ', '+'))}
@@ -44,10 +45,10 @@ const PhotoInfo = ({photoInfo, setFace, photo}) => {
             }
             <div className={"control-bottom"}>
                 <div onClick={set} className="photoInfo-hide">
-                    {!hide ? <VisibilityOffIcon/> : <VisibilityIcon/>}
+                    {!hide ? <VisibilityOffIcon fontSize="large"/> : <VisibilityIcon fontSize="large"/>}
                 </div>
-                <a className="download" href={photo.origin} target="_blank">
-                    <DownloadIcon/>
+                <a className="download" href={photo.origin} download target="_blank">
+                    <DownloadIcon fontSize="large"/>
                 </a>
             </div>
         </div>

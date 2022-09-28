@@ -1,11 +1,12 @@
 @import "./theme-variables.css";
 .body {
-    width: 100%;
+    height: calc(100vh - 143px);
     display: flex;
     flex-wrap: wrap;
     gap: 2em;
-    margin: 2em 1rem;
-
+    margin: 0 calc(1rem - 10px) 0 1rem;
+    overflow: auto;
+    border-radius: 8px;
 }
 
 .body .control {
@@ -14,6 +15,21 @@
     top: 40px;
     right: 40px;
     cursor: pointer;
+}
+
+.body::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 3px;
+}
+
+.body::-webkit-scrollbar-track {
+    background-color: var(--additionalBGColor);
+}
+
+.body::-webkit-scrollbar-thumb {
+    background-color: var(--mainBGColor);
+    outline: 1px solid var(--additionalColor);
+    border-radius: 3px;
 }
 
 .masonry {
@@ -45,16 +61,16 @@
 }
 
 .masonry-brick:nth-child(7n+1) {
-    width: 30%;
+    width: 33%;
 
 }
 
 .masonry-brick:nth-child(7n+2) {
-    width: 30%;
+    width: 33%;
 }
 
 .masonry-brick:nth-child(7n+3) {
-    width: 30%;
+    width: 33%;
 }
 
 .masonry-brick:nth-child(7n+4) {
@@ -70,7 +86,7 @@
 }
 
 .masonry-brick:nth-child(7n+7) {
-    width: 250px;
+    width: 24%;
 }
 
 .body .wrapper {
@@ -79,8 +95,7 @@
     position: relative;
     justify-content: center;
     margin: auto;
-    height: 100%;
-    width: 100%;
+
 }
 
 .body .face {
@@ -88,12 +103,13 @@
 }
 
 .overlay {
+
+    width: 100vw;
+    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    width: 100%;
-    height: 100%;
     background: var(--opacityBGColor);
     display: flex;
     align-items: center;
@@ -101,8 +117,8 @@
 }
 
 .overlay .full {
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    max-width: 100vw;
     object-fit: contain;
     display: block;
     box-shadow: 3px 5px 7px var(--opacityBGColor);
@@ -152,9 +168,4 @@
     height: 50px;
     top: 50%;
     z-index: 999;
-}
-
-.dismiss {
-    height: 100%;
-    width: 100%;
 }

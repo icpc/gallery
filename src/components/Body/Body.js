@@ -154,6 +154,7 @@ const Body = () => {
                     hasMore={getMore()}
                     initialLoad={true}
                     loader={<div className="loader" key={0}>Loading ...</div>}
+                    useWindow={false}
                 >
                     {photos.map((photo, index) => {
                         return <figure key={photo?.id + index} className="masonry-brick">

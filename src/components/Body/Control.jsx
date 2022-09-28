@@ -7,10 +7,10 @@ const Control = ({handelClick, slideShow, isSlideShow}) => {
 
     return (
         <div className="control">
-            {isSlideShow ? <PauseIcon className='slideshow' onClick={slideShow}/> :
-                <PlayArrowIcon className='slideshow' onClick={slideShow}/>}
+            {isSlideShow ? <PauseIcon className='slideshow' onClick={slideShow} fontSize="large"/> :
+                <PlayArrowIcon className='slideshow' onClick={slideShow} fontSize="large"/>}
             <span className="dismiss" onClick={handelClick}>
-                    <CloseIcon className="dismiss"/>
+                    <CloseIcon className="dismiss" fontSize="large"/>
             </span>
 
         </div>

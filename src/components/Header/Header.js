@@ -90,9 +90,6 @@ export const Header = ({setSearchParams}) => {
 
     return <div className={"header-wrapper"}>
         <div className={"header"}>
-            <a href={"?album=" + LAST_YEAR}  style={{width: "25%", marginLeft: "40px", marginTop: "40px", display:"flex", justifyContent:"center"}}>
-                <img className={"logo"} src={process.env.PUBLIC_URL + "/icpc_header.svg"}
-                                                  style={{height: "63px"}} alt={"go home page"}/></a>
 
             <div className={"header-input-wrapper"}>
                 <Seleclor options={getOptionObj(events)}
