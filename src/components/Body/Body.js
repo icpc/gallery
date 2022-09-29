@@ -166,7 +166,7 @@ const Body = () => {
                     })}
                 </InfiniteScroll>
             </div>
-            {total === 0 && <div style={{margin: "auto", fontSize: "30px"}}>No photo</div>}
+            {total === 0 && <div style={{margin: "auto", fontSize: "3rem"}}>No photo</div>}
             {shown && <MyModal photo={shown}
                                handelRotationRight={handelRotationRight}
                                handelRotationLeft={handelRotationLeft}

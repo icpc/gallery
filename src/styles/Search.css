@@ -7,7 +7,7 @@
 .search form {
     display: flex;
     align-items: center;
-    height: 63px;
+    height: 56px;
     border-radius: 8px;
     position: relative;
     margin: 0 auto;
@@ -24,7 +24,7 @@
 }
 
 .search input {
-    font-size: 21px;
+    font-size: 1rem;
     color: var(--mainColor);
     box-sizing: border-box;
     padding-right: 40px;

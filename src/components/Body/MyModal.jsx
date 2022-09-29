@@ -30,11 +30,11 @@ const MyModal = ({
 
             {isSlideShow ?
                 <Slideshow setIsSlideShow={setIsSlideShow} isSlideShow={isSlideShow} photo={photo} setPhoto={setPhoto}
-                           handelRotationRight={handelRotationRight} rightArrow={rightArrow}/> :
+                           handelRotationRight={handelRotationRight} rightArrow={rightArrow} setPhotoInfo={setPhotoInfo}/> :
                 <Lightbox setIsSlideShow={setIsSlideShow} isSlideShow={isSlideShow} photo={photo} setPhoto={setPhoto}
                           handelRotationRight={handelRotationRight}
                           handelRotationLeft={handelRotationLeft} leftArrow={leftArrow} rightArrow={rightArrow}
-                          photoInfo={photoInfo}/>
+                          photoInfo={photoInfo} setPhotoInfo={setPhotoInfo}/>
             }
 
         </div>

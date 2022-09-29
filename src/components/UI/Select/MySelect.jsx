@@ -17,7 +17,7 @@ const useStyles = makeStyles(
         textfield: {
             "& .MuiInputBase-input.MuiAutocomplete-input": {
                 color: "white",
-                fontSize: "21px",
+                fontSize: "1rem",
                 marginLeft: "25px",
                 zIndex: 0
             },
@@ -25,7 +25,7 @@ const useStyles = makeStyles(
                 //or could be targeted through a class
                 color: "#8A8A8A",
                 marginLeft: "25px",
-                fontSize: "21px",
+                fontSize: "1rem",
                 zIndex: 0
             },
             "& .MuiOutlinedInput-notchedOutline": {

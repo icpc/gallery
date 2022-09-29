@@ -3,7 +3,7 @@ import TableOfContents from "./TableOfContents";
 
 const Sidebar = ({setSearchParams}) => {
     return (
-        <div className={"sidebar"} style={{marginLeft: "40px"}}>
+        <div className={"sidebar"} style={{marginLeft: "1rem"}}>
             <TableOfContents setSearchParams={setSearchParams}/>
         </div>
     );

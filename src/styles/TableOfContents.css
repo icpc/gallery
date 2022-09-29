@@ -39,22 +39,23 @@ nav::-webkit-scrollbar-thumb {
 
 .year {
     color: var(--mainColor);
+    font-size: 1.3rem;
 }
 
 .place {
     color: var(--additionalColor);
-    font-size: 15px;
+    font-size: 1rem;
 }
 
 .big-year {
     line-height: 42px;
-    font-size: 40px;
+    font-size: 2rem;
     margin-top: 10px;
 }
 
 
 .big-place {
     line-height: 32px;
-    font-size: 30px;
+    font-size: 1.7rem;
     margin-top: 10px;
 }

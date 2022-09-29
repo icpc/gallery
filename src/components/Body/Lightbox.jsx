@@ -14,7 +14,8 @@ const Lightbox = ({
                       handelRotationRight,
                       leftArrow,
                       rightArrow,
-                      photoInfo
+                      photoInfo,
+                      setPhotoInfo
                   }) => {
     const handelClick = (e) => {
         if (e.target.classList.contains("dismiss")) {
@@ -34,7 +35,10 @@ const Lightbox = ({
     return (
         <div className="dismiss" onClick={handelClick}>
             <div className="wrapper">
-                <Control handelClick={handelClick} slideShow={slideShow} isSlideShow={isSlideShow}/>
+                <Control handelClick={handelClick} slideShow={slideShow} isSlideShow={isSlideShow}
+                         setPhoto={setPhoto}
+                         setIsSlideShow={setIsSlideShow}
+                         setPhotoInfo={setPhotoInfo}/>
                 <img
                     className="full"
                     src={photo.url}

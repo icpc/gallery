@@ -1,8 +1,7 @@
 @import "./theme-variables.css";
 .body {
     height: calc(100vh - 143px);
-    display: flex;
-    flex-wrap: wrap;
+
     gap: 2em;
     margin: 0 calc(1rem - 10px) 0 1rem;
     overflow: auto;
