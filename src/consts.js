@@ -6,9 +6,9 @@ export const places =
         "2020": "Moscow, Russia",
         "2019": "Porto, Portugal",
         "2018": "Beijing, China",
-        "2017": "Rapid City SD,USA",
+        "2017": "Rapid City, SD, USA",
         "2016": "Phuket, Thailand",
-        "2015": " Marrakesh, Morocco",
+        "2015": "Marrakesh, Morocco",
         "2014": "Ekaterinburg, Russia",
         "2013": "Saint Petersburg, Russia",
         "2012": "Warsaw, Poland",
@@ -17,7 +17,10 @@ export const places =
         "2009": "Stockholm, Sweden",
         "2008": "Banff, Canada",
         "2007": "Tokyo, Japan",
-        "2006": "Waco TX, USA"
+        "2006": "Waco TX, USA",
+        "2005": "Shanghai, China",
+        "2004": "Prague, Czech Republic",
+        "2003": "Beverly Hills, CA, USA",
     }
 ;
 
