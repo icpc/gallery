@@ -44,7 +44,7 @@ const TableOfContents = ({setSearchParams}) => {
                         <div className="place">{places[year]}</div>
                     </div>
                 } else {
-                    return <div className="year-wrapper" key={year} onClick={event => handleClick(event, year)}>
+                    return <div className="year-wrapper" key={year} title="to top" onClick={event => handleClick(event, year)}>
                         <div className="year big-year">World Finals {year}</div>
                         <div className="place big-place">{places[year]}</div>
                     </div>
