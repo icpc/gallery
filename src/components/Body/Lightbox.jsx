@@ -32,8 +32,36 @@ const Lightbox = ({
 
     const [face, setFace] = useState(null);
 
+
+    const [touchPosition, setTouchPosition] = useState(null)
+
+    const handleTouchStart = (e) => {
+        const touchDown = e.touches[0].clientX
+        setTouchPosition(touchDown)
+    }
+
+    const handleTouchMove = (e) => {
+        const touchDown = touchPosition
+
+        if(touchDown === null) {
+            return
+        }
+
+        const currentTouch = e.touches[0].clientX
+        const diff = touchDown - currentTouch
+
+        if (diff > 5) {
+            handelRotationRight()
+        }
+
+        if (diff < -5) {
+            handelRotationLeft()
+        }
+
+        setTouchPosition(null)
+    }
     return (
-        <div className="dismiss" onClick={handelClick}>
+        <div className="dismiss" onClick={handelClick} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
             <div className="wrapper">
                 <Control handelClick={handelClick} slideShow={slideShow} isSlideShow={isSlideShow}
                          setPhoto={setPhoto}

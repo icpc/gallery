@@ -4,21 +4,33 @@ import Search from "./Search";
 import "../../styles/Header.css"
 import {AppContext} from "../AppContext";
 import axios from "axios";
-import {LAST_YEAR} from "../../consts";
+import {LAST_YEAR, years} from "../../consts";
+import MenuIcon from '@mui/icons-material/Menu';
+import useMatchMedia from 'use-match-media-hook'
+import "../../styles/DropdownMenu.css"
+import CloseIcon from '@mui/icons-material/Close';
 
 
-export const Header = ({setSearchParams}) => {
+export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
     const {data, setData} = useContext(AppContext);
     const [event, setEvent] = useState("");
     const [person, setPerson] = useState("");
     const [team, setTeam] = useState("");
+    const [year, setYear] = useState("");
+
 
     const [events, setEvents] = useState([]);
     const [teams, setTeams] = useState([]);
     const [people, setPeople] = useState([]);
 
 
+    const queries = [
+        '(min-width: 900px)'
+    ]
+    const [desktop] = useMatchMedia(queries)
+
     function updData() {
+        setYear(data.year === undefined ? "" : data.year);
         setEvent(data.event === undefined ? "" : data.event);
         setTeam(data.team === undefined ? "" : data.team);
         setPerson(data.person === undefined ? "" : data.person);
@@ -70,28 +82,70 @@ export const Header = ({setSearchParams}) => {
         });
     }
 
-    const setter = (selectedTeam, type) => {
-        if (data.year === undefined) {
-            data.year = LAST_YEAR;
+    const setter = (selectedItem, type) => {
+        if (type === "year") {
+            let newData = data;
+            data.year = selectedItem.label;
+            setData(data);
+            delete newData.year
+
+            newData["album"] = selectedItem.label;
+            setSearchParams(newData);
+        } else {
+            if (data.year === undefined) {
+                data.year = LAST_YEAR;
+            }
+            if (selectedItem === null) {
+                return;
+            }
+            setData({
+                "year": data.year,
+                [type]: selectedItem.label
+            })
+            setSearchParams({
+                album: data.year,
+                [type]: selectedItem.label
+            });
         }
-        if (selectedTeam === null) {
+        updData();
+        setIsOpenMenu(false);
+    }
+
+    useEffect(() => {
+        let element = document.getElementById("header-input-wrapper");
+        if (!element) {
             return;
         }
-        setData({
-            "year": data.year,
-            [type]: selectedTeam.label
-        })
-        setSearchParams({
-            album: data.year,
-            [type]: selectedTeam.label
-        });
-        updData();
+        if (isOpenMenu) {
+            element.style.display= 'flex';
+        } else {
+           element.style.display= 'none';
+        }
+    }, [isOpenMenu]);
+
+    const changeMenu = () => {
+        setIsOpenMenu(isOpenMenu ^ 1);
     }
 
     return <div className={"header-wrapper"}>
         <div className={"header"}>
-
-            <div className={"header-input-wrapper"}>
+            {!desktop &&
+                <div className="button" onClick={changeMenu}>
+                    {!isOpenMenu ? <MenuIcon fontSize="large"/>
+                     : <CloseIcon fontSize="large"/>}
+                </div>
+            }
+            <div className={"header-input-wrapper"} id={"header-input-wrapper"}>
+                {!desktop && <Seleclor options={years.map(x => {
+                    return {label: x}
+                })}
+                          setSearchParams={setSearchParams}
+                          name={"Select year"}
+                          link={`/calender.svg`}
+                          func={selectedYear => {
+                              setter(selectedYear, "year")
+                          }}
+                          value={year}/>}
                 <Seleclor options={getOptionObj(events)}
                           setSearchParams={setSearchParams}
                           name={"Select event"}
@@ -115,7 +169,7 @@ export const Header = ({setSearchParams}) => {
                               setter(selectedPerson, "person")
                           }}
                           value={person}/>
-                <Search setSearchParams={setSearchParams}/>
+                <Search setSearchParams={setSearchParams} setIsOpenMenu={setIsOpenMenu}/>
             </div>
         </div>
     </div>

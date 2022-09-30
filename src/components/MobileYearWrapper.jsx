@@ -1,0 +1,28 @@
+import React, {useContext} from 'react';
+import "../styles/App.css"
+import {AppContext} from "./AppContext";
+import {places} from "../consts";
+
+
+const MobileYearWrapper = ({setIsOpenMenu}) => {
+    const {data} = useContext(AppContext);
+
+    if (data.text) {
+        return  <div className="mobile-year-wrapper" style={{marginLeft:"1rem"}}>
+            <div className="year">{data.text}</div>
+        </div>
+    }
+
+    const openMenu = () => {
+        setIsOpenMenu(true);
+    }
+
+    return (
+        <div className="mobile-year-wrapper" style={{marginLeft:"1rem"}} onClick={openMenu}>
+            <div className="year">World Finals {data.year}</div>
+            <div className="place">{places[data.year]}</div>
+        </div>
+    );
+};
+
+export default MobileYearWrapper;

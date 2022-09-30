@@ -7,10 +7,28 @@ import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar";
 import Body from "./components/Body/Body";
 import Logo from "./components/Logo";
+import useMatchMedia from 'use-match-media-hook'
+import MobileYearWrapper from "./components/MobileYearWrapper";
+
 
 function App() {
+    const queries = [
+        '(min-width: 900px)'
+    ]
+    const [desktop] = useMatchMedia(queries)
+    const [isOpenMenu, setIsOpenMenu] = useState();
+
     const [data, setData] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        console.log("suka", desktop)
+        if (desktop) {
+            setIsOpenMenu(true);
+        } else {
+            setIsOpenMenu(false);
+        }
+    }, [desktop])
 
     useEffect(() => {
         let obj = {};
@@ -43,8 +61,9 @@ function App() {
         }}>
             <div className="content-layout">
                 <Logo/>
-                <Header setSearchParams={setSearchParams}/>
-                <Sidebar setSearchParams={setSearchParams}/>
+                <Header setSearchParams={setSearchParams} isOpenMenu={isOpenMenu} setIsOpenMenu={setIsOpenMenu}/>
+                {desktop && <Sidebar setSearchParams={setSearchParams}/>}
+                {!desktop && <MobileYearWrapper setSearchParams={setSearchParams} setIsOpenMenu={setIsOpenMenu}/>}
                 <Body/>
             </div>
         </AppContext.Provider>

@@ -1,0 +1,26 @@
+@media (max-width: 900px) {
+    .header-input-wrapper {
+        display: none;
+        position: absolute;
+        padding-top: 50px;
+        max-width: 300px;
+        width: 100%;
+        right: 0;
+        flex-flow: column wrap;
+        background: var(--opacityBGColor);
+    }
+
+    .search {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+
+    .button {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        z-index: 100;
+    }
+
+}

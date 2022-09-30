@@ -3,9 +3,11 @@ import "../../consts"
 import PhotoService from "../../Util/PhotoService";
 import InfiniteScroll from 'react-infinite-scroller';
 import "../../styles/Body.css"
+import "../../styles/App.css"
 import MyModal from "./MyModal";
 import {AppContext} from "../AppContext";
 import PhotoParser from "../../Util/PhotoParser";
+import useMatchMedia from 'use-match-media-hook'
 
 
 const Body = () => {
@@ -18,6 +20,12 @@ const Body = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [total, setTotal] = useState(1);
     const [photoInfo, setPhotoInfo] = useState(null);
+
+    const queries = [
+        '(min-width: 900px)'
+    ]
+    const [desktop] = useMatchMedia(queries)
+
 
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -65,7 +73,7 @@ const Body = () => {
             if (data?.year !== undefined) {
                 setPhotos([])
                 setPage(1)
-                if (data.person !== undefined || data.event !== undefined || data.team !== undefined) {
+                if (data.person !== undefined || data.event !== undefined || data.team !== undefined || data.text !== undefined) {
                     getTotal();
                 }
             }
@@ -146,7 +154,7 @@ const Body = () => {
 
     return (
         <div className="body">
-            {data.text && <h1 style={{width: "100%"}}>{data.text}</h1>}
+            {desktop && data.text && <h1 style={{width: "100%"}}>{data.text}</h1>}
             <div style={{paddingBottom: "10px", width: "100%"}}>
                 <InfiniteScroll
                     className="masonry"

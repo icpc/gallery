@@ -2,24 +2,28 @@ import React, {useContext, useState} from 'react';
 import {AppContext} from "../AppContext";
 import "../../styles/Search.css"
 import "../../styles/Header.css"
+import {LAST_YEAR} from "../../consts";
 
-const Search = ({setSearchParams}) => {
+const Search = ({setSearchParams, setIsOpenMenu}) => {
 
     const {data, setData} = useContext(AppContext);
 
     const [inputText, setInputText] = useState("");
     const set = (e) => {
         e.preventDefault()
+        console.log(data.year)
         if (inputText !== "") {
             setData({
                 "text": inputText,
-                "year": data.year
+                "year": (data.year ? data.year : LAST_YEAR)
             });
 
 
             setInputText("");
              setSearchParams({"query": inputText});
+            setIsOpenMenu(false);
         }
+
     }
 
     return (

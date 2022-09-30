@@ -24,7 +24,39 @@ a:visited {
     flex-direction: column;
 }
 
-.content-layout {
-    display: grid;
-    grid-template-columns: 20% 80%;
+@media (min-width: 900px) {
+    .content-layout {
+        display: grid;
+        grid-template-columns: 20% 80%;
+    }
 }
+@media (max-width: 900px) {
+    .content-layout {
+        display: grid;
+        position: relative;
+        grid-auto-columns: auto 140px;
+        grid-auto-rows: 60px 5rem auto;
+        grid-template-areas: "a b" "c c" "d d";
+    }
+    .logo {
+        grid-area: a;
+    }
+    .body {
+        grid-area: d;
+    }
+    .mobile-year-wrapper {
+        grid-area: c;
+    }
+
+    .year {
+        color: var(--mainColor);
+        font-size: 2rem;
+    }
+
+    .place {
+        color: var(--additionalColor);
+        font-size: 1.5rem;
+
+    }
+}
+
