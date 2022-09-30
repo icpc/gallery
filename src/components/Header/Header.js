@@ -112,6 +112,9 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
     }
 
     useEffect(() => {
+        if (desktop) {
+            setIsOpenMenu(true);
+        }
         let element = document.getElementById("header-input-wrapper");
         if (!element) {
             return;

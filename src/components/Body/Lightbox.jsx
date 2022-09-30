@@ -50,11 +50,11 @@ const Lightbox = ({
         const currentTouch = e.touches[0].clientX
         const diff = touchDown - currentTouch
 
-        if (diff > 5) {
+        if (diff > 5 && rightArrow) {
             handelRotationRight()
         }
 
-        if (diff < -5) {
+        if (diff < -5 && leftArrow) {
             handelRotationLeft()
         }
 
