@@ -7,14 +7,14 @@ import {places} from "../consts";
 const MobileYearWrapper = ({setIsOpenMenu}) => {
     const {data} = useContext(AppContext);
 
-    if (data.text) {
-        return  <div className="mobile-year-wrapper" style={{marginLeft:"1rem"}}>
-            <div className="year">{data.text}</div>
-        </div>
-    }
-
     const openMenu = () => {
         setIsOpenMenu(true);
+    }
+
+    if (data.text) {
+        return  <div className="mobile-year-wrapper" style={{marginLeft:"1rem"}} onClick={openMenu}>
+            <div className="year">{data.text}</div>
+        </div>
     }
 
     return (

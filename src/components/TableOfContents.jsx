@@ -18,7 +18,6 @@ const TableOfContents = ({setSearchParams}) => {
         return false;
     }
 
-    console.log(document.querySelector(".masonry-brick"));
     const handleClick = (event, selectedYear) => {
         let obj = data;
         obj["year"] = selectedYear;

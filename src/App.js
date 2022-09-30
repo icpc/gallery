@@ -22,7 +22,6 @@ function App() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        console.log("suka", desktop)
         if (desktop) {
             setIsOpenMenu(true);
         } else {

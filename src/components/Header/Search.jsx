@@ -11,7 +11,6 @@ const Search = ({setSearchParams, setIsOpenMenu}) => {
     const [inputText, setInputText] = useState("");
     const set = (e) => {
         e.preventDefault()
-        console.log(data.year)
         if (inputText !== "") {
             setData({
                 "text": inputText,

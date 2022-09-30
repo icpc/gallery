@@ -82,15 +82,29 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
         });
     }
 
+    const setDataType = (type, element, year) => {
+        if (element !== undefined) {
+            setSearchParams({
+                album: year,
+                [type]: element
+            });
+            return true;
+        }
+        return false;
+    }
+
     const setter = (selectedItem, type) => {
         if (type === "year") {
-            let newData = data;
-            data.year = selectedItem.label;
-            setData(data);
-            delete newData.year
-
-            newData["album"] = selectedItem.label;
-            setSearchParams(newData);
+            let obj = data;
+            obj["year"] = selectedItem.label;
+            if (!setDataType("event", data.event, selectedItem.label) &&
+                !setDataType("team", data.team, selectedItem.label) &&
+                !setDataType("person", data.person, selectedItem.label)) {
+                setDataType("event", "Photo Tour", selectedItem.label);
+                obj["event"] = "Photo Tour";
+                delete obj.text;
+            }
+            setData(obj);
         } else {
             if (data.year === undefined) {
                 data.year = LAST_YEAR;
