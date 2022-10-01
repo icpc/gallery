@@ -2,6 +2,8 @@
 
 Created to substitute [news.icpc.global/gallery](https://news.icpc.global/gallery) photoarchive.
 
+[Figma mockups](https://www.figma.com/file/MvNh0jm8dj0LXOh9vsVUbK/ICPC-Live?node-id=0%3A1)
+
 Important features to keep:
 * no-backend flickr-based solution
 * photos are classified based on public flickr tags: year, event, team
