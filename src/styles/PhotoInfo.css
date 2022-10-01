@@ -4,7 +4,7 @@
     width: 100%;
     background: var(--opacityBGColor);
     color: var(--mainColor);
-    position: absolute;
+    position: fixed;
     bottom: 0;
     padding: 30px 70px 30px 20px;
     box-sizing: border-box;
