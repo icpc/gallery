@@ -16,7 +16,7 @@ const PhotoInfo = ({photoInfo, setFace, photo}) => {
     return (
         <div className="photoInfo">
             {!hide && <div>{photoInfo?.photographer}</div>}
-            {!hide && data.year !== undefined && <div>
+            {!hide && data.text === undefined && data.year !== undefined && <div>
                 Year: {data.year}
             </div>}
             {!hide && photoInfo?.event?.length !== 0 && <div>
