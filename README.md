@@ -56,7 +56,7 @@ To calculate the absolute coordinates, multiply the left and right relative coor
 ## Flickr Tag Processing
 
 Even though flickr stores tags in their initial form, it is important to remember the following
-* by default, manually entered tags are split into separate words. Enclose the tag in quotes `'team$Aalto University'` to keep tag intact
+* by default, manually entered tags are split into separate words. Enclose the tag in quotes `"team$Aalto University"` to keep tag intact
 * flickr eliminates all spaces and non-letter sybmols from tags for the filtering purposes
 * make sure to keep correct encoding on tags, specifically in people names, to consistently process diacritic symbols
 * make sure to enclose all university names with punctuation in quotes
