@@ -60,7 +60,13 @@ const MySelect = ({options, name = "", onChange, value, link}) => {
             id="custom-autocomplete"
             value={value}
             options={options}
-            onChange={(event, newValue) => onChange(newValue)}
+            onChange={(event, newValue, reason) => {
+                if (reason === "selectOption") {
+                    onChange(newValue)
+                } else {
+                    onChange("clear");
+                }
+            }}
             sx={{
                 width: "100%", display: "flex", alignItems: "center", "& .MuiOutlinedInput-root": {
                     "& > fieldset": {

@@ -22,7 +22,7 @@ const Logo = () => {
             <a className="logo" href={"?album=" + LAST_YEAR}
                style={{marginLeft: "1rem", marginTop: "10px", display: "flex", justifyContent: "left"}}>
                 <img className={"logo"} src={process.env.PUBLIC_URL + "/logo2.svg"}
-                     style={{height: "56px", maxWidth: "100%"}} alt={"go home page"}/></a>
+                      alt={"go home page"}/></a>
 
         );
     }

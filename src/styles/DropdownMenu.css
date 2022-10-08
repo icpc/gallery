@@ -1,9 +1,6 @@
 @media (max-width: 900px) {
     .header-input-wrapper {
         display: none;
-        position: absolute;
-        padding-top: 50px;
-        max-width: 300px;
         width: 100%;
         right: 0;
         flex-flow: column wrap;

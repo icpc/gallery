@@ -4,7 +4,7 @@ import Search from "./Search";
 import "../../styles/Header.css"
 import {AppContext} from "../AppContext";
 import axios from "axios";
-import {LAST_YEAR, years} from "../../consts";
+import {LAST_YEAR, places, years} from "../../consts";
 import MenuIcon from '@mui/icons-material/Menu';
 import useMatchMedia from 'use-match-media-hook'
 import "../../styles/DropdownMenu.css"
@@ -96,11 +96,11 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
     const setter = (selectedItem, type) => {
         if (type === "year") {
             let obj = data;
-            obj["year"] = selectedItem.label;
-            if (!setDataType("event", data.event, selectedItem.label) &&
-                !setDataType("team", data.team, selectedItem.label) &&
-                !setDataType("person", data.person, selectedItem.label)) {
-                setDataType("event", "Photo Tour", selectedItem.label);
+            obj["year"] = selectedItem.year;
+            if (!setDataType("event", data.event, selectedItem.year) &&
+                !setDataType("team", data.team, selectedItem.year) &&
+                !setDataType("person", data.person, selectedItem.year)) {
+                setDataType("event", "Photo Tour", selectedItem.year);
                 obj["event"] = "Photo Tour";
                 delete obj.text;
             }
@@ -112,17 +112,28 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
             if (selectedItem === null) {
                 return;
             }
-            setData({
-                "year": data.year,
-                [type]: selectedItem.label
-            })
-            setSearchParams({
-                album: data.year,
-                [type]: selectedItem.label
-            });
+            if (selectedItem === "clear") {
+
+                setData({
+                    "year": data.year,
+                    "event": "Photo tour"
+                })
+                setSearchParams({
+                    album: data.year,
+                    "event": "Photo tour"
+                });
+            } else {
+                setData({
+                    "year": data.year,
+                    [type]: selectedItem.label
+                })
+                setSearchParams({
+                    album: data.year,
+                    [type]: selectedItem.label
+                });
+            }
         }
         updData();
-        setIsOpenMenu(false);
     }
 
     useEffect(() => {
@@ -154,7 +165,7 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
             }
             <div className={"header-input-wrapper"} id={"header-input-wrapper"}>
                 {!desktop && <Seleclor options={years.map(x => {
-                    return {label: x}
+                    return {year: x, label: x + " " + places[x]}
                 })}
                           setSearchParams={setSearchParams}
                           name={"Select year"}

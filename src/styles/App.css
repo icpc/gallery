@@ -29,23 +29,34 @@ a:visited {
         display: grid;
         grid-template-columns: 20% 80%;
     }
+    .logo img {
+        height: 56px;
+        max-width: 100%;
+    }
 }
 @media (max-width: 900px) {
     .content-layout {
         display: grid;
         position: relative;
-        grid-auto-columns: auto 140px;
-        grid-auto-rows: 60px 5rem auto;
-        grid-template-areas: "a b" "c c" "d d";
+        grid-template-areas: "a" "b" "c" "d";
     }
     .logo {
         grid-area: a;
     }
+
+    .logo img {
+        height: 100%;
+        width: 30%;
+    }
+
     .body {
         grid-area: d;
     }
     .mobile-year-wrapper {
         grid-area: c;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+
     }
 
     .year {
@@ -56,7 +67,6 @@ a:visited {
     .place {
         color: var(--additionalColor);
         font-size: 1.5rem;
-
     }
 }
 
