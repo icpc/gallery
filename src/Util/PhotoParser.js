@@ -24,6 +24,7 @@ export default class PhotoParser {
 
     static async getPhotoInfo(id, setPhotoInfo) {
         let response = await PhotoService.getPhotoInfo(id);
+        console.log("ID", id);
         let curInfo = {
             "photographer": response.data.photo.description._content,
         };
@@ -34,6 +35,18 @@ export default class PhotoParser {
                     continue;
                 }
                 let tag = response.data.photo.tags.tag[i].raw;
+                if (tag.startsWith("event")) {
+                    event.push(tag.replaceAll("event$", ""));
+                    continue;
+                }
+                if (tag.startsWith("team")) {
+                    team.push(tag.replaceAll("team$", ""));
+                    continue;
+                }
+                if (tag.startsWith("person")) {
+                    person.push({name: tag.replaceAll("person$", "")});
+                    continue;
+                }
                 if (tag.indexOf('(') !== -1) {
                     const name = tag.substr(0, tag.indexOf('('));
                     if (name === "") {
@@ -44,22 +57,11 @@ export default class PhotoParser {
                         position: this.getPosition(tag.substr(tag.indexOf('(') + 1, tag.indexOf(')', tag.indexOf('(')) - tag.indexOf('(') - 1))
                     });
                 }
-                if (tag.startsWith("event")) {
-                    event.push(tag.replaceAll("event$", ""));
-                }
-                if (tag.startsWith("team")) {
-                    team.push(tag.replaceAll("team$", ""));
-                }
-                if (tag.startsWith("person")) {
-                    person.push({name: tag.replaceAll("person$", "")});
-                }
             }
             curInfo["team"] = team;
             curInfo["event"] = event;
             curInfo["person"] = person;
         }
-        console.log("kek");
-        console.log(curInfo);
         setPhotoInfo(curInfo);
     }
 }

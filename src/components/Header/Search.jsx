@@ -13,8 +13,7 @@ const Search = ({setSearchParams, setIsOpenMenu}) => {
         e.preventDefault()
         if (inputText !== "") {
             setData({
-                "text": inputText,
-                "year": (data.year ? data.year : LAST_YEAR)
+                "text": inputText
             });
 
 
