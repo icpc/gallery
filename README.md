@@ -41,7 +41,7 @@ To search by a keyword just type it into the Search field. For example, `Bill`, 
 # Development
 
 The gallery is built on top of the flickr api backend. All metadata is stored in photo exif tags. Tag types are:
-* year, pulled from the name of the album on flickr
+* year, for example `album$2001`
 * event, for example `event$Team Photos`
 * team, for example `team$Aalto University`
 * person, for example `Bill Poucher(1761524d3f579a4d)`. The data in parenthesis denotes face location within the image in Picasa standard.
