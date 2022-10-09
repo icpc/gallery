@@ -61,6 +61,13 @@ Even though flickr stores tags in their initial form, it is important to remembe
 * make sure to keep correct encoding on tags, specifically in people names, to consistently process diacritic symbols
 * make sure to enclose all university names with punctuation in quotes
 
+## Configuration
+
+[`src/const.js`](https://github.com/masha237/gallery/blob/master/src/consts.js) contais access detail and general year setup. 
+
+Each year separately can be setup through individual year files in [`/public/`](https://github.com/masha237/gallery/tree/master/public).
+First line of year file holds the list of events. Second line holds list of universities, third line holds list of people present.
+
 ## Deployment guide
 
 1. Set path
