@@ -1,5 +1,5 @@
 export const years = [
-    "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003"
+    "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001"
 ];
 export const places =
     {
@@ -21,6 +21,8 @@ export const places =
         "2005": "Shanghai, China",
         "2004": "Prague, Czech Republic",
         "2003": "Beverly Hills, CA, USA",
+        "2002": "Honolulu, Hawaii, USA",
+        "2001": "Vancouver, Canada",
     }
 ;
 
@@ -38,7 +40,7 @@ export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
 export const LAST_YEAR = "2020";
-export const FIRST_YEAR = "2003";
+export const FIRST_YEAR = "2001";
 
 export const DEBUG = process.env.NODE_ENV === "development";
 
