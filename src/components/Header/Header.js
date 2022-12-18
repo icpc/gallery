@@ -48,9 +48,13 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
 
 
     async function getMenu(year) {
-        const response = await axios.get(process.env.PUBLIC_URL + `/${year}.html`);
-        const menu = response.data;
-        const split = menu.split("\n", 3);
+        const responseEvent = await axios.get(process.env.PUBLIC_URL + `/data/existing/${year}.event`);
+        const responseTeam = await axios.get(process.env.PUBLIC_URL + `/data/existing/${year}.team`);
+        const responsePeople = await axios.get(process.env.PUBLIC_URL + `/data/existing/${year}.people`);
+
+        const splitEvent = responseEvent.data.split("\n");
+        const splitTeam = responseTeam.data.split("\n");
+        const splitPeople = responsePeople.data.split("\n");
         let obj = data;
         if (year === data.year) {
             if (data.event === undefined && data.team === undefined && data.person === undefined) {
@@ -59,9 +63,9 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
             delete obj.text;
             setData(obj);
         }
-        setEvents(parseOptions(split[0]));
-        setTeams(parseOptions(split[1]));
-        setPeople(parseOptions(split[2]));
+        setEvents(splitEvent);
+        setTeams(splitTeam);
+        setPeople(splitPeople);
     }
 
     useEffect(() => {
@@ -70,10 +74,6 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
 
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
-    }
-
-    function parseOptions(a) {
-        return a.split(',').filter(x => x.length > 0).filter(onlyUnique);
     }
 
     function getOptionObj(a) {
