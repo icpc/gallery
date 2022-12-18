@@ -44,7 +44,11 @@ const Body = () => {
         }
         if (response) {
             setPhotos([...photos, ...response.data.photos.photo.map(photo => {
-                return {url_preview: photo?.url_m, url: photo?.url_l, id: photo?.id, origin: photo?.url_o}
+                if (photo?.url_l !== undefined) {
+                    return {url_preview: photo?.url_m, url: photo?.url_l, id: photo?.id, origin: photo?.url_o}
+                } else {
+                    return {url_preview: photo?.url_m, url: photo?.url_o, id: photo?.id, origin: photo?.url_o}
+                }
             })].filter(onlyUnique));
             setPage(page + 1);
             setTotalPages(response.data.photos.pages)
