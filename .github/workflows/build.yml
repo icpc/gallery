@@ -29,8 +29,8 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Build
-        run: ./build.sh
+        run: PUBLIC_URL=/gallery npm run build
       - uses: actions/upload-artifact@master
         with:
           name: artifacts
-          path: build/upload_me.zip
+          path: build
