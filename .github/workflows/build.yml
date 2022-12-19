@@ -33,4 +33,4 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: artifacts
-          path: artifacts
+          path: build/upload_me.zip

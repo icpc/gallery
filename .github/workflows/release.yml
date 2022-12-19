@@ -27,6 +27,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: artifacts
       - name: Create release
         if: ${{ github.event.inputs.publish }}
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -36,5 +40,5 @@ jobs:
           automatic_release_tag: "v${{ github.event.inputs.version }}"
           draft: ${{ github.event.inputs.draft }}
           files: |
-            artifacts/*.zip
+            upload_me.zip
 
