@@ -2,10 +2,11 @@ import React, {useContext, useState} from 'react';
 import {AppContext} from "../AppContext";
 import "../../styles/Search.css"
 import "../../styles/Header.css"
-import {LAST_YEAR} from "../../consts";
+//import {LAST_YEAR} from "../../consts";
 
 const Search = ({setSearchParams, setIsOpenMenu}) => {
 
+    // eslint-disable-next-line no-unused-vars
     const {data, setData} = useContext(AppContext);
 
     const [inputText, setInputText] = useState("");

@@ -6,9 +6,9 @@ import {AppContext} from "../AppContext";
 import axios from "axios";
 import {LAST_YEAR, places, years} from "../../consts";
 import MenuIcon from '@mui/icons-material/Menu';
-import useMatchMedia from 'use-match-media-hook'
 import "../../styles/DropdownMenu.css"
 import CloseIcon from '@mui/icons-material/Close';
+import { useMediaQuery } from "@mui/material";
 
 
 export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
@@ -24,10 +24,7 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
     const [people, setPeople] = useState([]);
 
 
-    const queries = [
-        '(min-width: 900px)'
-    ]
-    const [desktop] = useMatchMedia(queries)
+    const desktop = useMediaQuery('(min-width: 900px)')
 
     function updData() {
         setYear(data.year === undefined ? "" : data.year);
@@ -44,6 +41,7 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
         } else {
             getMenu(LAST_YEAR)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data.year]);
 
 
@@ -70,8 +68,10 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
 
     useEffect(() => {
         updData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
 
+    // eslint-disable-next-line no-unused-vars
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     }
@@ -149,6 +149,7 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
         } else {
            element.style.display= 'none';
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpenMenu]);
 
     const changeMenu = () => {

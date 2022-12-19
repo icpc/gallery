@@ -23,6 +23,7 @@ const Lightbox = ({
         }
     }
 
+    // eslint-disable-next-line no-unused-vars
     const [isLoaded, setIsLoaded] = useState(false);
 
 
@@ -70,7 +71,7 @@ const Lightbox = ({
                 <img
                     className="full"
                     src={photo.url}
-                    alt={"bigger picture"}
+                    alt={"fullsize"}
                     onLoad={() => setIsLoaded(true)}
                 />
                 <PhotoInfo photo={photo} photoInfo={photoInfo} setFace={setFace}/>

@@ -1,14 +1,11 @@
 import React from 'react';
 import {LAST_YEAR} from "../consts";
 import "../styles/App.css"
-import useMatchMedia from 'use-match-media-hook'
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 const Logo = () => {
-    const queries = [
-        '(min-width: 900px)'
-    ]
-    const [desktop] = useMatchMedia(queries)
+    const desktop = useMediaQuery('(min-width: 900px)');
     if (desktop) {
         return (
             <a className="logo" href={"?album=" + LAST_YEAR}

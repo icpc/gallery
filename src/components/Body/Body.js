@@ -7,7 +7,7 @@ import "../../styles/App.css"
 import MyModal from "./MyModal";
 import {AppContext} from "../AppContext";
 import PhotoParser from "../../Util/PhotoParser";
-import useMatchMedia from 'use-match-media-hook'
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 const Body = () => {
@@ -21,10 +21,7 @@ const Body = () => {
     const [total, setTotal] = useState(1);
     const [photoInfo, setPhotoInfo] = useState(null);
 
-    const queries = [
-        '(min-width: 900px)'
-    ]
-    const [desktop] = useMatchMedia(queries)
+    const desktop = useMediaQuery('(min-width: 900px)');
 
 
     function onlyUnique(value, index, self) {
@@ -82,6 +79,7 @@ const Body = () => {
                 }
             }
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [data.year]
     )
 
@@ -90,6 +88,7 @@ const Body = () => {
             setPage(1)
             getTotal();
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [data.event, data.text, data.team, data.person]
     )
 
@@ -143,6 +142,8 @@ const Body = () => {
                         setIsSlideShow(false);
                         setPhotoInfo(null);
                         break;
+                    default:
+                        break;
                 }
             }
         };
@@ -150,6 +151,7 @@ const Body = () => {
         return () => {
             target.removeEventListener("onkeydown", listener);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [shown]);
 
     const getMore = () => {

@@ -47,7 +47,7 @@ const PhotoInfo = ({photoInfo, setFace, photo}) => {
                 <div onClick={set} className="photoInfo-hide">
                     {!hide ? <VisibilityOffIcon fontSize="large"/> : <VisibilityIcon fontSize="large"/>}
                 </div>
-                <a className="download" href={photo.origin} download target="_blank">
+                <a className="download" href={photo.origin} download target="_blank" rel="noreferrer">
                     <DownloadIcon fontSize="large"/>
                 </a>
             </div>

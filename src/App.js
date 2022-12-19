@@ -7,15 +7,12 @@ import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar";
 import Body from "./components/Body/Body";
 import Logo from "./components/Logo";
-import useMatchMedia from 'use-match-media-hook'
+import useMediaQuery from '@mui/material/useMediaQuery';
 import MobileYearWrapper from "./components/MobileYearWrapper";
 
 
 function App() {
-    const queries = [
-        '(min-width: 900px)'
-    ]
-    const [desktop] = useMatchMedia(queries)
+    const desktop = useMediaQuery('(min-width: 900px)');
     const [isOpenMenu, setIsOpenMenu] = useState();
 
     const [data, setData] = useState({});
@@ -51,6 +48,7 @@ function App() {
             }
         }
         setData(obj);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

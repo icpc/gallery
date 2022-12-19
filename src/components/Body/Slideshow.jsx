@@ -10,6 +10,7 @@ const Slideshow = ({setIsSlideShow, isSlideShow, photo, setPhoto, handelRotation
         }
     }
 
+    // eslint-disable-next-line no-unused-vars
     const [isLoaded, setIsLoaded] = useState(null);
 
     const timeoutRef = React.useRef(null);
@@ -36,6 +37,7 @@ const Slideshow = ({setIsSlideShow, isSlideShow, photo, setPhoto, handelRotation
         return () => {
             resetTimeout();
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [photo]);
 
     const slideShow = () => {
@@ -54,7 +56,7 @@ const Slideshow = ({setIsSlideShow, isSlideShow, photo, setPhoto, handelRotation
                 <img
                     className="full"
                     src={photo.url}
-                    alt={"bigger picture"}
+                    alt={"fullsize"}
                     onLoad={() => setIsLoaded(true)}
                 />
             </div>
