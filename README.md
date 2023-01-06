@@ -68,7 +68,16 @@ Even though flickr stores tags in their initial form, it is important to remembe
 Each year separately can be setup through individual year files in [`/public/`](https://github.com/masha237/gallery/tree/master/public).
 First line of year file holds the list of events. Second line holds list of universities, third line holds list of people present.
 
-## Deployment guide
+## Production Deployment Guide
+
+1. After every commit Action [Build](https://github.com/icpc/gallery/actions/workflows/build.yml) will run automatically.
+1. Open the Action page for the corresponding run. Wait for it to finish
+1. Download the created "artifact" on the bottom of the page
+1. Upload the acquired ```artifacts.zip``` archive into Bluehost -> Advanced -> File Manager -> under ```home/public_html/newsicpc/gallery``` folder
+1. Select ```artifacts.zip``` in the bluehost filemanager webinterface and press the ```Extract``` button
+1. New gallery version is deployed, good job!
+
+## Development Deployment Guide
 
 1. Set path
 
