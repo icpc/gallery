@@ -28,7 +28,6 @@ export const places =
 ;
 
 
-export const current_year = "2020";
 export const api_key = "d30033b3d833adaace90f8487da70bba";
 export const user_id = "141939107@N06";
 
@@ -41,7 +40,7 @@ export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
 export const LAST_YEAR = "2021";
-export const FIRST_YEAR = "2001";
+export const EVENT_NAME = "World Finals"
 
 export const DEBUG = process.env.NODE_ENV === "development";
 

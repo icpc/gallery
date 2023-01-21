@@ -1,5 +1,5 @@
 import "../styles/TableOfContents.css"
-import {places, years} from "../consts";
+import {places, years, EVENT_NAME} from "../consts";
 import {AppContext} from "./AppContext";
 import {useContext} from "react";
 
@@ -44,7 +44,7 @@ const TableOfContents = ({setSearchParams}) => {
                     </div>
                 } else {
                     return <div className="year-wrapper" key={year} title="to top" onClick={event => handleClick(event, year)}>
-                        <div className="year big-year">World Finals {year}</div>
+                        <div className="year big-year">{EVENT_NAME} {year}</div>
                         <div className="place big-place">{places[year]}</div>
                     </div>
                 }
