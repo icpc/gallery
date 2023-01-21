@@ -55,9 +55,6 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
         const splitPeople = responsePeople.data.split("\n");
         let obj = data;
         if (year === data.year) {
-            if (data.event === undefined && data.team === undefined && data.person === undefined) {
-                obj["event"] = "Photo Tour";
-            }
             delete obj.text;
             setData(obj);
         }

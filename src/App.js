@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react'
+import axios from "axios";
 import "./styles/App.css"
 import {AppContext} from "./components/AppContext";
 import {LAST_YEAR} from "./consts";
@@ -18,15 +19,13 @@ function App() {
     const [data, setData] = useState({});
     const [searchParams, setSearchParams] = useSearchParams();
 
-    useEffect(() => {
-        if (desktop) {
-            setIsOpenMenu(true);
-        } else {
-            setIsOpenMenu(false);
-        }
-    }, [desktop])
+    async function getEvents(year) {
+        const responseEvent = await axios.get(process.env.PUBLIC_URL + `/data/existing/${year}.event`);
+        const splitEvent = responseEvent.data.split("\n");
+        return splitEvent
+    }
 
-    useEffect(() => {
+    const getData = async () => {
         let obj = {};
         if (searchParams.has('query')) {
             obj["text"] = searchParams.get('query').replaceAll("+", " ");
@@ -40,14 +39,24 @@ function App() {
                 obj["event"] = searchParams.get('event').replaceAll("+", " ");
             } else if (searchParams.has('team')) {
                 obj["team"] = searchParams.get('team').replaceAll("+", " ");
-
             } else if (searchParams.has('person')) {
                 obj["person"] = searchParams.get('person').replaceAll("+", " ");
-            } else {
-                obj["event"] = "Photo Tour";
             }
+            obj["events"] = await getEvents(obj["year"])
         }
         setData(obj);
+    }
+
+    useEffect(() => {
+        if (desktop) {
+            setIsOpenMenu(true);
+        } else {
+            setIsOpenMenu(false);
+        }
+    }, [desktop])
+
+    useEffect(() => {
+        getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

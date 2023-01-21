@@ -20,17 +20,38 @@ const Body = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [total, setTotal] = useState(1);
     const [photoInfo, setPhotoInfo] = useState(null);
+    const [internalEvent, setInternalEvent] = useState(null)
 
     const desktop = useMediaQuery('(min-width: 900px)');
-
 
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     }
 
+    const getNextEvent = (currentEvent) => {
+        const events = data.events
+        if (events === undefined) 
+            return null
+        const index = events.findIndex(event => event === currentEvent);
+        if (index !== -1 && index + 1 < events.length) {
+            console.log(currentEvent + " -> " + events[index + 1])
+            return events[index + 1]
+        } 
+        return null
+    }
+
+    const getFirstEvent = () => {
+        const events = data.events
+        if (events === undefined) 
+            return null
+        return data.events[0]
+    }
+
     async function uploadGallery() {
         let response;
-        if (data?.event !== undefined) {
+        if (internalEvent !== null) {
+            response = await PhotoService.getAllWithEvent(data.year, internalEvent.replaceAll(" ", "%20"), page) 
+        } else if (data?.event !== undefined) {
             response = await PhotoService.getAllWithEvent(data.year, data.event.replaceAll(" ", "%20"), page)
         } else if (data?.team !== undefined) {
             response = await PhotoService.getAllWithTeam(data.year, data.team.replaceAll(" ", "%20"), page)
@@ -38,8 +59,20 @@ const Body = () => {
             response = await PhotoService.getAllWithPerson(data.year, data.person.replaceAll(" ", "%20"), page)
         } else if (data?.text !== undefined) {
             response = await PhotoService.getAllWithText(data.text.replaceAll(" ", "%20"), page);
+        } else if (internalEvent != null) {
+            setInternalEvent(getFirstEvent)
+            response = await PhotoService.getAllWithEvent(data.year, internalEvent.replaceAll(" ", "%20"), page)
+        } else {
+            setInternalEvent(getFirstEvent)
+            return
         }
+
         if (response) {
+            if (page > response.data.photos.pages && getNextEvent(internalEvent) !== null) {
+                setInternalEvent(getNextEvent(internalEvent))
+                setPage(1)
+                return
+            } 
             setPhotos([...photos, ...response.data.photos.photo.map(photo => {
                 if (photo?.url_l !== undefined) {
                     return {url_preview: photo?.url_m, url: photo?.url_l, id: photo?.id, origin: photo?.url_o}
@@ -47,15 +80,17 @@ const Body = () => {
                     return {url_preview: photo?.url_m, url: photo?.url_o, id: photo?.id, origin: photo?.url_o}
                 }
             })].filter(onlyUnique));
-            setPage(page + 1);
             setTotalPages(response.data.photos.pages)
             setTotal(response.data.photos.total)
+            setPage(page + 1);
         }
     }
 
     async function getTotal() {
         let response;
-        if (data?.event !== undefined) {
+        if (internalEvent !== null) {
+            response = await PhotoService.getAllWithEvent(data.year, internalEvent.replaceAll(" ", "%20"), page) 
+        } else if (data?.event !== undefined) {
             response = await PhotoService.getAllWithEvent(data.year, data.event.replaceAll(" ", "%20"), page)
         } else if (data?.team !== undefined) {
             response = await PhotoService.getAllWithTeam(data.year, data.team.replaceAll(" ", "%20"), page)
@@ -64,7 +99,8 @@ const Body = () => {
         } else if (data?.text !== undefined) {
             response = await PhotoService.getAllWithText(data.text.replaceAll(" ", "%20"), page);
         } else {
-            return;
+            setInternalEvent(getFirstEvent)
+            return
         }
         setTotalPages(response.data.photos.pages)
     }
@@ -155,7 +191,7 @@ const Body = () => {
     }, [shown]);
 
     const getMore = () => {
-        return page <= totalPages
+        return page <= totalPages || getNextEvent(internalEvent) !== null
     }
 
     return (
