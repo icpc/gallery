@@ -4,7 +4,7 @@ import Search from "./Search";
 import "../../styles/Header.css"
 import {AppContext} from "../AppContext";
 import axios from "axios";
-import {LAST_YEAR, places, years} from "../../consts";
+import {LAST_YEAR, places, years, DEFAULT_EVENT} from "../../consts";
 import MenuIcon from '@mui/icons-material/Menu';
 import "../../styles/DropdownMenu.css"
 import CloseIcon from '@mui/icons-material/Close';
@@ -56,7 +56,7 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
         let obj = data;
         if (year === data.year) {
             if (data.event === undefined && data.team === undefined && data.person === undefined) {
-                obj["event"] = "Photo Tour";
+                obj["event"] = DEFAULT_EVENT;
             }
             delete obj.text;
             setData(obj);
@@ -100,8 +100,8 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
             if (!setDataType("event", data.event, selectedItem.year) &&
                 !setDataType("team", data.team, selectedItem.year) &&
                 !setDataType("person", data.person, selectedItem.year)) {
-                setDataType("event", "Photo Tour", selectedItem.year);
-                obj["event"] = "Photo Tour";
+                setDataType("event", DEFAULT_EVENT, selectedItem.year);
+                obj["event"] = DEFAULT_EVENT;
                 delete obj.text;
             }
             setData(obj);
@@ -116,11 +116,11 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
 
                 setData({
                     "year": data.year,
-                    "event": "Photo tour"
+                    "event": DEFAULT_EVENT
                 })
                 setSearchParams({
                     album: data.year,
-                    "event": "Photo tour"
+                    "event": DEFAULT_EVENT
                 });
             } else {
                 setData({

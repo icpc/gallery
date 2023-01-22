@@ -1,5 +1,5 @@
 import "../styles/TableOfContents.css"
-import {places, years, EVENT_NAME} from "../consts";
+import {places, years, CONTEST_NAME, DEFAULT_EVENT} from "../consts";
 import {AppContext} from "./AppContext";
 import {useContext} from "react";
 
@@ -24,8 +24,8 @@ const TableOfContents = ({setSearchParams}) => {
         if (!setDataType("event", data.event, selectedYear) &&
             !setDataType("team", data.team, selectedYear) &&
             !setDataType("person", data.person, selectedYear)) {
-            setDataType("event", "Photo Tour", selectedYear);
-            obj["event"] = "Photo Tour";
+            setDataType("event", DEFAULT_EVENT, selectedYear);
+            obj["event"] = DEFAULT_EVENT;
             delete obj.text;
         }
         setData(obj);
@@ -44,7 +44,7 @@ const TableOfContents = ({setSearchParams}) => {
                     </div>
                 } else {
                     return <div className="year-wrapper" key={year} title="to top" onClick={event => handleClick(event, year)}>
-                        <div className="year big-year">{EVENT_NAME} {year}</div>
+                        <div className="year big-year">{CONTEST_NAME} {year}</div>
                         <div className="place big-place">{places[year]}</div>
                     </div>
                 }

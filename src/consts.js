@@ -40,7 +40,8 @@ export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
 export const LAST_YEAR = "2021";
-export const EVENT_NAME = "World Finals"
+export const CONTEST_NAME = "World Finals";
+export const DEFAULT_EVENT = "Photo Tour";
 
 export const DEBUG = process.env.NODE_ENV === "development";
 
