@@ -18,7 +18,7 @@ export const places =
         "2009": "Stockholm, Sweden",
         "2008": "Banff, Canada",
         "2007": "Tokyo, Japan",
-        "2006": "Waco TX, USA",
+        "2006": "San Antonio, TX, USA",
         "2005": "Shanghai, China",
         "2004": "Prague, Czech Republic",
         "2003": "Beverly Hills, CA, USA",
