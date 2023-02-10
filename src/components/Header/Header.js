@@ -56,9 +56,12 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
         let obj = data;
         if (year === data.year) {
             if (data.event === undefined && data.team === undefined && data.person === undefined) {
-                obj["event"] = DEFAULT_EVENT;
+                obj.event = DEFAULT_EVENT;
             }
             delete obj.text;
+            obj.events = splitEvent;
+            obj.teams = splitTeam;
+            obj.people = splitPeople;
             setData(obj);
         }
         setEvents(splitEvent);
@@ -113,10 +116,12 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
                 return;
             }
             if (selectedItem === "clear") {
-
                 setData({
                     "year": data.year,
-                    "event": DEFAULT_EVENT
+                    "event": DEFAULT_EVENT,
+                    "events": data.events,
+                    "teams": data.teams,
+                    "people": data.people 
                 })
                 setSearchParams({
                     album: data.year,
@@ -125,7 +130,10 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
             } else {
                 setData({
                     "year": data.year,
-                    [type]: selectedItem.label
+                    [type]: selectedItem.label,
+                    "events": data.events,
+                    "teams": data.teams,
+                    "people": data.people 
                 })
                 setSearchParams({
                     album: data.year,
