@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import "../../consts"
 import PhotoService from "../../Util/PhotoService";
 import InfiniteScroll from 'react-infinite-scroller';
@@ -14,6 +14,7 @@ const Body = () => {
 
     const {data} = useContext(AppContext);
     const [isSlideShow, setIsSlideShow] = useState(false);
+    const scrollRef = useRef(null);
 
     const [photos, setPhotos] = useState([]);
     const [page, setPage] = useState(1);
@@ -159,7 +160,7 @@ const Body = () => {
     }
 
     return (
-        <div className="body">
+        <div className="body" ref={scrollRef}>
             {desktop && data.text && <h1 style={{width: "100%"}}>{data.text}</h1>}
             <div style={{paddingBottom: "10px", width: "100%"}}>
                 <InfiniteScroll
@@ -169,6 +170,7 @@ const Body = () => {
                     initialLoad={true}
                     loader={<div className="loader" key={0}>Loading ...</div>}
                     useWindow={false}
+                    getScrollParent={() => scrollRef.current}
                 >
                     {photos.map((photo, index) => {
                         return <figure key={photo?.id + index} className="masonry-brick">
