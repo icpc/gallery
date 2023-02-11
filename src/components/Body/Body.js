@@ -127,12 +127,12 @@ const Body = () => {
         PhotoParser.getPhotoInfo(photo.id, setPhotoInfo)
         setCurrentIndex(index);
         setShown(photo);
-        if (index + 3 >= listPhotos.length - 1 && hasMore()) {
+        if (index + 4 >= listPhotos().length && hasMore()) {
             uploadGallery();
         }
         setLeftArrow(null);
         setRightArrow(null);
-        if (hasMore()) {
+        if (index + 1 < listPhotos().length || hasMore()) {
             setRightArrow(true);
         }
         if (index !== 0) {
@@ -142,11 +142,11 @@ const Body = () => {
 
 
     const handelRotationRight = () => {
-        handelClick(listPhotos[currentIndex + 1], currentIndex + 1);
+        handelClick(listPhotos()[currentIndex + 1], currentIndex + 1);
     }
 
     const handelRotationLeft = () => {
-        handelClick(listPhotos[currentIndex - 1], currentIndex - 1);
+        handelClick(listPhotos()[currentIndex - 1], currentIndex - 1);
     }
 
     useEffect(() => {
@@ -204,7 +204,8 @@ const Body = () => {
                               */}
                             <h1 style={{ marginTop: "0.83em", marginBottom: "0.83em" }}>{event}</h1>
                             <div className="masonry">
-                                {photos.map((photo, index) => {
+                                {photos.map((photo) => {
+                                    let index = listPhotos().indexOf(photo)
                                     return <figure key={photo?.id + index} className="masonry-brick">
                                         <img className="preview"
                                             src={photo?.url_preview}
