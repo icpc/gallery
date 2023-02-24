@@ -1,4 +1,5 @@
 import PhotoService from "./PhotoService";
+import {TAG_EVENT, TAG_TEAM, TAG_ALBUM, TAG_PERSON, TAG_PHOTOGRAPHER} from "../consts";
 
 
 export default class PhotoParser {
@@ -26,25 +27,36 @@ export default class PhotoParser {
         let response = await PhotoService.getPhotoInfo(id);
         console.log("ID", id);
         let curInfo = {
-            "photographer": response.data.photo.description._content,
         };
         if (response.data.photo.tags.tag) {
-            let person = [], team = [], event = [];
+            let person = [], team = [], event = [], album = [], photographer = [];
             for (let i = 0; i < response.data.photo.tags.tag.length; i++) {
                 if (response.data.photo.tags.tag[i] === null) {
                     continue;
                 }
                 let tag = response.data.photo.tags.tag[i].raw;
-                if (tag.startsWith("event")) {
-                    event.push(tag.replaceAll("event$", ""));
+                if (tag.startsWith(TAG_EVENT)) {
+                    event.push(tag.replaceAll(TAG_EVENT+"$", ""));
                     continue;
                 }
-                if (tag.startsWith("team")) {
-                    team.push(tag.replaceAll("team$", ""));
+                if (tag.startsWith(TAG_EVENT)) {
+                    event.push(tag.replaceAll(TAG_EVENT+"$", ""));
                     continue;
                 }
-                if (tag.startsWith("person")) {
-                    person.push({name: tag.replaceAll("person$", "")});
+                if (tag.startsWith(TAG_TEAM)) {
+                    team.push(tag.replaceAll(TAG_TEAM+"$", ""));
+                    continue;
+                }
+                if (tag.startsWith(TAG_PERSON)) {
+                    person.push({name: tag.replaceAll(TAG_PERSON+"$", "")});
+                    continue;
+                }
+                if (tag.startsWith(TAG_ALBUM)) {
+                    album.push(tag.replaceAll(TAG_ALBUM+"$", ""));
+                    continue;
+                }
+                if (tag.startsWith(TAG_PHOTOGRAPHER)) {
+                    photographer.push(tag.replaceAll(TAG_PHOTOGRAPHER+"$", ""));
                     continue;
                 }
                 if (tag.indexOf('(') !== -1) {
@@ -58,10 +70,13 @@ export default class PhotoParser {
                     });
                 }
             }
-            curInfo["team"] = team;
-            curInfo["event"] = event;
-            curInfo["person"] = person;
+            curInfo[TAG_TEAM] = team;
+            curInfo[TAG_EVENT] = event;
+            curInfo[TAG_PERSON] = person;
+            curInfo[TAG_ALBUM] = album;
+            curInfo[TAG_PHOTOGRAPHER] = photographer;
         }
+        curInfo[TAG_PHOTOGRAPHER]?.push(response.data.photo.description._content.replaceAll("Photographer: ",""));
         setPhotoInfo(curInfo);
     }
 }
