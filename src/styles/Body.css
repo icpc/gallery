@@ -41,6 +41,7 @@
 
 .body .preview {
     object-fit: cover;
+    object-position: top;
     width: 100%;
 
     border-radius: 8px;
