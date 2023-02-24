@@ -50,9 +50,9 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
         const responseTeam = await axios.get(process.env.PUBLIC_URL + `/data/existing/${year}.team`);
         const responsePeople = await axios.get(process.env.PUBLIC_URL + `/data/existing/${year}.people`);
 
-        const splitEvent = responseEvent.data.split("\n");
-        const splitTeam = responseTeam.data.split("\n");
-        const splitPeople = responsePeople.data.split("\n");
+        const splitEvent = responseEvent.data.split("\n").map(i=>i.trim());
+        const splitTeam = responseTeam.data.split("\n").map(i=>i.trim());
+        const splitPeople = responsePeople.data.split("\n").map(i=>i.trim());
         let obj = data;
         if (year === data.year) {
             if (data.event === undefined && data.team === undefined && data.person === undefined) {

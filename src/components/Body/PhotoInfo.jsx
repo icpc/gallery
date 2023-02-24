@@ -11,7 +11,6 @@ const PhotoInfo = ({photoInfo, setFace, photo}) => {
         setHide(hide ^ 1);
     }
 
-    const {data} = useContext(AppContext);
     const [hide, setHide] = useState(false);
     return (
         <div className="photoInfo">
@@ -22,21 +21,21 @@ const PhotoInfo = ({photoInfo, setFace, photo}) => {
 
             {!hide && photoInfo?.album?.length !== 0 && <div>
                 Album: {photoInfo?.album?.map(album => <a key={album + photo.url}
-                                                          href={"?" + "album=" + photoInfo?.album[0].replaceAll(' ', '+') }
+                                                          href={"?album=" + photoInfo?.album[0].replaceAll(' ', '+') }
                                                           className={"album " + album}
                                                           style={{display: "inline", padding: "2px"}}>{album}</a>)}
             </div>}
 
             {!hide && photoInfo?.event?.length !== 0 && <div>
                 Event: {photoInfo?.event?.map(event => <a key={event + photo.url}
-                                                          href={"?" + ("album=" + photoInfo?.album[0].replaceAll(' ', '+') + "&event=" + event.replaceAll(' ', '+'))}
+                                                          href={"?album=" + photoInfo?.album[0].replaceAll(' ', '+') + "&event=" + event.replaceAll(' ', '+')}
                                                           className={"event " + event}
                                                           style={{display: "inline", padding: "2px"}}>{event}</a>)}
             </div>}
 
             {!hide && photoInfo?.team?.length !== 0 && <div>
                 Team: {photoInfo?.team?.map(team => <a key={team + photo.url}
-                                                       href={"?" + ("album=" + photoInfo?.album[0].replaceAll(' ', '+') + "&team=" + team.replaceAll(' ', '+'))}
+                                                       href={"?album=" + photoInfo?.album[0].replaceAll(' ', '+') + "&team=" + team.replaceAll(' ', '+')}
                                                        className={"team " + team}
                                                        style={{display: "inline", padding: "2px"}}>{team}</a>)}
             </div>}
@@ -44,7 +43,7 @@ const PhotoInfo = ({photoInfo, setFace, photo}) => {
             {!hide && photoInfo?.person?.length !== 0 && <div>
                 Person: {photoInfo?.person?.map(person => {
                 	return <a key={person.name + photo.url + person.position.top}
-                                                             href={"?" + ("album=" + photoInfo?.album[0].replaceAll(' ', '+') + "&person=" + person.name.replaceAll(' ', '+'))}
+                                                             href={"?album=" + photoInfo?.album[0].replaceAll(' ', '+') + "&person=" + person.name.replaceAll(' ', '+')}
                                                              className={"name " + person.name}
                                                              onMouseLeave={() => setFace(null)}
                                                              onMouseEnter={() => setFace(person)} 
