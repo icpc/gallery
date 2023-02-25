@@ -17,6 +17,8 @@ export const user_id = "141939107@N06";
 export const TAG_EVENT = "event";
 export const TAG_TEAM = "team";
 export const TAG_ALBUM = "albumNAC";
+export const TAG_PERSON = "person";
+export const TAG_PHOTOGRAPHER = "photographer";
 
 export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;

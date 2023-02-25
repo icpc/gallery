@@ -1,48 +1,49 @@
 import React, {useState} from 'react';
+import {TAG_EVENT, TAG_TEAM, TAG_ALBUM, TAG_PHOTOGRAPHER,TAG_PERSON} from "../../consts";
 import "../../styles/PhotoInfo.css"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import DownloadIcon from '@mui/icons-material/Download';
 
 const PhotoInfo = ({photoInfo, setFace, photo}) => {
-
+    console.log(TAG_EVENT, TAG_TEAM, TAG_ALBUM, TAG_PHOTOGRAPHER,TAG_PERSON)
+    console.log(photoInfo)
     function set() {
         setHide(hide ^ 1);
     }
-
     const [hide, setHide] = useState(false);
     return (
         <div className="photoInfo">
 
-            {!hide && <div>
-                Photographer: {photoInfo?.photographer.join(", ")}
+            {!hide && photoInfo && <div>
+                Photographer: {photoInfo[TAG_PHOTOGRAPHER].join(", ")}
             </div>}
 
-            {!hide && photoInfo?.album?.length !== 0 && <div>
-                Album: {photoInfo?.album?.map(album => <a key={album + photo.url}
-                                                          href={"?album=" + photoInfo?.album[0].replaceAll(' ', '+') }
+            {!hide && photoInfo && photoInfo[TAG_ALBUM].length !== 0 && <div>
+                Album: {photoInfo[TAG_ALBUM].map(album => <a key={album + photo.url}
+                                                          href={"?album=" + album.replaceAll(' ', '+') }
                                                           className={"album " + album}
                                                           style={{display: "inline", padding: "2px"}}>{album}</a>)}
             </div>}
 
-            {!hide && photoInfo?.event?.length !== 0 && <div>
-                Event: {photoInfo?.event?.map(event => <a key={event + photo.url}
-                                                          href={"?album=" + photoInfo?.album[0].replaceAll(' ', '+') + "&event=" + event.replaceAll(' ', '+')}
+            {!hide && photoInfo && photoInfo[TAG_EVENT].length !== 0 && <div>
+                Event: {photoInfo[TAG_EVENT].map(event => <a key={event + photo.url}
+                                                          href={"?album=" + photoInfo[TAG_ALBUM][0].replaceAll(' ', '+') + "&event=" + event.replaceAll(' ', '+')}
                                                           className={"event " + event}
                                                           style={{display: "inline", padding: "2px"}}>{event}</a>)}
             </div>}
 
-            {!hide && photoInfo?.team?.length !== 0 && <div>
-                Team: {photoInfo?.team?.map(team => <a key={team + photo.url}
-                                                       href={"?album=" + photoInfo?.album[0].replaceAll(' ', '+') + "&team=" + team.replaceAll(' ', '+')}
+            {!hide && photoInfo && photoInfo[TAG_TEAM].length !== 0 && <div>
+                Team: {photoInfo[TAG_TEAM].map(team => <a key={team + photo.url}
+                                                       href={"?album=" + photoInfo[TAG_ALBUM][0].replaceAll(' ', '+') + "&team=" + team.replaceAll(' ', '+')}
                                                        className={"team " + team}
                                                        style={{display: "inline", padding: "2px"}}>{team}</a>)}
             </div>}
 
-            {!hide && photoInfo?.person?.length !== 0 && <div>
-                Person: {photoInfo?.person?.map(person => {
+            {!hide && photoInfo && photoInfo[TAG_PERSON].length !== 0 && <div>
+                Person: {photoInfo[TAG_PERSON].map(person => {
                 	return <a key={person.name + photo.url + person.position.top}
-                                                             href={"?album=" + photoInfo?.album[0].replaceAll(' ', '+') + "&person=" + person.name.replaceAll(' ', '+')}
+                                                             href={"?album=" + photoInfo[TAG_ALBUM][0].replaceAll(' ', '+') + "&person=" + person.name.replaceAll(' ', '+')}
                                                              className={"name " + person.name}
                                                              onMouseLeave={() => setFace(null)}
                                                              onMouseEnter={() => setFace(person)} 
