@@ -67,11 +67,10 @@ const Body = () => {
                 return;
             }
             appendPhotos(internalEvent, [...response.data.photos.photo.map(photo => {
-                if (photo?.url_l !== undefined) {
-                    return { url_preview: photo?.url_m, url: photo?.url_l, id: photo?.id, origin: photo?.url_o }
-                } else {
-                    return { url_preview: photo?.url_m, url: photo?.url_o, id: photo?.id, origin: photo?.url_o }
-                }
+                return { url_preview: (photo?.url_m !== undefined ? photo?.url_m : photo?.url_o ), 
+                         url: (photo?.url_l !== undefined ? photo?.url_l : photo?.url_o ), 
+                         id: photo?.id, 
+                         origin: photo?.url_o }
             })]);
             setTotalPages(response.data.photos.pages)
             setTotal(response.data.photos.total)
@@ -81,7 +80,7 @@ const Body = () => {
 
     async function getTotal() {
         let response;
-        if (internalEvent !== undefined) {
+        if (internalEvent !== undefined) {    // if you switch from year to text search this if gets data=undefined and throws an error. But if we split text search into albums too that will make sense
             response = await PhotoService.getAllWithEvent(data.year, data.event.replaceAll(" ", "%20"), page)
         } else if (data?.team !== undefined) {
             response = await PhotoService.getAllWithTeam(data.year, data.team.replaceAll(" ", "%20"), page)
@@ -98,6 +97,7 @@ const Body = () => {
     useEffect(() => {
         if (data?.year !== undefined) {
             setPhotosByEvent(new Map())
+            setInternalEvent(data.event)
             setPage(1)
             if (data.person !== undefined || internalEvent !== undefined || data.team !== undefined || data.text !== undefined) {
                 getTotal();
@@ -184,6 +184,7 @@ const Body = () => {
     const hasMore = () => {
         return page <= totalPages || getNextEvent(internalEvent) !== null
     }
+
 
     return (
         <div className="body" ref={scrollRef}>
