@@ -33,7 +33,7 @@ export const user_id = "141939107@N06";
 
 export const TAG_EVENT = "event";
 export const TAG_TEAM = "team";
-export const TAG_ALBUM = "album";
+export const TAG_ALBUM = "albumWF";
 export const TAG_PERSON = "person";
 export const TAG_PHOTOGRAPHER = "photographer";
 
