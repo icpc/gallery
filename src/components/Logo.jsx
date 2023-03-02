@@ -2,6 +2,7 @@ import React from 'react';
 import {LAST_YEAR} from "../consts";
 import "../styles/App.css"
 import useMediaQuery from '@mui/material/useMediaQuery';
+import logo from "../images/logo2.svg"
 
 
 const Logo = () => {
@@ -10,7 +11,7 @@ const Logo = () => {
         return (
             <a className="logo" href={"?album=" + LAST_YEAR}
                style={{marginLeft: "1rem", marginTop: "40px", display: "flex", justifyContent: "center"}}>
-                <img className={"logo"} src={process.env.PUBLIC_URL + "/logo2.svg"}
+                <img className={"logo"} src={logo}
                      style={{height: "56px", maxWidth: "100%"}} alt={"go home page"}/></a>
 
         );
@@ -18,8 +19,8 @@ const Logo = () => {
         return (
             <a className="logo" href={"?album=" + LAST_YEAR}
                style={{marginLeft: "1rem", marginTop: "10px", display: "flex", justifyContent: "left"}}>
-                <img className={"logo"} src={process.env.PUBLIC_URL + "/logo2.svg"}
-                      alt={"go home page"}/></a>
+                <img className={"logo"} src={logo}
+                     alt={"go home page"}/></a>
 
         );
     }

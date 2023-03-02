@@ -45,8 +45,7 @@ const CustomPopper = function (props) {
     return <MyPaper {...props} style={{backgroundColor: "#2E2E2E", color: "#8A8A8A"}}/>;
 };
 
-const MySelect = ({options, name = "", onChange, value, link}) => {
-    const path = process.env.PUBLIC_URL + link;
+const MySelect = ({options, name = "", onChange, value, leftIcon}) => {
     return (
         <Autocomplete
             disablePortal
@@ -70,7 +69,7 @@ const MySelect = ({options, name = "", onChange, value, link}) => {
             renderInput={(params) => <MyTextField {...params} variant="outlined" label={name} style={{
                 backgroundColor: "#2E2E2E",
                 borderRadius: "8px",
-                backgroundImage: `url(${path})`,
+                backgroundImage: `url(${leftIcon})`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "left 10px center"
             }}/>}

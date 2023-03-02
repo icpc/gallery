@@ -39,6 +39,5 @@ export const LAST_YEAR = "2022";
 export const CONTEST_NAME = "";
 export const DEFAULT_EVENT = "Photo Tour";
 
-export const DEBUG = process.env.NODE_ENV === "development";
 
 

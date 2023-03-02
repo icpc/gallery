@@ -1,50 +1,36 @@
-export const years = [
-    "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001"
-];
-export const places =
-    {
-        "2021": "Dhaka, Bangladesh",
-        "2020": "Moscow, Russia",
-        "2019": "Porto, Portugal",
-        "2018": "Beijing, China",
-        "2017": "Rapid City, SD, USA",
-        "2016": "Phuket, Thailand",
-        "2015": "Marrakesh, Morocco",
-        "2014": "Ekaterinburg, Russia",
-        "2013": "Saint Petersburg, Russia",
-        "2012": "Warsaw, Poland",
-        "2011": "Orlando FL, USA",
-        "2010": "Harbin, China",
-        "2009": "Stockholm, Sweden",
-        "2008": "Banff, Canada",
-        "2007": "Tokyo, Japan",
-        "2006": "San Antonio, TX, USA",
-        "2005": "Shanghai, China",
-        "2004": "Prague, Czech Republic",
-        "2003": "Beverly Hills, CA, USA",
-        "2002": "Honolulu, Hawaii, USA",
-        "2001": "Vancouver, Canada",
-    }
-;
+const dataFolder = import.meta.env.VITE_DATA_FOLDER;
+console.log(import.meta.env);
 
+const consts = await import(`../${dataFolder}/consts.js`);
+export const getEventData = async (year) => {
+    return (await import(`../${dataFolder}/${year}.event`)).default;
+}
 
-export const api_key = "d30033b3d833adaace90f8487da70bba";
-export const user_id = "141939107@N06";
+export const getTeamData = async (year) => {
+    return (await import(`../${dataFolder}/${year}.team`)).default;
+}
 
-export const TAG_EVENT = "event";
-export const TAG_TEAM = "team";
-export const TAG_ALBUM = "albumWF";
-export const TAG_PERSON = "person";
-export const TAG_PHOTOGRAPHER = "photographer";
+export const getPeopleData = async (year) => {
+    return (await import(`../${dataFolder}/${year}.people`)).default;
+}
 
-export const SVG_WIDTH = 60;
-export const SVG_HEIGHT = 60;
-
-export const PER_PAGE = 25;
-export const LAST_YEAR = "2021";
-export const CONTEST_NAME = "World Finals";
-export const DEFAULT_EVENT = "Photo Tour";
-
-export const DEBUG = process.env.NODE_ENV === "development";
-
+console.log(`Using ${dataFolder} folder for consts.js`);
+console.log(`Loaded \n${JSON.stringify(consts, undefined, 4)}`);
+export const years = consts.years;
+export const places = consts.places;
+export const api_key = consts.api_key;
+export const user_id = consts.user_id;
+export const TAG_EVENT = consts.TAG_EVENT;
+export const TAG_TEAM = consts.TAG_TEAM;
+export const TAG_ALBUM = consts.TAG_ALBUM;
+export const TAG_PERSON = consts.TAG_PERSON;
+export const TAG_PHOTOGRAPHER = consts.TAG_PHOTOGRAPHER;
+export const SVG_WIDTH = consts.SVG_WIDTH;
+export const SVG_HEIGHT = consts.SVG_HEIGHT;
+export const PER_PAGE = consts.PER_PAGE;
+export const LAST_YEAR = consts.LAST_YEAR;
+export const CONTEST_NAME = consts.CONTEST_NAME;
+export const DEFAULT_EVENT = consts.DEFAULT_EVENT;
+// todo: somehow replace this without redeclaration
+export const DEBUG = import.meta.env.mode === "development";
 

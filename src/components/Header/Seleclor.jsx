@@ -1,11 +1,11 @@
 import React from 'react';
 import MySelect from "../UI/Select/MySelect";
 
-const Seleclor = ({link, func, name, value, options}) => {
+const Seleclor = ({leftIcon: leftIcon, func, name, value, options}) => {
 
     return (
         <div className="selector-wrapper">
-            <MySelect options={options} onChange={func} name={name} value={value} link={link}/>
+            <MySelect options={options} onChange={func} name={name} value={value} leftIcon={leftIcon}/>
         </div>
     );
 };

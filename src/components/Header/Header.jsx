@@ -4,11 +4,15 @@ import Search from "./Search";
 import "../../styles/Header.css"
 import {AppContext} from "../AppContext";
 import axios from "axios";
-import {LAST_YEAR, places, years, DEFAULT_EVENT} from "../../consts";
+import {LAST_YEAR, places, years, DEFAULT_EVENT, getEventData, getPeopleData, getTeamData} from "../../consts";
 import MenuIcon from '@mui/icons-material/Menu';
 import "../../styles/DropdownMenu.css"
 import CloseIcon from '@mui/icons-material/Close';
 import { useMediaQuery } from "@mui/material";
+import calendarIcon from "../../images/calender.svg";
+import eventIcon from "../../images/event.svg";
+import teamIcon from "../../images/team.svg";
+import personIcon from "../../images/person.svg";
 
 
 export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
@@ -46,13 +50,13 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
 
 
     async function getMenu(year) {
-        const responseEvent = await axios.get(process.env.PUBLIC_URL + `/data/existing/${year}.event`);
-        const responseTeam = await axios.get(process.env.PUBLIC_URL + `/data/existing/${year}.team`);
-        const responsePeople = await axios.get(process.env.PUBLIC_URL + `/data/existing/${year}.people`);
+        const responseEvent = await getEventData(year);
+        const responseTeam = await getTeamData(year);
+        const responsePeople = await getPeopleData(year);
 
-        const splitEvent = responseEvent.data.split("\n").map(i=>i.trim());
-        const splitTeam = responseTeam.data.split("\n").map(i=>i.trim());
-        const splitPeople = responsePeople.data.split("\n").map(i=>i.trim());
+        const splitEvent = responseEvent.split("\n").map(i=>i.trim());
+        const splitTeam = responseTeam.split("\n").map(i=>i.trim());
+        const splitPeople = responsePeople.split("\n").map(i=>i.trim());
         let obj = data;
         if (year === data.year) {
             if (data.event === undefined && data.team === undefined && data.person === undefined) {
@@ -178,7 +182,7 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
                 })}
                           setSearchParams={setSearchParams}
                           name={"Select year"}
-                          link={`/calender.svg`}
+                          leftIcon={calendarIcon}
                           func={selectedYear => {
                               setter(selectedYear, "year")
                           }}
@@ -186,7 +190,7 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
                 <Seleclor options={getOptionObj(events)}
                           setSearchParams={setSearchParams}
                           name={"Select event"}
-                          link={`/event.svg`}
+                          leftIcon={eventIcon}
                           func={selectedEvent => {
                               setter(selectedEvent, "event")
                           }}
@@ -194,14 +198,14 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
                 <Seleclor options={getOptionObj(teams)}
                           setSearchParams={setSearchParams}
                           name={"Select team"}
-                          link={`/team.svg`}
+                          leftIcon={teamIcon}
                           func={selectedTeam => {
                               setter(selectedTeam, "team")
                           }} value={team}/>
                 <Seleclor options={getOptionObj(people)}
                           setSearchParams={setSearchParams}
                           name={"Select person"}
-                          link={`/person.svg`}
+                          leftIcon={personIcon}
                           func={selectedPerson => {
                               setter(selectedPerson, "person")
                           }}
