@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import "../styles/App.css"
 import {AppContext} from "./AppContext";
-import {places} from "../consts";
+import {places,CONTEST_NAME} from "../consts";
 
 
 const MobileYearWrapper = ({setIsOpenMenu}) => {
@@ -19,7 +19,7 @@ const MobileYearWrapper = ({setIsOpenMenu}) => {
 
     return (
         <div className="mobile-year-wrapper" style={{marginLeft:"1rem"}} onClick={openMenu}>
-            <div className="year">World Finals {data.year}</div>
+            <div className="year">{CONTEST_NAME} {data.year}</div>
             <div className="place">{places[data.year]}</div>
         </div>
     );

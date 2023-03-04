@@ -12,6 +12,6 @@ export default defineConfig({
     build: {
         target: 'esnext',
         emptyOutDir: true,
-        outDir: 'dist',
+        outDir: process.env.PUBLIC_URL,
     },
 });
