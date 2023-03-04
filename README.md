@@ -79,26 +79,29 @@ First line of year file holds the list of events. Second line holds list of univ
 
 ## Development Deployment Guide
 
+Requires: Node 18+
+
 1. Set path
 
 ```
-set PUBLIC_URL=/gallery
+set PUBLIC_URL=gallery
+set VITE_DATA_FOLDER=data
+
 ```
 
 2. Start production build
 
 ```
-npm run build
+npm run build -- --base=/%PUBLIC_URL%
+
 ```
 
-3. rename `build` folder into `gallery`
-4. upload `gallery` folder to your server
+3. this will produce a folder named %PUBLIC_URL%
+4. upload this folder to your server
 
 ## Future Work:
 
 * easy interface to suggest a photo tag change
-* infinite scroll though all years by given filter
-* work better with university names with commas, ampersands and other symbols in the name
 * (?) support universities changing names
 * rename events for better consistence (correct flickr tags)
 * release badge recognition tool
