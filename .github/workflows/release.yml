@@ -48,8 +48,8 @@ jobs:
           name: build-${{ matrix.public_url }}
           path: ${{ matrix.public_url }}.zip
           if-no-files-found: error
-  release:
-    name: Create release
+  merge:
+    name: Merge zips into one
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -67,6 +67,21 @@ jobs:
           ls
           zip -r all.zip */*
           ls
+      - name: Upload
+        uses: actions/upload-artifact@master
+        with:
+          name: all
+          path: build-all/all.zip
+          if-no-files-found: error
+  release:
+    name: Create release
+    runs-on: ubuntu-latest
+    needs: merge
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: .
       - name: Create release
         if: ${{ github.event.inputs.publish }}
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -76,4 +91,4 @@ jobs:
           automatic_release_tag: "v${{ github.event.inputs.version }}"
           draft: ${{ github.event.inputs.draft }}
           files: |
-            build-all/*.zip
+            *.zip
