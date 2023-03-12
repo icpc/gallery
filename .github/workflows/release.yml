@@ -22,9 +22,7 @@ on:
 jobs:
   build:
     name: Create artifacts from master
-    runs:
-      using: 'docker'
-      image: '.github/workflow/Dockerfile'
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
@@ -35,6 +33,13 @@ jobs:
           - public_url: galleryNERC # nerc
             data_folder: dataNERC
     steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
       - name: Build
         run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} ./build.sh
       - name: Upload
