@@ -59,6 +59,7 @@ jobs:
           path: .
       - name: Make zip from multiple zips
         run: |
+          mkdir build-all
           cp build-*/*.zip build-all
           cd build-all
           ls
