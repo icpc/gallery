@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Build WF
-        run: PUBLIC_URL=gallery VITE_DATA_FOLDER=data npm run build
+        run: PUBLIC_URL=gallery VITE_DATA_FOLDER=data ./build.sh
       - name: Upload WF
         uses: actions/upload-artifact@master
         with:
@@ -40,7 +40,7 @@ jobs:
           path: "gallery.zip"
           if-no-files-found: error
       - name: Build NAC
-        run: PUBLIC_URL=galleryNAC VITE_DATA_FOLDER=dataNAC npm run build
+        run: PUBLIC_URL=galleryNAC VITE_DATA_FOLDER=dataNAC ./build.sh
       - name: Upload NAC
         uses: actions/upload-artifact@master
         with:
@@ -48,7 +48,7 @@ jobs:
           path: "galleryNAC.zip"
           if-no-files-found: error
       - name: Build NERC
-        run: PUBLIC_URL=galleryNERC VITE_DATA_FOLDER=dataNERC npm run build
+        run: PUBLIC_URL=galleryNERC VITE_DATA_FOLDER=dataNERC ./build.sh
       - name: Upload NERC
         uses: actions/upload-artifact@master
         with:
