@@ -32,29 +32,36 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Build WF
-        # PUBLIC_URL="$PUBLIC_URL" VITE_DATA_FOLDER="$VITE_DATA_FOLDER" npm run build -- --base=/${PUBLIC_URL}
-        run: PUBLIC_URL=gallery VITE_DATA_FOLDER=data npm run build -- --base=/gallery
+        run: PUBLIC_URL=gallery VITE_DATA_FOLDER=data ./build.sh
       - name: Upload WF
         uses: actions/upload-artifact@master
         with:
           name: build-wf
-          path: gallery
+          path: "gallery.zip"
           if-no-files-found: error
       - name: Build NAC
-        run: PUBLIC_URL=galleryNAC VITE_DATA_FOLDER=dataNAC npm run build -- --base=/galleryNAC
+        run: PUBLIC_URL=galleryNAC VITE_DATA_FOLDER=dataNAC ./build.sh
       - name: Upload NAC
         uses: actions/upload-artifact@master
         with:
           name: build-nac
-          path: galleryNAC
+          path: "galleryNAC.zip"
           if-no-files-found: error
       - name: Build NERC
-        run: PUBLIC_URL=galleryNERC VITE_DATA_FOLDER=dataNERC npm run build -- --base=/galleryNERC
+        run: PUBLIC_URL=galleryNERC VITE_DATA_FOLDER=dataNERC ./build.sh
       - name: Upload NERC
         uses: actions/upload-artifact@master
         with:
           name: build-nerc
-          path: galleryNERC
+          path: "galleryNERC.zip"
+          if-no-files-found: error
+      - name: Make zip of all galery* directories
+        run: zip -r gallery-all.zip gallery*/*
+      - name: Upload all
+        uses: actions/upload-artifact@master
+        with:
+          name: build-all
+          path: "gallery-all.zip"
           if-no-files-found: error
   release:
     name: Create release
@@ -65,8 +72,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: build
-      - name: Make zip of all gallery* directories
-        run: zip -r gallery-all.zip build/*
       - name: Create release
         if: ${{ github.event.inputs.publish }}
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -76,4 +81,4 @@ jobs:
           automatic_release_tag: "v${{ github.event.inputs.version }}"
           draft: ${{ github.event.inputs.draft }}
           files: |
-            gallery-all.zip
+            build/**/*.zip
