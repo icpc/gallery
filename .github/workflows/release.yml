@@ -55,6 +55,14 @@ jobs:
           name: build-nerc
           path: "galleryNERC.zip"
           if-no-files-found: error
+      - name: Make zip of all galery* directories
+        run: zip -r gallery-all.zip gallery*/**/*
+      - name: Upload all
+        uses: actions/upload-artifact@master
+        with:
+          name: build-all
+          path: "gallery-all.zip"
+          if-no-files-found: error
   release:
     name: Create release
     runs-on: ubuntu-latest
