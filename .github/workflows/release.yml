@@ -20,9 +20,18 @@ on:
         default: true
 
 jobs:
-  build: # FIXME: use matrix instead of a couple of steps. Requires a Dockerfile for the builder image with the dependencies
+  build:
     name: Create artifacts from master
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - public_url: gallery # wf
+            data_folder: data
+          - public_url: galleryNAC # nac
+            data_folder: dataNAC
+          - public_url: galleryNERC # nerc
+            data_folder: dataNERC
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v3
@@ -31,37 +40,13 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
-      - name: Build WF
-        run: PUBLIC_URL=gallery VITE_DATA_FOLDER=data ./build.sh
-      - name: Upload WF
+      - name: Build
+        run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} ./build.sh
+      - name: Upload
         uses: actions/upload-artifact@master
         with:
-          name: build-wf
-          path: "gallery.zip"
-          if-no-files-found: error
-      - name: Build NAC
-        run: PUBLIC_URL=galleryNAC VITE_DATA_FOLDER=dataNAC ./build.sh
-      - name: Upload NAC
-        uses: actions/upload-artifact@master
-        with:
-          name: build-nac
-          path: "galleryNAC.zip"
-          if-no-files-found: error
-      - name: Build NERC
-        run: PUBLIC_URL=galleryNERC VITE_DATA_FOLDER=dataNERC ./build.sh
-      - name: Upload NERC
-        uses: actions/upload-artifact@master
-        with:
-          name: build-nerc
-          path: "galleryNERC.zip"
-          if-no-files-found: error
-      - name: Make zip of all galery* directories
-        run: zip -r gallery-all.zip gallery*/*
-      - name: Upload all
-        uses: actions/upload-artifact@master
-        with:
-          name: build-all
-          path: "gallery-all.zip"
+          name: build-${{ matrix.public_url }}
+          path: ${{ matrix.public_url }}.zip
           if-no-files-found: error
   release:
     name: Create release
