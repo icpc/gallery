@@ -59,8 +59,13 @@ jobs:
           path: .
       - name: Make zip from multiple zips
         run: |
+          cp build-*/*.zip build-all
+          cd build-all
+          ls
           unzip '*.zip'
+          ls
           zip -r all.zip */*
+          ls
       - name: Create release
         if: ${{ github.event.inputs.publish }}
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -70,4 +75,4 @@ jobs:
           automatic_release_tag: "v${{ github.event.inputs.version }}"
           draft: ${{ github.event.inputs.draft }}
           files: |
-            *.zip
+            build-all/*.zip
