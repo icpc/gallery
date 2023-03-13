@@ -1,22 +1,23 @@
 export const years = [
-    "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2004", "2003", "2001", "2000"
+    "2022", "RC 2022-2023", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2004", "2003", "2001", "2000"
 ];
 export const places =
     {
-        "2022": "",
-        "2021": "",
-        "2020": "",
-        "2019": "",
-        "2018": "",
-        "2017": "",
-        "2016": "",
-        "2015": "",
-        "2014": "",
-        "2013": "",
-        "2004": "",
-        "2003": "",
-        "2001": "",
-        "2000": "",
+        "2022": "Tinkoff Arena",
+        "RC 2022-2023": "Regional Contests",
+        "2021": "Tinkoff Arena",
+        "2020": "SPb, My history park",
+        "2019": "SPb, My history park",
+        "2018": "ITMO University",
+        "2017": "ITMO University",
+        "2016": "ITMO University",
+        "2015": "ITMO University",
+        "2014": "ITMO University",
+        "2013": "ITMO University",
+        "2004": "SPb, Palace of Youth Creativity",
+        "2003": "SPb, Palace of Youth Creativity",
+        "2001": "SPb, Palace of Youth Creativity",
+        "2000": "SPb, Palace of Youth Creativity",
     }
 ;
 
