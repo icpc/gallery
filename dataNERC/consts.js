@@ -1,5 +1,5 @@
 export const years = [
-    "2022", "RC 2022-2023", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2004", "2003", "2001", "2000"
+    "2022", "RC 2022-2023", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2004", "2003", "2001", "2000"
 ];
 export const places =
     {
@@ -14,6 +14,8 @@ export const places =
         "2015": "ITMO University",
         "2014": "ITMO University",
         "2013": "ITMO University",
+        "2012": "ITMO University",
+        "2011": "ITMO University",
         "2004": "SPb, Palace of Youth Creativity",
         "2003": "SPb, Palace of Youth Creativity",
         "2001": "SPb, Palace of Youth Creativity",
