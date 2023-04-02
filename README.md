@@ -65,35 +65,34 @@ Even though flickr stores tags in their initial form, it is important to remembe
 
 [`src/const.js`](https://github.com/masha237/gallery/blob/master/src/consts.js) contais access detail and general year setup. 
 
-Each year separately can be setup through individual year files in [`/public/`](https://github.com/masha237/gallery/tree/master/public).
-First line of year file holds the list of events. Second line holds list of universities, third line holds list of people present.
+This repository supports multiple galleries, each with its own dedicated [`/data/`](https://github.com/icpc/gallery/tree/main/data) folder.
+Each year is represented by three files in this folder: ```.event```, ```.people``` and ```.team``` with one item per line.
 
 ## Production Deployment Guide
 
-1. After every commit Action [Build](https://github.com/icpc/gallery/actions/workflows/build.yml) will run automatically.
+1. After every commit Action [Publish Release](https://github.com/icpc/gallery/actions) will run automatically.
 1. Open the Action page for the corresponding run. Wait for it to finish
-1. Download the created "artifact" on the bottom of the page
-1. Upload the acquired ```artifacts.zip``` archive into Bluehost -> Advanced -> File Manager -> under ```home/public_html/newsicpc/gallery``` folder
-1. Select ```artifacts.zip``` in the bluehost filemanager webinterface and press the ```Extract``` button
-1. New gallery version is deployed, good job!
+1. Download the created ```all_raw``` on the bottom of the page
+1. Upload the acquired ```all_raw.zip``` archive into Bluehost -> Advanced -> File Manager -> under ```home/public_html/newsicpc/``` folder
+1. Select ```all_raw.zip``` in the bluehost filemanager webinterface and press the ```Extract``` button
+1. All new galleries are deployed, good job!
 
 ## Development Deployment Guide
 
 Requires: Node 18+
 
-1. Set path
+Select gallery instance and build
 
 ```
-set PUBLIC_URL=gallery
-set VITE_DATA_FOLDER=data
+set version=
 
-```
+set PUBLIC_URL=gallery%version%
 
-2. Start production build
+set VITE_DATA_FOLDER=data%version%
 
-```
+echo "Making bundle with public_url=%PUBLIC_URL% and data=%VITE_DATA_FOLDER%"
+
 npm run build -- --base=/%PUBLIC_URL%
-
 ```
 
 3. this will produce a folder named %PUBLIC_URL%
