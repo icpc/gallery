@@ -57,14 +57,23 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: .
-      - name: Make zip from multiple zips
+      - name: Unzip all zip from multiple zips
         run: |
           mkdir build-all
           cp build-*/*.zip build-all
           cd build-all
           ls
           unzip '*.zip'
+          rm *.zip
           ls
+      - name: Upload raw
+        uses: actions/upload-artifact@master
+        with:
+          name: all_raw
+          path: build-all
+          if-no-files-found: error
+      - name: Zip all
+          cd build-all
           zip -r all.zip */*
           ls
       - name: Upload
