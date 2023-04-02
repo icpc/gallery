@@ -3,26 +3,31 @@ name: Publish release
 # Releases artifact from the build workflow
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: Name of release (in the format of X.Y.Z and without 'v' prefix)
-        required: true
-      publish:
-        type: boolean
-        description: Would release be published
-        required: true
-        default: true
-      draft:
-        type: boolean
-        description: Publish draft first
-        required: true
-        default: true
+  push:
+    branches:
+      - 'main'
+
+#  workflow_dispatch:
+#    inputs:
+#      version:
+#        description: Name of release (in the format of X.Y.Z and without 'v' prefix)
+#        required: true
+#      publish:
+#        type: boolean
+#        description: Would release be published
+#        required: true
+#        default: true
+#      draft:
+#        type: boolean
+#        description: Publish draft first
+#        required: true
+#        default: true
 
 jobs:
   build:
     name: Create artifacts from master
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         include:
