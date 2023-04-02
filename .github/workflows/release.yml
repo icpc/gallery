@@ -73,6 +73,7 @@ jobs:
           path: build-all
           if-no-files-found: error
       - name: Zip all
+        run: |
           cd build-all
           zip -r all.zip */*
           ls
