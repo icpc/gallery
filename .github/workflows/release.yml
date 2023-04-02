@@ -69,36 +69,36 @@ jobs:
       - name: Upload raw
         uses: actions/upload-artifact@master
         with:
-          name: all_raw
+          name: all
           path: build-all
           if-no-files-found: error
-      - name: Zip all
-        run: |
-          cd build-all
-          zip -r all.zip */*
-          ls
-      - name: Upload
-        uses: actions/upload-artifact@master
-        with:
-          name: all
-          path: build-all/all.zip
-          if-no-files-found: error
-  release:
-    name: Create release
-    runs-on: ubuntu-latest
-    needs: merge
-    if: ${{ github.event.inputs.publish }}
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-        with:
-          path: .
-      - name: Create release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          automatic_release_tag: "v${{ github.event.inputs.version }}"
-          draft: ${{ github.event.inputs.draft }}
-          files: |
-            all/*.zip
+#      - name: Zip all
+#        run: |
+#          cd build-all
+#          zip -r all.zip */*
+#          ls
+#      - name: Upload
+#        uses: actions/upload-artifact@master
+#        with:
+#          name: all
+#          path: build-all/all.zip
+#          if-no-files-found: error
+#  release:
+#    name: Create release
+#    runs-on: ubuntu-latest
+#    needs: merge
+#    if: ${{ github.event.inputs.publish }}
+#    steps:
+#      - name: Download artifacts
+#        uses: actions/download-artifact@v2
+#        with:
+#          path: .
+#      - name: Create release
+#        uses: "marvinpinto/action-automatic-releases@latest"
+#        with:
+#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#          prerelease: false
+#          automatic_release_tag: "v${{ github.event.inputs.version }}"
+#          draft: ${{ github.event.inputs.draft }}
+#          files: |
+#            all/*.zip
