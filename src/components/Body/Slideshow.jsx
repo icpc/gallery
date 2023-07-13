@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import "../../styles/Body.css"
-import Control from "./Control";
+import SlideShowControl from "./SlideShowControl";
 
 const Slideshow = ({setIsSlideShow, isSlideShow, photo, setPhoto, handelRotationRight, rightArrow, setPhotoInfo}) => {
     const handelClick = (e) => {
@@ -47,7 +47,7 @@ const Slideshow = ({setIsSlideShow, isSlideShow, photo, setPhoto, handelRotation
     return (
         <div className="dismiss" onClick={handelClick}>
             <div className="wrapper">
-                <Control handelClick={handelClick}
+                <SlideShowControl handelClick={handelClick}
                          slideShow={slideShow}
                          isSlideShow={isSlideShow}
                          setPhoto={setPhoto}

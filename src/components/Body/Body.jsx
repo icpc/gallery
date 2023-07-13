@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import "../../consts"
-import PhotoService from "../../Util/PhotoService";
 import InfiniteScroll from 'react-infinite-scroller';
 import "../../styles/Body.css"
 import "../../styles/App.css"
@@ -20,7 +19,7 @@ const Body = () => {
 
     const desktop = useMediaQuery('(min-width: 900px)');
 
-    const [shown, setShown] = useState(null);
+    const [fullscreenPhoto, setFullscreenPhoto] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(null);
     const [rightArrow, setRightArrow] = useState(null);
     const [leftArrow, setLeftArrow] = useState(null);
@@ -28,7 +27,7 @@ const Body = () => {
     const handelClick = (photo, index) => {
         PhotoParser.getPhotoInfo(photo.id, setPhotoInfo);
         setCurrentIndex(index);
-        setShown(photo);
+        setFullscreenPhoto(photo);
         setLeftArrow(null);
         setRightArrow(null);
         if (index + 1 < photosList.length || hasMorePhotos()) {
@@ -37,12 +36,13 @@ const Body = () => {
         if (index !== 0) {
             setLeftArrow(true);
         }
-    };
-
-    const handelRotationRight = () => {
+        // Load more photos for future
         if (currentIndex + 4 >= photosList.length && hasMorePhotos()) {
             loadMorePhotos();
         }
+    };
+
+    const handelRotationRight = () => {
         handelClick(photosList[currentIndex + 1], currentIndex + 1);
     }
 
@@ -53,7 +53,7 @@ const Body = () => {
     useEffect(() => {
         const target = document.getElementsByTagName("body")[0];
         const listener = (e) => {
-            if (shown) {
+            if (fullscreenPhoto) {
                 switch (e.key) {
                     case "ArrowLeft":
                         if (leftArrow) {
@@ -66,7 +66,7 @@ const Body = () => {
                         }
                         break;
                     case "Escape":
-                        setShown(null);
+                        setFullscreenPhoto(null);
                         setIsSlideShow(false);
                         setPhotoInfo(null);
                         break;
@@ -80,7 +80,7 @@ const Body = () => {
             target.removeEventListener("onkeydown", listener);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [shown]);
+    }, [fullscreenPhoto]);
 
     function renderEvent(event, photos) {
         return (
@@ -119,10 +119,10 @@ const Body = () => {
                 </InfiniteScroll>
             </div>
             {photosList.length === 0 && <div style={{ margin: "auto", fontSize: "3rem" }}>No photo</div>}
-            {shown && <MyModal photo={shown}
+            {fullscreenPhoto && <MyModal photo={fullscreenPhoto}
                 handelRotationRight={handelRotationRight}
                 handelRotationLeft={handelRotationLeft}
-                setPhoto={setShown}
+                setPhoto={setFullscreenPhoto}
                 rightArrow={rightArrow}
                 leftArrow={leftArrow}
                 photoInfo={photoInfo}

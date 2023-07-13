@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import "../../styles/Body.css"
 import PhotoInfo from "./PhotoInfo";
 import FaceDiv from "./FaceDiv";
-import Control from "./Control";
+import Control from "./SlideShowControl";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const Lightbox = ({

@@ -3,8 +3,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 
-const Control = ({handelClick, slideShow, isSlideShow, setPhoto, setPhotoInfo, setIsSlideShow}) => {
-
+const SlideShowControl = ({handelClick, slideShow, isSlideShow, setPhoto, setPhotoInfo, setIsSlideShow}) => {
     const handelClickControl = () => {
         setPhoto(null);
         setIsSlideShow(false);
@@ -23,4 +22,4 @@ const Control = ({handelClick, slideShow, isSlideShow, setPhoto, setPhotoInfo, s
     );
 };
 
-export default Control;
+export default SlideShowControl;
