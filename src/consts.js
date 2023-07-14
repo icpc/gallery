@@ -31,6 +31,7 @@ export const PER_PAGE = consts.PER_PAGE;
 export const LAST_YEAR = consts.LAST_YEAR;
 export const CONTEST_NAME = consts.CONTEST_NAME;
 export const DEFAULT_EVENT = consts.DEFAULT_EVENT;
+export const FLICKR_IMAGE_PREFIX = consts.FLICKR_IMAGE_PREFIX;
 // todo: somehow replace this without redeclaration
 export const DEBUG = import.meta.env.mode === "development";
 

@@ -21,6 +21,14 @@
     color: white;
 }
 
+.icon-button {
+    color: var(--mainColor);
+}
+
+.icon-button:visited {
+    color: white;
+}
+
 .control-bottom {
     right: 0;
     padding-right: 20px;

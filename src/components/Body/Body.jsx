@@ -89,7 +89,7 @@ const Body = () => {
                 <div className="masonry">
                     {photos.map((photo) => {
                         let index = photosList.indexOf(photo)
-                        return <figure key={photo?.id + index} className="masonry-brick">
+                        return <figure key={photo.id + index} className="masonry-brick">
                             <img className="preview"
                                 src={photo?.url_preview}
                                 alt={photo.url_preview}
