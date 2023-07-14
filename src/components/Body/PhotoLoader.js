@@ -29,11 +29,12 @@ const usePhotoLoader = () => {
     )
 
     function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
+        return self.findIndex(photo => photo.id === value.id) === index;
     }
 
     const appendPhotos = (event, photos) => {
-        setPhotosByEvent(new Map(photosByEvent.set(event, [...(photosByEvent.get(event) || []), ...photos].filter(onlyUnique))));
+        const appendedEventPhotos = [...(photosByEvent.get(event) || []), ...photos];
+        setPhotosByEvent(new Map(photosByEvent.set(event, appendedEventPhotos.filter(onlyUnique))));
     };
 
     const getNextEvent = (currentEvent) => {
