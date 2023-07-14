@@ -202,3 +202,8 @@
     top: 50%;
     z-index: 999;
 }
+
+.photo-list-message {
+    font-size: 2rem;
+    margin-top: 2rem;
+}

@@ -109,7 +109,7 @@ const Body = () => {
                     loadMore={loadMorePhotos}
                     hasMore={hasMorePhotos()}
                     initialLoad={true}
-                    loader={<div className="loader" key={0}>Loading ...</div>}
+                    loader={<div className="photo-list-message" key={0}>Loading ...</div>}
                     useWindow={false}
                     getScrollParent={() => scrollRef.current}
                 >
@@ -118,7 +118,7 @@ const Body = () => {
                     })}
                 </InfiniteScroll>
             </div>
-            {photosList.length === 0 && <div style={{ margin: "auto", fontSize: "3rem" }}>No photo</div>}
+            {(!hasMorePhotos() && photosList.length === 0) && <div className="photo-list-message">No photo</div>}
             {fullscreenPhoto && <MyModal photo={fullscreenPhoto}
                 handelRotationRight={handelRotationRight}
                 handelRotationLeft={handelRotationLeft}
