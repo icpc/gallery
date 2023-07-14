@@ -19,7 +19,7 @@ const usePhotoLoader = () => {
         setInternalEvent(data.event)
         setTotalPages(1)
     },
-        [data]
+        [data, data.year, data.event, data.text, data.team, data.person]
     )
 
     useEffect(() => {
