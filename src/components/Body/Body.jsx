@@ -116,7 +116,7 @@ const Body = () => {
     function renderPhotos(photos) {
         const photosByYear = groupPhotosByYear(photos);
 
-        if (photosByYear.length === 0) {
+        if (Object.keys(photosByYear).length < 2) {
             return (putPhotosInMasonry(photos));
         }
 
