@@ -6,7 +6,7 @@ import { useAppContext } from "../AppContext";
 import { IconButton } from '@mui/material';
 
 const Control = ({ isSlideShow, setIsSlideShow }) => {
-    const { setFullscreenPhotoIndex } = useAppContext();
+    const { setFullscreenPhotoId } = useAppContext();
 
     const slideShow = () => {
         setIsSlideShow(!isSlideShow);
@@ -18,7 +18,7 @@ const Control = ({ isSlideShow, setIsSlideShow }) => {
                 {isSlideShow ? <PauseIcon className="icon-button" fontSize="large" /> :
                     <PlayArrowIcon className="icon-button" fontSize="large" />}
             </IconButton>
-            <IconButton className="dismiss" onClick={() => setFullscreenPhotoIndex(null)}>
+            <IconButton className="dismiss" onClick={() => setFullscreenPhotoId(null)}>
                 <CloseIcon className="icon-button" fontSize="large" />
             </IconButton>
         </div>

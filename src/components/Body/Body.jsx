@@ -9,7 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import usePhotoLoader from '../../Util/PhotoLoader';
 
 const Body = () => {
-    const { data, setFullscreenPhotoIndex } = useAppContext();
+    const { data, setFullscreenPhotoId } = useAppContext();
     const [isSlideShow, setIsSlideShow] = useState(false);
     const scrollRef = useRef(null);
 
@@ -18,45 +18,50 @@ const Body = () => {
     const desktop = useMediaQuery('(min-width: 900px)');
 
     const [fullscreenPhoto, setFullscreenPhoto] = useState(null);
+    const [fullscreenIndex, setFullscreenIndex] = useState(null);
     const [rightArrow, setRightArrow] = useState(null);
     const [leftArrow, setLeftArrow] = useState(null);
 
     const handelClick = (_, index) => {
-        setFullscreenPhotoIndex(index);
+        const photo = photosList[index];
+        setFullscreenPhotoId(photo.id);
     };
 
     useEffect(() => {
-        const index = data.fullscreenPhotoIndex;
-        if (index != null) {
-            if (photosList.length <= index + 4 && hasMorePhotos()) {
+        const id = data.fullscreenPhotoId;
+        if (id != null) {
+            const index = photosList.findIndex(photo => photo.id === id);
+
+            if (index === -1 && hasMorePhotos()) {
                 loadMorePhotos();
                 return;
             }
 
             const photo = photosList[index];
+            setFullscreenIndex(index);
             setFullscreenPhoto(photo);
-            setLeftArrow(false);
-            setRightArrow(false);
-            if (index + 1 < photosList.length || hasMorePhotos()) {
-                setRightArrow(true);
-            }
-            if (index !== 0) {
-                setLeftArrow(true);
+
+            setLeftArrow(index !== 0);
+            setRightArrow(index + 1 < photosList.length || hasMorePhotos());
+            
+            if (photosList.length <= index + 4 && hasMorePhotos()) {
+                loadMorePhotos();
             }
         } else {
+            setFullscreenIndex(null);
             setFullscreenPhoto(null);
             setIsSlideShow(false);
             setLeftArrow(false);
             setRightArrow(false);
         }
-    }, [data.fullscreenPhotoIndex, photosList, hasMorePhotos, loadMorePhotos]);
+    }, [data.fullscreenPhotoId, photosList, hasMorePhotos, loadMorePhotos]);
 
     const handelRotationRight = () => {
-        handelClick(photosList[data.fullscreenPhotoIndex + 1], data.fullscreenPhotoIndex + 1);
+        handelClick(photosList[fullscreenIndex + 1], fullscreenIndex + 1);
     }
 
     const handelRotationLeft = () => {
-        handelClick(photosList[data.fullscreenPhotoIndex - 1], data.fullscreenPhotoIndex - 1);
+        handelClick(photosList[fullscreenIndex - 1], fullscreenIndex - 1);
     }
 
     useEffect(() => {
@@ -75,7 +80,7 @@ const Body = () => {
                         }
                         break;
                     case "Escape":
-                        setFullscreenPhotoIndex(null);
+                        setFullscreenPhotoId(null);
                         break;
                     default:
                         break;

@@ -12,7 +12,7 @@ import { useSearchParams } from 'react-router-dom';
  * @property {string|null} text 
  * @property {string|null} person 
  * @property {string|null} team 
- * @property {number|null} fullscreenPhotoIndex 
+ * @property {string|null} fullscreenPhotoId 
  */
 
 /**
@@ -25,7 +25,7 @@ const defaultContext = {
     text: null,
     person: null,
     team: null,
-    fullscreenPhotoIndex: null,
+    fullscreenPhotoId: null,
 }
 
 const AppContext = createContext(null);
@@ -34,7 +34,7 @@ const AppContext = createContext(null);
 function parseSearchParams(searchParams) {
     let searchParamsData = {};
     if (searchParams.has('photo')) {
-        searchParamsData.fullscreenPhotoIndex = parseInt(searchParams.get('photo'));
+        searchParamsData.fullscreenPhotoId = searchParams.get('photo');
     }
     if (searchParams.has('query')) {
         searchParamsData.text = decodeURIComponent(searchParams.get('query'));
@@ -56,7 +56,7 @@ function parseSearchParams(searchParams) {
     return searchParamsData;
 }
 
-function serizalizeSearchParams({ year, event, text, person, team, fullscreenPhotoIndex }) {
+function serizalizeSearchParams({ year, event, text, person, team, fullscreenPhotoId }) {
     let searchParams = {};
     if (year != null) {
         searchParams.album = year;
@@ -73,8 +73,8 @@ function serizalizeSearchParams({ year, event, text, person, team, fullscreenPho
     if (text != null) {
         searchParams.query = text;
     }
-    if (fullscreenPhotoIndex != null) {
-        searchParams.photo = fullscreenPhotoIndex;
+    if (fullscreenPhotoId != null) {
+        searchParams.photo = fullscreenPhotoId;
     }
     return searchParams;
 }
@@ -166,10 +166,10 @@ const AppContextProvider = ({ children }) => {
         )
     }, [data]);
 
-    const setFullscreenPhotoIndex = useCallback((newIndex) => {
+    const setFullscreenPhotoId = useCallback((newIndex) => {
         setData({
             ...data,
-            fullscreenPhotoIndex: newIndex,
+            fullscreenPhotoId: newIndex,
         })
     }, [data]);
 
@@ -180,7 +180,7 @@ const AppContextProvider = ({ children }) => {
         setText,
         setPerson,
         setTeam,
-        setFullscreenPhotoIndex,
+        setFullscreenPhotoId,
     }}>
         {children}
     </AppContext.Provider>)
@@ -198,7 +198,7 @@ const AppContextProvider = ({ children }) => {
  *  setText: function,
  *  setPerson: function,
  *  setTeam: function,
- *  setFullscreenPhotoIndex: function,
+ *  setFullscreenPhotoId: function,
  * }}.
  */
 const useAppContext = () => {

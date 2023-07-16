@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import "../../styles/Body.css"
 import Control from "./Control";
 
 const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handelRotationRight, rightArrow }) => {
-    // eslint-disable-next-line no-unused-vars
-
     const timeoutRef = React.useRef(null);
 
     function resetTimeout() {
