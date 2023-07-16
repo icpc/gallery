@@ -34,7 +34,9 @@ const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handelRotationRight, ri
         <div className="dismiss">
             <div className="wrapper">
                 <Control isSlideShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
-                <img className="full" src={photo.url} alt={"fullsize"} />
+                <div className="img-container">
+                    <img className="full" src={photo.url} alt={"fullsize"} />
+                </div>
             </div>
         </div>
     );

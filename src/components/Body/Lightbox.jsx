@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import "../../styles/Body.css"
 import PhotoInfo from "./PhotoInfo";
 import FaceDiv from "./FaceDiv";
@@ -6,6 +6,7 @@ import Control from "./Control";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PhotoParser from '../../Util/PhotoParser';
 import { IconButton } from '@mui/material';
+import styled from 'styled-components';
 
 const Lightbox = ({
     isSlideShow,
@@ -22,22 +23,27 @@ const Lightbox = ({
         PhotoParser.getPhotoInfo(photo.id, setPhotoInfo);
     }, [photo.id]);
 
-    // eslint-disable-next-line no-unused-vars
-    const [isLoaded, setIsLoaded] = useState(false);
-
-
     const [face, setFace] = useState(null);
+    const imgRef = useRef(null);
+
+    const Faces = styled.div`
+        width: ${imgRef?.current?.width}px;
+        height: ${imgRef?.current?.height}px;
+        position: absolute;
+    `;
 
     return (
         <div className="wrapper">
-            <div>
+            <div className="img-container">
                 <img
+                    ref={imgRef}
                     className="full"
                     src={photo.url}
                     alt={"fullsize"}
-                    onLoad={() => setIsLoaded(true)}
                 />
-                {photoInfo?.person?.map(person => (<FaceDiv person={person} face={face} setFace={setFace} key={person.name + "facediv" + person.position.top} />))}
+                <Faces>
+                    {photoInfo?.person?.map(person => (<FaceDiv imgRef={imgRef} person={person} face={face} setFace={setFace} key={person.name + "facediv" + person.position.top} />))}
+                </Faces>
             </div>
             <Control isSlideShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
             <PhotoInfo photo={photo} photoInfo={photoInfo} setFace={setFace} />
