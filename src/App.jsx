@@ -14,6 +14,8 @@ function App() {
     const desktop = useMediaQuery('(min-width: 900px)');
     const [isOpenMenu, setIsOpenMenu] = useState(false);
 
+    const { data } = useAppContext();
+
     useEffect(() => {
         if (desktop) {
             setIsOpenMenu(true);
@@ -24,6 +26,7 @@ function App() {
 
     return (
         <div className="content-layout">
+            {console.log(data)}
             <Logo />
             <Header isOpenMenu={isOpenMenu} setIsOpenMenu={setIsOpenMenu} />
             {desktop && <Sidebar />}

@@ -4,9 +4,10 @@ import { useSearchParams } from 'react-router-dom';
 
 /**
  * Data for the entire app. 
- * Exactly one of event, text, person, team should be non-null at the same time.
+ * Exactly one of event, text, person, team should be non-null at the same time. 
+ * If query is not null, team should be null.
  * @typedef {Object} DefaultContext
- * @property {string} year - The year.
+ * @property {string|null} year - The year.
  * @property {string|null} event - The event.
  * @property {string|null} text - The text.
  * @property {string|null} person - The person.
@@ -19,7 +20,7 @@ import { useSearchParams } from 'react-router-dom';
  */
 const defaultContext = {
     year: LAST_YEAR,
-    event: DEFAULT_EVENT,
+    event: null,
     text: null,
     person: null,
     team: null
@@ -30,17 +31,22 @@ const AppContext = createContext(null);
 
 function parseSearchParams(searchParams) {
     let searchParamsData = {};
-    if (searchParams.has('album')) {
-        searchParamsData.year = decodeURIComponent(searchParams.get('album'));
-    }
     if (searchParams.has('query')) {
         searchParamsData.text = decodeURIComponent(searchParams.get('query'));
-    } else if (searchParams.has('event')) {
-        searchParamsData.event = decodeURIComponent(searchParams.get('event'));
-    } else if (searchParams.has('team')) {
-        searchParamsData.team = decodeURIComponent(searchParams.get('team'));
-    } else if (searchParams.has('person')) {
-        searchParamsData.person = decodeURIComponent(searchParams.get('person'));
+        searchParamsData.year = null;
+    } else {
+        if (searchParams.has('album')) {
+            searchParamsData.year = decodeURIComponent(searchParams.get('album'));
+        }
+        if (searchParams.has('event')) {
+            searchParamsData.event = decodeURIComponent(searchParams.get('event'));
+        } else if (searchParams.has('team')) {
+            searchParamsData.team = decodeURIComponent(searchParams.get('team'));
+        } else if (searchParams.has('person')) {
+            searchParamsData.person = decodeURIComponent(searchParams.get('person'));
+        } else {
+            searchParamsData.event = DEFAULT_EVENT;
+        }
     }
     return searchParamsData;
 }
@@ -63,6 +69,13 @@ function serizalizeSearchParams(year, event, text, person, team) {
         searchParams.query = text;
     }
     return searchParams;
+}
+
+function attachYearIfNull(data) {
+    if (!data.year) {
+        data.year = LAST_YEAR;
+    }
+    return data;
 }
 
 
@@ -92,22 +105,14 @@ const AppContextProvider = ({ children }) => {
         setData({
             ...defaultContext,
             year: newYear,
+            event: DEFAULT_EVENT,
         })
     }, []);
-
-    const setEvent = useCallback((newEvent) => {
-        setData({
-            ...data,
-            event: newEvent,
-            text: null,
-            person: null,
-            team: null,
-        })
-    }, [data]);
 
     const setText = useCallback((newText) => {
         setData({
             ...data,
+            year: null,
             event: null,
             text: newText,
             person: null,
@@ -115,24 +120,41 @@ const AppContextProvider = ({ children }) => {
         })
     }, [data]);
 
+    const setEvent = useCallback((newEvent) => {
+        setData(
+            attachYearIfNull({
+                ...data,
+                event: newEvent,
+                text: null,
+                person: null,
+                team: null,
+            })
+        )
+    }, [data]);
+
+
     const setPerson = useCallback((newPerson) => {
-        setData({
-            ...data,
-            event: null,
-            text: null,
-            person: newPerson,
-            team: null,
-        })
+        setData(
+            attachYearIfNull({
+                ...data,
+                event: null,
+                text: null,
+                person: newPerson,
+                team: null,
+            })
+        )
     }, [data]);
 
     const setTeam = useCallback((newTeam) => {
-        setData({
-            ...data,
-            event: null,
-            text: null,
-            person: null,
-            team: newTeam,
-        })
+        setData(
+            attachYearIfNull({
+                ...data,
+                event: null,
+                text: null,
+                person: null,
+                team: newTeam,
+            })
+        )
     }, [data]);
 
     return (<AppContext.Provider value={{

@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import "../../styles/Search.css"
 import "../../styles/Header.css"
 import { useAppContext } from '../AppContext';
+import { useMediaQuery } from '@mui/material';
 
 const Search = ({ setIsOpenMenu }) => {
     const { setText } = useAppContext();
+
+    const desktop = useMediaQuery('(min-width: 900px)')
 
     const [inputText, setInputText] = useState("");
     const set = (e) => {
@@ -12,7 +15,10 @@ const Search = ({ setIsOpenMenu }) => {
         if (inputText !== "") {
             setText(inputText);
             setInputText("");
-            setIsOpenMenu(false);
+
+            if (!desktop) {
+                setIsOpenMenu(false);
+            }
         }
     }
 
