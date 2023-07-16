@@ -7,11 +7,12 @@ import { useSearchParams } from 'react-router-dom';
  * Exactly one of event, text, person, team should be non-null at the same time. 
  * If query is not null, team should be null.
  * @typedef {Object} DefaultContext
- * @property {string|null} year - The year.
- * @property {string|null} event - The event.
- * @property {string|null} text - The text.
- * @property {string|null} person - The person.
- * @property {string|null} team - The team.
+ * @property {string|null} year
+ * @property {string|null} event
+ * @property {string|null} text 
+ * @property {string|null} person 
+ * @property {string|null} team 
+ * @property {number|null} fullscreenPhotoIndex 
  */
 
 /**
@@ -23,7 +24,8 @@ const defaultContext = {
     event: null,
     text: null,
     person: null,
-    team: null
+    team: null,
+    fullscreenPhotoIndex: null,
 }
 
 const AppContext = createContext(null);
@@ -31,6 +33,9 @@ const AppContext = createContext(null);
 
 function parseSearchParams(searchParams) {
     let searchParamsData = {};
+    if (searchParams.has('photo')) {
+        searchParamsData.fullscreenPhotoIndex = parseInt(searchParams.get('photo'));
+    }
     if (searchParams.has('query')) {
         searchParamsData.text = decodeURIComponent(searchParams.get('query'));
         searchParamsData.year = null;
@@ -51,22 +56,25 @@ function parseSearchParams(searchParams) {
     return searchParamsData;
 }
 
-function serizalizeSearchParams(year, event, text, person, team) {
+function serizalizeSearchParams({ year, event, text, person, team, fullscreenPhotoIndex }) {
     let searchParams = {};
-    if (year) {
+    if (year != null) {
         searchParams.album = year;
     }
-    if (event) {
+    if (event != null) {
         searchParams.event = event;
     }
-    if (person) {
+    if (person != null) {
         searchParams.person = person;
     }
-    if (team) {
+    if (team != null) {
         searchParams.team = team;
     }
-    if (text) {
+    if (text != null) {
         searchParams.query = text;
+    }
+    if (fullscreenPhotoIndex != null) {
+        searchParams.photo = fullscreenPhotoIndex;
     }
     return searchParams;
 }
@@ -94,8 +102,9 @@ const AppContextProvider = ({ children }) => {
     });
 
     useEffect(() => {
-        setSearchParams(serizalizeSearchParams(data.year, data.event, data.text, data.person, data.team));
-    }, [data.year, data.event, data.text, data.person, data.team, setSearchParams]);
+        setSearchParams(
+            serizalizeSearchParams(data));
+    }, [data, setSearchParams]);
 
     /**
      * Sets the year.
@@ -157,6 +166,13 @@ const AppContextProvider = ({ children }) => {
         )
     }, [data]);
 
+    const setFullscreenPhotoIndex = useCallback((newIndex) => {
+        setData({
+            ...data,
+            fullscreenPhotoIndex: newIndex,
+        })
+    }, [data]);
+
     return (<AppContext.Provider value={{
         data,
         setYear,
@@ -164,6 +180,7 @@ const AppContextProvider = ({ children }) => {
         setText,
         setPerson,
         setTeam,
+        setFullscreenPhotoIndex,
     }}>
         {children}
     </AppContext.Provider>)
@@ -181,6 +198,7 @@ const AppContextProvider = ({ children }) => {
  *  setText: function,
  *  setPerson: function,
  *  setTeam: function,
+ *  setFullscreenPhotoIndex: function,
  * }}.
  */
 const useAppContext = () => {

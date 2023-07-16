@@ -5,49 +5,58 @@ import "../../styles/Body.css"
 import "../../styles/App.css"
 import MyModal from "./MyModal";
 import { useAppContext } from "../AppContext";
-import PhotoParser from "../../Util/PhotoParser";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import usePhotoLoader from '../../Util/PhotoLoader';
 
 const Body = () => {
-    const { data } = useAppContext();
+    const { data, setFullscreenPhotoIndex } = useAppContext();
     const [isSlideShow, setIsSlideShow] = useState(false);
     const scrollRef = useRef(null);
 
     const { hasMorePhotos, loadMorePhotos, photosByEvent, photosList } = usePhotoLoader();
-    const [photoInfo, setPhotoInfo] = useState(null);
 
     const desktop = useMediaQuery('(min-width: 900px)');
 
     const [fullscreenPhoto, setFullscreenPhoto] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(null);
     const [rightArrow, setRightArrow] = useState(null);
     const [leftArrow, setLeftArrow] = useState(null);
 
-    const handelClick = (photo, index) => {
-        PhotoParser.getPhotoInfo(photo.id, setPhotoInfo);
-        setCurrentIndex(index);
-        setFullscreenPhoto(photo);
-        setLeftArrow(null);
-        setRightArrow(null);
-        if (index + 1 < photosList.length || hasMorePhotos()) {
-            setRightArrow(true);
-        }
-        if (index !== 0) {
-            setLeftArrow(true);
-        }
-        // Load more photos for future
-        if (currentIndex + 4 >= photosList.length && hasMorePhotos()) {
-            loadMorePhotos();
-        }
+    const handelClick = (_, index) => {
+        setFullscreenPhotoIndex(index);
     };
 
+    useEffect(() => {
+        const index = data.fullscreenPhotoIndex;
+        if (index != null) {
+            if (photosList.length <= index + 4 && hasMorePhotos()) {
+                loadMorePhotos();
+                return;
+            }
+
+            const photo = photosList[index];
+            setFullscreenPhoto(photo);
+            setLeftArrow(false);
+            setRightArrow(false);
+            if (index + 1 < photosList.length || hasMorePhotos()) {
+                setRightArrow(true);
+            }
+            if (index !== 0) {
+                setLeftArrow(true);
+            }
+        } else {
+            setFullscreenPhoto(null);
+            setIsSlideShow(false);
+            setLeftArrow(false);
+            setRightArrow(false);
+        }
+    }, [data.fullscreenPhotoIndex, photosList, hasMorePhotos, loadMorePhotos]);
+
     const handelRotationRight = () => {
-        handelClick(photosList[currentIndex + 1], currentIndex + 1);
+        handelClick(photosList[data.fullscreenPhotoIndex + 1], data.fullscreenPhotoIndex + 1);
     }
 
     const handelRotationLeft = () => {
-        handelClick(photosList[currentIndex - 1], currentIndex - 1);
+        handelClick(photosList[data.fullscreenPhotoIndex - 1], data.fullscreenPhotoIndex - 1);
     }
 
     useEffect(() => {
@@ -66,9 +75,7 @@ const Body = () => {
                         }
                         break;
                     case "Escape":
-                        setFullscreenPhoto(null);
-                        setIsSlideShow(false);
-                        setPhotoInfo(null);
+                        setFullscreenPhotoIndex(null);
                         break;
                     default:
                         break;
@@ -160,14 +167,11 @@ const Body = () => {
                 </InfiniteScroll>
             </div>
             {(!hasMorePhotos() && photosList.length === 0) && <div className="photo-list-message">No photo</div>}
-            {fullscreenPhoto && <MyModal photo={fullscreenPhoto}
+            {fullscreenPhoto != null && <MyModal photo={fullscreenPhoto}
                 handelRotationRight={handelRotationRight}
                 handelRotationLeft={handelRotationLeft}
-                setPhoto={setFullscreenPhoto}
                 rightArrow={rightArrow}
                 leftArrow={leftArrow}
-                photoInfo={photoInfo}
-                setPhotoInfo={setPhotoInfo}
                 isSlideShow={isSlideShow}
                 setIsSlideShow={setIsSlideShow}
             />}
