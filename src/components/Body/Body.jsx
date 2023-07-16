@@ -121,7 +121,7 @@ const Body = () => {
         }
 
         return (
-            <div className="masonry">
+            <div>
                 {Object.entries(photosByYear).sort().reverse().map(([year, photos]) => (
                     <div key={year}>
                         <h2 className="event-title">{year}</h2>
