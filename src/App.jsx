@@ -14,10 +14,6 @@ function App() {
     const desktop = useMediaQuery('(min-width: 900px)');
     const [isOpenMenu, setIsOpenMenu] = useState(false);
 
-    const { data, setYear, setEvent, setText, setPerson, setTeam } = useAppContext();
-
-    const [searchParams, setSearchParams] = useSearchParams();
-
     useEffect(() => {
         if (desktop) {
             setIsOpenMenu(true);
@@ -26,47 +22,8 @@ function App() {
         }
     }, [desktop]);
 
-    // TODO: somehow make this less ugly
-    useEffect(() => {
-        if (searchParams.has('album')) {
-            setYear(decodeURIComponent(searchParams.get('album')));
-        }
-        if (searchParams.has('query')) {
-            setText(decodeURIComponent(searchParams.get('query')));
-        } else if (searchParams.has('event')) {
-            setEvent(decodeURIComponent(searchParams.get('event')));
-        } else if (searchParams.has('team')) {
-            setTeam(decodeURIComponent(searchParams.get('team')));
-        } else if (searchParams.has('person')) {
-            setPerson(decodeURIComponent(searchParams.get('person')));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        let searchParams = {};
-        if (data.year) {
-            searchParams.album = data.year;
-        }
-        if (data.event) {
-            searchParams.event = data.event;
-        }
-        if (data.person) {
-            searchParams.person = data.person;
-        }
-        if (data.team) {
-            searchParams.team = data.team;
-        }
-        if (data.text) {
-            searchParams.query = data.text;
-        }
-        setSearchParams(searchParams);
-    }, [data.year, data.event, data.text, data.person, data.team, setSearchParams]);
-
     return (
         <div className="content-layout">
-            {console.log(data)}
-            {console.log(isOpenMenu)}
             <Logo />
             <Header isOpenMenu={isOpenMenu} setIsOpenMenu={setIsOpenMenu} />
             {desktop && <Sidebar />}

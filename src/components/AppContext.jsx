@@ -1,5 +1,6 @@
-import { createContext, useCallback, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useState, useEffect } from 'react'
 import { DEFAULT_EVENT, LAST_YEAR } from '../consts';
+import { useSearchParams } from 'react-router-dom';
 
 /**
  * Data for the entire app. 
@@ -26,14 +27,62 @@ const defaultContext = {
 
 const AppContext = createContext(null);
 
+
+function parseSearchParams(searchParams) {
+    let searchParamsData = {};
+    if (searchParams.has('album')) {
+        searchParamsData.year = decodeURIComponent(searchParams.get('album'));
+    }
+    if (searchParams.has('query')) {
+        searchParamsData.text = decodeURIComponent(searchParams.get('query'));
+    } else if (searchParams.has('event')) {
+        searchParamsData.event = decodeURIComponent(searchParams.get('event'));
+    } else if (searchParams.has('team')) {
+        searchParamsData.team = decodeURIComponent(searchParams.get('team'));
+    } else if (searchParams.has('person')) {
+        searchParamsData.person = decodeURIComponent(searchParams.get('person'));
+    }
+    return searchParamsData;
+}
+
+function serizalizeSearchParams(year, event, text, person, team) {
+    let searchParams = {};
+    if (year) {
+        searchParams.album = year;
+    }
+    if (event) {
+        searchParams.event = event;
+    }
+    if (person) {
+        searchParams.person = person;
+    }
+    if (team) {
+        searchParams.team = team;
+    }
+    if (text) {
+        searchParams.query = text;
+    }
+    return searchParams;
+}
+
+
 const AppContextProvider = ({ children }) => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
     /**
      * The state object and its setter function for AppContext.
      * @typedef {Object} AppState
      * @property {DefaultContext} data.
      * @property {function} setData - Setter function for the data object. Try not to use this directly.
      */
-    const [data, setData] = useState(defaultContext);
+    const [data, setData] = useState({
+        ...defaultContext,
+        ...parseSearchParams(searchParams),
+    });
+
+    useEffect(() => {
+        setSearchParams(serizalizeSearchParams(data.year, data.event, data.text, data.person, data.team));
+    }, [data.year, data.event, data.text, data.person, data.team, setSearchParams]);
 
     /**
      * Sets the year.
