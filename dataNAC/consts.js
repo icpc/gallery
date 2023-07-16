@@ -16,6 +16,8 @@ export const places =
 export const api_key = "d30033b3d833adaace90f8487da70bba";
 export const user_id = "141939107@N06";
 
+export const FLICKR_IMAGE_PREFIX = "https://www.flickr.com/photos/icpcnews/";
+
 export const TAG_EVENT = "event";
 export const TAG_TEAM = "team";
 export const TAG_ALBUM = "albumNAC";
@@ -29,5 +31,3 @@ export const PER_PAGE = 25;
 export const LAST_YEAR = "2023";
 export const CONTEST_NAME = "";
 export const DEFAULT_EVENT = "Photo Tour";
-
-
