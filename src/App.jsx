@@ -29,18 +29,18 @@ function App() {
     // TODO: somehow make this less ugly
     useEffect(() => {
         if (searchParams.has('album')) {
-            setYear(searchParams.get('album').replaceAll("+", " "));
+            setYear(decodeURIComponent(searchParams.get('album')));
         }
         if (searchParams.has('query')) {
-            setText(searchParams.get('query').replaceAll("+", " "));
+            setText(decodeURIComponent(searchParams.get('query')));
         } else if (searchParams.has('event')) {
-            setEvent(searchParams.get('event').replaceAll("+", " "));
+            setEvent(decodeURIComponent(searchParams.get('event')));
         } else if (searchParams.has('team')) {
-            setTeam(searchParams.get('team').replaceAll("+", " "));
+            setTeam(decodeURIComponent(searchParams.get('team')));
         } else if (searchParams.has('person')) {
-            setPerson(searchParams.get('person').replaceAll("+", " "));
+            setPerson(decodeURIComponent(searchParams.get('person')));
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
