@@ -79,14 +79,13 @@ const usePhotoLoader = () => {
                 setInternalEvent(getNextEvent(internalEvent));
                 return;
             }
-            appendPhotos(internalEvent, [...response.data.photos.photo.map(photo => {
-                return {
-                    url_preview: (photo?.url_m !== undefined ? photo?.url_m : photo?.url_o),
-                    url: (photo?.url_l !== undefined ? photo?.url_l : photo?.url_o),
-                    id: photo?.id,
-                    origin: photo?.url_o
-                }
-            })]);
+            appendPhotos(internalEvent, response.data.photos.photo.map(({ datetaken, url_m, url_o, url_l, id }) => ({
+                url_preview: url_m ?? url_o,
+                url: url_l ?? url_o,
+                id,
+                origin: url_o,
+                year: new Date(datetaken)?.getUTCFullYear()
+            })));
             setTotalPages(response.data.photos.pages)
             setPage(page + 1);
         }

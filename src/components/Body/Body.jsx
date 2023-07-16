@@ -82,21 +82,61 @@ const Body = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fullscreenPhoto]);
 
+    function groupPhotosByYear(photos) {
+        const photosByYear = {};
+        photos.forEach((photo) => {
+            if (!photosByYear[photo.year]) {
+                photosByYear[photo.year] = [];
+            }
+            photosByYear[photo.year].push(photo);
+        });
+        return photosByYear;
+    }
+
+    function putPhotosInMasonry(photos) {
+        return (
+            <div className="masonry">
+                {photos.map((photo) => {
+                    let index = photosList.indexOf(photo);
+                    return (
+                        <figure key={photo.id} className="masonry-brick">
+                            <img
+                                className="preview"
+                                src={photo?.url_preview}
+                                alt={photo.url_preview}
+                                onClick={() => handelClick(photo, index)}
+                            />
+                        </figure>
+                    );
+                })}
+            </div>
+        )
+    }
+
+    function renderPhotos(photos) {
+        const photosByYear = groupPhotosByYear(photos);
+
+        if (photosByYear.length === 0) {
+            return (putPhotosInMasonry(photos));
+        }
+
+        return (
+            <div className="masonry">
+                {Object.entries(photosByYear).sort().reverse().map(([year, photos]) => (
+                    <div key={year}>
+                        <h2 className="event-title">{year}</h2>
+                        {putPhotosInMasonry(photos)}
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
     function renderEvent(event, photos) {
         return (
             <div key={event}>
-                <h1 className="event-title">{event}</h1>
-                <div className="masonry">
-                    {photos.map((photo) => {
-                        let index = photosList.indexOf(photo)
-                        return <figure key={photo.id + index} className="masonry-brick">
-                            <img className="preview"
-                                src={photo?.url_preview}
-                                alt={photo.url_preview}
-                                onClick={() => handelClick(photo, index)} />
-                        </figure>
-                    })}
-                </div>
+                {event && <h1 className="event-title">{event}</h1>}
+                {renderPhotos(photos)}
             </div>
         );
     }
@@ -104,8 +144,9 @@ const Body = () => {
     return (
         <div className="body" ref={scrollRef}>
             {desktop && data.text && <h1 style={{ width: "100%" }}>{data.text}</h1>}
-            <div style={{ paddingBottom: "10px", width: "100%" }}>
+            <div >
                 <InfiniteScroll
+                    style={{ paddingBottom: "10px", width: "100%" }}
                     loadMore={loadMorePhotos}
                     hasMore={hasMorePhotos()}
                     initialLoad={true}
