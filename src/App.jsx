@@ -1,8 +1,7 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import "./styles/App.css"
-import {AppContext} from "./components/AppContext";
-import {LAST_YEAR, DEFAULT_EVENT} from "./consts";
-import {useSearchParams} from "react-router-dom";
+import { useAppContext } from "./components/AppContext";
+import { useSearchParams } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar";
 import Body from "./components/Body/Body";
@@ -13,9 +12,10 @@ import MobileYearWrapper from "./components/MobileYearWrapper";
 
 function App() {
     const desktop = useMediaQuery('(min-width: 900px)');
-    const [isOpenMenu, setIsOpenMenu] = useState();
+    const [isOpenMenu, setIsOpenMenu] = useState(false);
 
-    const [data, setData] = useState({});
+    const { data, setYear, setEvent, setText, setPerson, setTeam } = useAppContext();
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
@@ -24,46 +24,55 @@ function App() {
         } else {
             setIsOpenMenu(false);
         }
-    }, [desktop])
+    }, [desktop]);
+
+    // TODO: somehow make this less ugly
+    useEffect(() => {
+        if (searchParams.has('album')) {
+            setYear(searchParams.get('album').replaceAll("+", " "));
+        }
+        if (searchParams.has('query')) {
+            setText(searchParams.get('query').replaceAll("+", " "));
+        } else if (searchParams.has('event')) {
+            setEvent(searchParams.get('event').replaceAll("+", " "));
+        } else if (searchParams.has('team')) {
+            setTeam(searchParams.get('team').replaceAll("+", " "));
+        } else if (searchParams.has('person')) {
+            setPerson(searchParams.get('person').replaceAll("+", " "));
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
-        let obj = {};
-        if (searchParams.has('query')) {
-            obj["text"] = searchParams.get('query').replaceAll("+", " ");
-        } else {
-            if (searchParams.has('album')) {
-                obj["year"] = searchParams.get('album').replaceAll("+", " ");
-            } else {
-                obj["year"] = LAST_YEAR;
-            }
-            if (searchParams.has('event')) {
-                obj["event"] = searchParams.get('event').replaceAll("+", " ");
-            } else if (searchParams.has('team')) {
-                obj["team"] = searchParams.get('team').replaceAll("+", " ");
-
-            } else if (searchParams.has('person')) {
-                obj["person"] = searchParams.get('person').replaceAll("+", " ");
-            } else {
-                obj["event"] = DEFAULT_EVENT;
-            }
+        let searchParams = {};
+        if (data.year) {
+            searchParams.album = data.year;
         }
-        setData(obj);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        if (data.event) {
+            searchParams.event = data.event;
+        }
+        if (data.person) {
+            searchParams.person = data.person;
+        }
+        if (data.team) {
+            searchParams.team = data.team;
+        }
+        if (data.text) {
+            searchParams.query = data.text;
+        }
+        setSearchParams(searchParams);
+    }, [data.year, data.event, data.text, data.person, data.team, setSearchParams]);
 
     return (
-        <AppContext.Provider value={{
-            data,
-            setData
-        }}>
-            <div className="content-layout">
-                <Logo/>
-                <Header setSearchParams={setSearchParams} isOpenMenu={isOpenMenu} setIsOpenMenu={setIsOpenMenu}/>
-                {desktop && <Sidebar setSearchParams={setSearchParams}/>}
-                {!desktop && <MobileYearWrapper setSearchParams={setSearchParams} setIsOpenMenu={setIsOpenMenu}/>}
-                <Body/>
-            </div>
-        </AppContext.Provider>
+        <div className="content-layout">
+            {console.log(data)}
+            {console.log(isOpenMenu)}
+            <Logo />
+            <Header isOpenMenu={isOpenMenu} setIsOpenMenu={setIsOpenMenu} />
+            {desktop && <Sidebar />}
+            {!desktop && <MobileYearWrapper setIsOpenMenu={setIsOpenMenu} />}
+            <Body />
+        </div>
     );
 }
 

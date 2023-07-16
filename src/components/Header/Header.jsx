@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useState} from "react";
-import Seleclor from "./Seleclor";
+import React, { useEffect } from "react";
+import Selector from "./Selector";
 import Search from "./Search";
 import "../../styles/Header.css"
-import {AppContext} from "../AppContext";
-import axios from "axios";
-import {LAST_YEAR, places, years, DEFAULT_EVENT, getEventData, getPeopleData, getTeamData} from "../../consts";
+import { useAppContext } from "../AppContext";
+import { places, years } from "../../consts";
+import { getEventData, getPeopleData, getTeamData } from "../../Util/DataLoader";
 import MenuIcon from '@mui/icons-material/Menu';
 import "../../styles/DropdownMenu.css"
 import CloseIcon from '@mui/icons-material/Close';
@@ -15,143 +15,46 @@ import teamIcon from "../../images/team.svg";
 import personIcon from "../../images/person.svg";
 
 
-export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
-    const {data, setData} = useContext(AppContext);
-    const [event, setEvent] = useState("");
-    const [person, setPerson] = useState("");
-    const [team, setTeam] = useState("");
-    const [year, setYear] = useState("");
-
-
-    const [events, setEvents] = useState([]);
-    const [teams, setTeams] = useState([]);
-    const [people, setPeople] = useState([]);
-
+export const Header = ({ setIsOpenMenu, isOpenMenu }) => {
+    const { data, setYear, setEvent, setPerson, setTeam } = useAppContext();
 
     const desktop = useMediaQuery('(min-width: 900px)')
 
-    function updData() {
-        setYear(data.year === undefined ? "" : data.year);
-        setEvent(data.event === undefined ? "" : data.event);
-        setTeam(data.team === undefined ? "" : data.team);
-        setPerson(data.person === undefined ? "" : data.person);
-    }
-
+    const [events, setEvents] = React.useState([]);
+    const [people, setPeople] = React.useState([]);
+    const [teams, setTeams] = React.useState([]);
 
     useEffect(() => {
-        updData();
-        if (data.year !== undefined) {
-            getMenu(data.year)
-        } else {
-            getMenu(LAST_YEAR)
+        async function fetchData() {
+            setEvents(await getEventData(data.year));
+            setPeople(await getPeopleData(data.year));
+            setTeams(await getTeamData(data.year));
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchData();
     }, [data.year]);
 
-
-    async function getMenu(year) {
-        const responseEvent = await getEventData(year);
-        const responseTeam = await getTeamData(year);
-        const responsePeople = await getPeopleData(year);
-
-        const splitEvent = responseEvent.split("\n").map(i=>i.trim());
-        const splitTeam = responseTeam.split("\n").map(i=>i.trim());
-        const splitPeople = responsePeople.split("\n").map(i=>i.trim());
-        let obj = data;
-        if (year === data.year) {
-            if (data.event === undefined && data.team === undefined && data.person === undefined) {
-                obj.event = DEFAULT_EVENT;
-            }
-            delete obj.text;
-            obj.events = splitEvent;
-            obj.teams = splitTeam;
-            obj.people = splitPeople;
-            setData(obj);
-        }
-        setEvents(splitEvent);
-        setTeams(splitTeam);
-        setPeople(splitPeople);
-    }
-
-    useEffect(() => {
-        updData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data])
-
-    // eslint-disable-next-line no-unused-vars
-    function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-    }
-
-    function getOptionObj(a) {
+    function formatOptions(a) {
         return a.map(x => {
-            return {label: x}
+            return { label: x }
         });
     }
 
-    const setDataType = (type, element, year) => {
-        if (element !== undefined) {
-            setSearchParams({
-                album: year,
-                [type]: element
-            });
-            return true;
-        }
-        return false;
+    function formatYearOption(a) {
+        return a.map(x => {
+            return { year: x, label: x + " " + places[x] }
+        });
     }
 
-    const setter = (selectedItem, type) => {
-        if (type === "year") {
-            let obj = data;
-            obj["year"] = selectedItem.year;
-            if (!setDataType("event", data.event, selectedItem.year) &&
-                !setDataType("team", data.team, selectedItem.year) &&
-                !setDataType("person", data.person, selectedItem.year)) {
-                setDataType("event", DEFAULT_EVENT, selectedItem.year);
-                obj["event"] = DEFAULT_EVENT;
-                delete obj.text;
-            }
-            setData(obj);
+    function selectItem(item, func) {
+        if (item === "clear") {
+            setYear(data.year);
         } else {
-            if (data.year === undefined) {
-                data.year = LAST_YEAR;
-            }
-            if (selectedItem === null) {
-                return;
-            }
-            if (selectedItem === "clear") {
-                setData({
-                    "year": data.year,
-                    "event": DEFAULT_EVENT,
-                    "events": data.events,
-                    "teams": data.teams,
-                    "people": data.people 
-                })
-                setSearchParams({
-                    album: data.year,
-                    "event": DEFAULT_EVENT
-                });
-            } else {
-                setData({
-                    "year": data.year,
-                    [type]: selectedItem.label,
-                    "events": data.events,
-                    "teams": data.teams,
-                    "people": data.people 
-                })
-                setSearchParams({
-                    album: data.year,
-                    [type]: selectedItem.label
-                });
-            }
+            func(item.label);
         }
-        updData();
     }
 
+    // TODO: rewrite
     useEffect(() => {
-        if (desktop) {
-            setIsOpenMenu(true);
-        }
         let element = document.getElementById("header-input-wrapper");
         if (!element) {
             return;
@@ -161,56 +64,50 @@ export const Header = ({setSearchParams, setIsOpenMenu, isOpenMenu}) => {
         } else {
            element.style.display= 'none';
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpenMenu]);
 
     const changeMenu = () => {
-        setIsOpenMenu(isOpenMenu ^ 1);
+        setIsOpenMenu(!isOpenMenu);
     }
 
     return <div className={"header-wrapper"}>
         <div className={"header"}>
             {!desktop &&
                 <div className="button" onClick={changeMenu}>
-                    {!isOpenMenu ? <MenuIcon fontSize="large"/>
-                     : <CloseIcon fontSize="large"/>}
+                    {!isOpenMenu ? <MenuIcon fontSize="large" />
+                        : <CloseIcon fontSize="large" />}
                 </div>
             }
             <div className={"header-input-wrapper"} id={"header-input-wrapper"}>
-                {!desktop && <Seleclor options={years.map(x => {
-                    return {year: x, label: x + " " + places[x]}
-                })}
-                          setSearchParams={setSearchParams}
-                          name={"Select year"}
-                          leftIcon={calendarIcon}
-                          func={selectedYear => {
-                              setter(selectedYear, "year")
-                          }}
-                          value={year}/>}
-                <Seleclor options={getOptionObj(events)}
-                          setSearchParams={setSearchParams}
-                          name={"Select event"}
-                          leftIcon={eventIcon}
-                          func={selectedEvent => {
-                              setter(selectedEvent, "event")
-                          }}
-                          value={event}/>
-                <Seleclor options={getOptionObj(teams)}
-                          setSearchParams={setSearchParams}
-                          name={"Select team"}
-                          leftIcon={teamIcon}
-                          func={selectedTeam => {
-                              setter(selectedTeam, "team")
-                          }} value={team}/>
-                <Seleclor options={getOptionObj(people)}
-                          setSearchParams={setSearchParams}
-                          name={"Select person"}
-                          leftIcon={personIcon}
-                          func={selectedPerson => {
-                              setter(selectedPerson, "person")
-                          }}
-                          value={person}/>
-                <Search setSearchParams={setSearchParams} setIsOpenMenu={setIsOpenMenu}/>
+                {!desktop && <Selector options={formatYearOption(years)}
+                    name={"Select year"}
+                    leftIcon={calendarIcon}
+                    func={selectedItem => {
+                        const year = selectedItem.year;
+                        setYear(year);
+                    }}
+                    value={data.year} />}
+                <Selector options={formatOptions(events)}
+                    name={"Select event"}
+                    leftIcon={eventIcon}
+                    func={selectedItem => {
+                        selectItem(selectedItem, setEvent);
+                    }}
+                    value={data.event} />
+                <Selector options={formatOptions(teams)}
+                    name={"Select team"}
+                    leftIcon={teamIcon}
+                    func={selectedItem => {
+                        selectItem(selectedItem, setTeam);
+                    }} value={data.team} />
+                <Selector options={formatOptions(people)}
+                    name={"Select person"}
+                    leftIcon={personIcon}
+                    func={selectedItem => {
+                        selectItem(selectedItem, setPerson);
+                    }}
+                    value={data.person} />
+                <Search setIsOpenMenu={setIsOpenMenu} />
             </div>
         </div>
     </div>

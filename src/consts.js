@@ -2,15 +2,15 @@ const dataFolder = import.meta.env.VITE_DATA_FOLDER;
 console.log(import.meta.env);
 
 const consts = await import(`../${dataFolder}/consts.js`);
-export const getEventData = async (year) => {
+export const getRawEventData = async (year) => {
     return (await import(`../${dataFolder}/${year}.event`)).default;
 }
 
-export const getTeamData = async (year) => {
+export const getRawTeamData = async (year) => {
     return (await import(`../${dataFolder}/${year}.team`)).default;
 }
 
-export const getPeopleData = async (year) => {
+export const getRawPeopleData = async (year) => {
     return (await import(`../${dataFolder}/${year}.people`)).default;
 }
 

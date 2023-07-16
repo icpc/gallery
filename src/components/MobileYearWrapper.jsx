@@ -1,11 +1,11 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import "../styles/App.css"
-import {AppContext} from "./AppContext";
-import {places,CONTEST_NAME} from "../consts";
+import { useAppContext } from "./AppContext";
+import { places, CONTEST_NAME } from "../consts";
 
 
-const MobileYearWrapper = ({setIsOpenMenu}) => {
-    const {data} = useContext(AppContext);
+const MobileYearWrapper = ({setIsOpenMenu }) => {
+    const { data } = useAppContext();
 
     const openMenu = () => {
         setIsOpenMenu(true);

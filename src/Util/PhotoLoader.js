@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
-import "../../consts";
-import PhotoService from "../../Util/PhotoService";
-import { AppContext } from "../AppContext";
+import { useEffect, useState } from 'react';
+import "../consts";
+import PhotoService from "./PhotoService";
+import { useAppContext } from "../components/AppContext";
+import { getEventData } from './DataLoader';
 
 
 const usePhotoLoader = () => {
-    const { data } = useContext(AppContext);
+    const { data } = useAppContext();
 
     const [photosByEvent, setPhotosByEvent] = useState(new Map());
     const [photosList, setPhotosList] = useState([]);
@@ -13,13 +14,22 @@ const usePhotoLoader = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [internalEvent, setInternalEvent] = useState(undefined);
 
+    const [events, setEvents] = useState([]);
+
+    useEffect(() => {
+        async function fetchData() {
+            setEvents(await getEventData(data.year));
+        }
+        fetchData();
+    }, [data.year]);
+
     useEffect(() => {
         setPhotosByEvent(new Map())
         setPage(1)
         setInternalEvent(data.event)
         setTotalPages(1)
     },
-        [data, data.year, data.event, data.text, data.team, data.person]
+        [data.year, data.event, data.text, data.team, data.person]
     )
 
     useEffect(() => {
@@ -38,7 +48,6 @@ const usePhotoLoader = () => {
     };
 
     const getNextEvent = (currentEvent) => {
-        const events = data?.events;
         if (currentEvent === undefined || events === undefined)
             return null;
         const index = events.findIndex(event => event === currentEvent);
@@ -54,13 +63,13 @@ const usePhotoLoader = () => {
 
     async function loadMorePhotos() {
         let response;
-        if (internalEvent !== undefined) {
+        if (internalEvent) {
             response = await PhotoService.getAllWithEvent(data.year, internalEvent.replaceAll(" ", "%20"), page)
-        } else if (data?.team !== undefined) {
+        } else if (data.team) {
             response = await PhotoService.getAllWithTeam(data.year, data.team.replaceAll(" ", "%20"), page)
-        } else if (data?.person !== undefined) {
+        } else if (data.person) {
             response = await PhotoService.getAllWithPerson(data.year, data.person.replaceAll(" ", "%20"), page)
-        } else if (data?.text !== undefined) {
+        } else if (data.text) {
             response = await PhotoService.getAllWithText(data.text.replaceAll(" ", "%20"), page);
         }
 

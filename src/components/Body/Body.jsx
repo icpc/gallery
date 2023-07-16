@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import "../../consts"
 import InfiniteScroll from 'react-infinite-scroller';
 import "../../styles/Body.css"
 import "../../styles/App.css"
 import MyModal from "./MyModal";
-import { AppContext } from "../AppContext";
+import { useAppContext } from "../AppContext";
 import PhotoParser from "../../Util/PhotoParser";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import usePhotoLoader from './PhotoLoader';
+import usePhotoLoader from '../../Util/PhotoLoader';
 
 const Body = () => {
-    const { data } = useContext(AppContext);
+    const { data } = useAppContext();
     const [isSlideShow, setIsSlideShow] = useState(false);
     const scrollRef = useRef(null);
 

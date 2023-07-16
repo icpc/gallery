@@ -1,10 +1,10 @@
 import React from 'react';
 import TableOfContents from "./TableOfContents";
 
-const Sidebar = ({setSearchParams}) => {
+const Sidebar = () => {
     return (
         <div className={"sidebar"} style={{marginLeft: "1rem"}}>
-            <TableOfContents setSearchParams={setSearchParams}/>
+            <TableOfContents/>
         </div>
     );
 };

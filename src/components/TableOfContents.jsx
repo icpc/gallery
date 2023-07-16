@@ -1,39 +1,18 @@
 import "../styles/TableOfContents.css"
-import {places, years, CONTEST_NAME, DEFAULT_EVENT} from "../consts";
-import {AppContext} from "./AppContext";
-import {useContext} from "react";
+import { places, years, CONTEST_NAME } from "../consts";
+import { useAppContext } from "./AppContext";
 
-const TableOfContents = ({setSearchParams}) => {
-    const {data, setData} = useContext(AppContext);
+const TableOfContents = () => {
+    const { data, setYear } = useAppContext();
 
-
-    const setDataType = (type, element, year) => {
-        if (element !== undefined) {
-            setSearchParams({
-                album: year,
-                [type]: element
-            });
-            return true;
-        }
-        return false;
-    }
-
-    const handleClick = (event, selectedYear) => {
-        let obj = data;
-        obj["year"] = selectedYear;
-        if (!setDataType("event", data.event, selectedYear) &&
-            !setDataType("team", data.team, selectedYear) &&
-            !setDataType("person", data.person, selectedYear)) {
-            setDataType("event", DEFAULT_EVENT, selectedYear);
-            obj["event"] = DEFAULT_EVENT;
-            delete obj.text;
-        }
-        setData(obj);
+    const handleClick = (_, selectedYear) => {
+        setYear(selectedYear);
         document.querySelector(".body").scrollTo({
             top: 0,
             behavior: "smooth"
         });
     }
+
     return (
         <nav aria-label="Table of contents">
             {years.map(year => {
