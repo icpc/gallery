@@ -12,8 +12,8 @@ const Lightbox = ({
     isSlideShow,
     setIsSlideShow,
     photo,
-    handelRotationLeft,
-    handelRotationRight,
+    handleRotationLeft,
+    handleRotationRight,
     leftArrow,
     rightArrow
 }) => {
@@ -48,13 +48,13 @@ const Lightbox = ({
             <Control isSlideShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
             <PhotoInfo photo={photo} photoInfo={photoInfo} setFace={setFace} />
             {leftArrow && <div className="overlay-arrows_left">
-                <IconButton onClick={handelRotationLeft}>
+                <IconButton onClick={handleRotationLeft}>
                     <ArrowForwardIosIcon className="icon-button" style={{ transform: "scale(-1, 1)" }} />
                 </IconButton>
             </div>
             }
             {rightArrow && <div className="overlay-arrows_right">
-                <IconButton onClick={handelRotationRight}>
+                <IconButton onClick={handleRotationRight}>
                     <ArrowForwardIosIcon className="icon-button" />
                 </IconButton>
             </div>}

@@ -6,8 +6,8 @@ import { useAppContext } from '../AppContext';
 
 const MyModal = ({
     photo,
-    handelRotationLeft,
-    handelRotationRight,
+    handleRotationLeft,
+    handleRotationRight,
     leftArrow,
     rightArrow,
     isSlideShow,
@@ -26,9 +26,9 @@ const MyModal = ({
         <div className="overlay dismiss" onClick={handleClick}>
             {isSlideShow
                 ? <Slideshow setIsSlideShow={setIsSlideShow} isSlideShow={isSlideShow} photo={photo}
-                    handelRotationRight={handelRotationRight} rightArrow={rightArrow} />
+                    handleRotationRight={handleRotationRight} rightArrow={rightArrow} />
                 : <Lightbox setIsSlideShow={setIsSlideShow} isSlideShow={isSlideShow} photo={photo}
-                    handelRotationRight={handelRotationRight} handelRotationLeft={handelRotationLeft}
+                    handleRotationRight={handleRotationRight} handleRotationLeft={handleRotationLeft}
                     leftArrow={leftArrow} rightArrow={rightArrow} />}
         </div>
     );

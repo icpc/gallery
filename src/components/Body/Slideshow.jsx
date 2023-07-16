@@ -2,7 +2,7 @@ import React from 'react';
 import "../../styles/Body.css"
 import Control from "./Control";
 
-const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handelRotationRight, rightArrow }) => {
+const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handleRotationRight, rightArrow }) => {
     const timeoutRef = React.useRef(null);
 
     function resetTimeout() {
@@ -16,7 +16,7 @@ const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handelRotationRight, ri
         timeoutRef.current = setTimeout(
             () => {
                 if (rightArrow) {
-                    handelRotationRight()
+                    handleRotationRight()
                 } else {
                     setIsSlideShow(false);
                 }

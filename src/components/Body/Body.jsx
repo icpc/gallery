@@ -22,7 +22,7 @@ const Body = () => {
     const [rightArrow, setRightArrow] = useState(null);
     const [leftArrow, setLeftArrow] = useState(null);
 
-    const handelClick = (_, index) => {
+    const handleClick = (_, index) => {
         const photo = photosList[index];
         setFullscreenPhotoId(photo.id);
     };
@@ -43,7 +43,7 @@ const Body = () => {
 
             setLeftArrow(index !== 0);
             setRightArrow(index + 1 < photosList.length || hasMorePhotos());
-            
+
             if (photosList.length <= index + 4 && hasMorePhotos()) {
                 loadMorePhotos();
             }
@@ -56,12 +56,12 @@ const Body = () => {
         }
     }, [data.fullscreenPhotoId, photosList, hasMorePhotos, loadMorePhotos]);
 
-    const handelRotationRight = () => {
-        handelClick(photosList[fullscreenIndex + 1], fullscreenIndex + 1);
+    const handleRotationRight = () => {
+        handleClick(photosList[fullscreenIndex + 1], fullscreenIndex + 1);
     }
 
-    const handelRotationLeft = () => {
-        handelClick(photosList[fullscreenIndex - 1], fullscreenIndex - 1);
+    const handleRotationLeft = () => {
+        handleClick(photosList[fullscreenIndex - 1], fullscreenIndex - 1);
     }
 
     useEffect(() => {
@@ -71,12 +71,12 @@ const Body = () => {
                 switch (e.key) {
                     case "ArrowLeft":
                         if (leftArrow) {
-                            handelRotationLeft();
+                            handleRotationLeft();
                         }
                         break;
                     case "ArrowRight":
                         if (rightArrow) {
-                            handelRotationRight()
+                            handleRotationRight()
                         }
                         break;
                     case "Escape":
@@ -116,7 +116,7 @@ const Body = () => {
                                 className="preview"
                                 src={photo?.url_preview}
                                 alt={photo.url_preview}
-                                onClick={() => handelClick(photo, index)}
+                                onClick={() => handleClick(photo, index)}
                             />
                         </figure>
                     );
@@ -173,8 +173,8 @@ const Body = () => {
             </div>
             {(!hasMorePhotos() && photosList.length === 0) && <div className="photo-list-message">No photo</div>}
             {fullscreenPhoto != null && <MyModal photo={fullscreenPhoto}
-                handelRotationRight={handelRotationRight}
-                handelRotationLeft={handelRotationLeft}
+                handleRotationRight={handleRotationRight}
+                handleRotationLeft={handleRotationLeft}
                 rightArrow={rightArrow}
                 leftArrow={leftArrow}
                 isSlideShow={isSlideShow}
