@@ -11,7 +11,7 @@
 
 .body .control {
     background: var(--opacityBGColor);
-    position: absolute;
+    position: fixed;
     top: 40px;
     right: 40px;
     cursor: pointer;
@@ -150,7 +150,7 @@
 }
 
 .overlay .full {
-    height: 100vh;
+    max-width: 100vh;
     max-width: 100vw;
     object-fit: contain;
     display: block;
