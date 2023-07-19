@@ -52,11 +52,12 @@ a:visited {
     .body {
         grid-area: d;
     }
+    
     .mobile-year-wrapper {
         grid-area: c;
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
-
+        margin-left: 1rem;
     }
 
     .year {

@@ -4,8 +4,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useAppContext } from "./components/AppContext";
 import Body from "./components/Body/Body";
 import Header from "./components/Header/Header";
+import MobileYearWrapper from "./components/Header/MobileYearWrapper";
 import Logo from "./components/Logo";
-import MobileYearWrapper from "./components/MobileYearWrapper";
 import Sidebar from "./components/Sidebar";
 
 import "./styles/App.css";
@@ -13,9 +13,8 @@ import "./styles/App.css";
 
 function App() {
     const desktop = useMediaQuery("(min-width: 900px)");
-    const [isOpenMenu, setIsOpenMenu] = useState(false);
 
-    const { data } = useAppContext();
+    const { data, setIsOpenMenu } = useAppContext();
 
     useEffect(() => {
         if (desktop) {
@@ -29,9 +28,9 @@ function App() {
         <div className="content-layout">
             {console.log(data)}
             <Logo />
-            <Header isOpenMenu={isOpenMenu} setIsOpenMenu={setIsOpenMenu} />
+            <Header />
             {desktop && <Sidebar />}
-            {!desktop && <MobileYearWrapper setIsOpenMenu={setIsOpenMenu} />}
+            {!desktop && <MobileYearWrapper />}
             <Body />
         </div>
     );

@@ -6,8 +6,8 @@ import { useAppContext } from "../AppContext";
 import "../../styles/Search.css";
 import "../../styles/Header.css";
 
-const Search = ({ setIsOpenMenu }) => {
-    const { setText } = useAppContext();
+const Search = () => {
+    const { setText, setIsOpenMenu } = useAppContext();
 
     const desktop = useMediaQuery("(min-width: 900px)");
 

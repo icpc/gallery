@@ -18,8 +18,8 @@ import "../../styles/Header.css";
 import "../../styles/DropdownMenu.css";
 
 
-export const Header = ({ setIsOpenMenu, isOpenMenu }) => {
-    const { data, setYear, setEvent, setPerson, setTeam } = useAppContext();
+export const Header = () => {
+    const { data, setYear, setEvent, setPerson, setTeam, isOpenMenu, setIsOpenMenu } = useAppContext();
 
     const desktop = useMediaQuery("(min-width: 900px)");
 
@@ -63,9 +63,9 @@ export const Header = ({ setIsOpenMenu, isOpenMenu }) => {
             return;
         }
         if (isOpenMenu) {
-            element.style.display= "flex";
+            element.style.display = "flex";
         } else {
-            element.style.display= "none";
+            element.style.display = "none";
         }
     }, [isOpenMenu]);
 
