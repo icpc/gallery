@@ -1,17 +1,18 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import { useEffect, useState } from 'react';
 import "../consts";
 import PhotoService from "./PhotoService";
-import {useAppContext} from "../components/AppContext";
-import {getEventData} from './DataLoader';
+import { useAppContext } from "../components/AppContext";
+import { getEventData } from './DataLoader';
 
 
 const usePhotoLoader = () => {
-    const {data} = useAppContext();
+    const { data } = useAppContext();
 
     const [photosByEvent, setPhotosByEvent] = useState(new Map());
+    const [photosList, setPhotosList] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [internalEvent, setInternalEvent] = useState(data.event);
+    const [internalEvent, setInternalEvent] = useState(undefined);
 
     const [events, setEvents] = useState([]);
 
@@ -19,7 +20,6 @@ const usePhotoLoader = () => {
         async function fetchData() {
             setEvents(await getEventData(data.year));
         }
-
         fetchData();
     }, [data.year]);
 
@@ -28,40 +28,48 @@ const usePhotoLoader = () => {
         setPage(1)
         setInternalEvent(data.event)
         setTotalPages(1)
-    }, [data.year, data.event, data.text, data.team, data.person])
+    },
+        [data.year, data.event, data.text, data.team, data.person]
+    )
 
-    const onlyUnique = useCallback((value, index, self) => self.findIndex(photo => photo.id === value.id) === index,
-        []);
+    useEffect(() => {
+        setPhotosList([].concat(...Array.from(photosByEvent.values())));
+    },
+        [photosByEvent]
+    )
+
+    function onlyUnique(value, index, self) {
+        return self.findIndex(photo => photo.id === value.id) === index;
+    }
 
     const appendPhotos = (event, photos) => {
         const appendedEventPhotos = [...(photosByEvent.get(event) || []), ...photos];
         setPhotosByEvent(new Map(photosByEvent.set(event, appendedEventPhotos.filter(onlyUnique))));
     };
 
-    const getNextEvent = useCallback((currentEvent) => {
-        if (currentEvent === undefined || events === undefined) return null;
+    const getNextEvent = (currentEvent) => {
+        if (currentEvent === undefined || events === undefined)
+            return null;
         const index = events.findIndex(event => event === currentEvent);
         if (index !== -1 && index + 1 < events.length) {
             return events[index + 1];
         }
         return null;
-    }, [events])
+    }
 
-    const photosList = useMemo(() => [].concat(...Array.from(photosByEvent.values())),
-        [photosByEvent]);
+    function hasMorePhotos() {
+        return page <= totalPages || getNextEvent(internalEvent) !== null
+    }
 
-    const hasMorePhotos = useMemo(() => page <= totalPages || getNextEvent(internalEvent) !== null,
-        [page, totalPages, internalEvent, getNextEvent]);
-
-    const loadMorePhotos = async () => {
+    async function loadMorePhotos() {
         let response;
-        if (internalEvent !== undefined) {
+        if (internalEvent) {
             response = await PhotoService.getAllWithEvent(data.year, encodeURIComponent(internalEvent), page)
-        } else if (data.team !== undefined) {
+        } else if (data.team) {
             response = await PhotoService.getAllWithTeam(data.year, encodeURIComponent(data.team), page)
-        } else if (data.person !== undefined) {
+        } else if (data.person) {
             response = await PhotoService.getAllWithPerson(data.year, encodeURIComponent(data.person), page)
-        } else if (data.text !== undefined) {
+        } else if (data.text) {
             response = await PhotoService.getAllWithText(encodeURIComponent(data.text), page);
         }
 
@@ -71,7 +79,7 @@ const usePhotoLoader = () => {
                 setInternalEvent(getNextEvent(internalEvent));
                 return;
             }
-            appendPhotos(internalEvent, response.data.photos.photo.map(({datetaken, url_m, url_o, url_l, id}) => ({
+            appendPhotos(internalEvent, response.data.photos.photo.map(({ datetaken, url_m, url_o, url_l, id }) => ({
                 url_preview: url_m ?? url_o,
                 url: url_l ?? url_o,
                 id,
@@ -81,9 +89,9 @@ const usePhotoLoader = () => {
             setTotalPages(response.data.photos.pages)
             setPage(page + 1);
         }
-    };
+    }
 
-    return {hasMorePhotos, loadMorePhotos, photosByEvent, photosList};
+    return { hasMorePhotos, loadMorePhotos, photosByEvent, photosList };
 };
 
 export default usePhotoLoader;
