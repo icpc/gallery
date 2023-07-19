@@ -1,24 +1,27 @@
 import React, { useEffect } from "react";
-import Selector from "./Selector";
-import Search from "./Search";
-import "../../styles/Header.css"
-import { useAppContext } from "../AppContext";
-import { places, years } from "../../consts";
-import { getEventData, getPeopleData, getTeamData } from "../../Util/DataLoader";
-import MenuIcon from '@mui/icons-material/Menu';
-import "../../styles/DropdownMenu.css"
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
+import MenuIcon from "@mui/icons-material/Menu";
 import { useMediaQuery } from "@mui/material";
+
+import { places, years } from "../../consts";
 import calendarIcon from "../../images/calender.svg";
 import eventIcon from "../../images/event.svg";
-import teamIcon from "../../images/team.svg";
 import personIcon from "../../images/person.svg";
+import teamIcon from "../../images/team.svg";
+import { getEventData, getPeopleData, getTeamData } from "../../Util/DataLoader";
+import { useAppContext } from "../AppContext";
+
+import Search from "./Search";
+import Selector from "./Selector";
+
+import "../../styles/Header.css";
+import "../../styles/DropdownMenu.css";
 
 
 export const Header = ({ setIsOpenMenu, isOpenMenu }) => {
     const { data, setYear, setEvent, setPerson, setTeam } = useAppContext();
 
-    const desktop = useMediaQuery('(min-width: 900px)')
+    const desktop = useMediaQuery("(min-width: 900px)");
 
     const [events, setEvents] = React.useState([]);
     const [people, setPeople] = React.useState([]);
@@ -35,13 +38,13 @@ export const Header = ({ setIsOpenMenu, isOpenMenu }) => {
 
     function formatOptions(a) {
         return a.map(x => {
-            return { label: x }
+            return { label: x };
         });
     }
 
     function formatYearOption(a) {
         return a.map(x => {
-            return { year: x, label: x + " " + places[x] }
+            return { year: x, label: x + " " + places[x] };
         });
     }
 
@@ -60,15 +63,15 @@ export const Header = ({ setIsOpenMenu, isOpenMenu }) => {
             return;
         }
         if (isOpenMenu) {
-            element.style.display= 'flex';
+            element.style.display= "flex";
         } else {
-           element.style.display= 'none';
+            element.style.display= "none";
         }
     }, [isOpenMenu]);
 
     const changeMenu = () => {
         setIsOpenMenu(!isOpenMenu);
-    }
+    };
 
     return <div className={"header-wrapper"}>
         <div className={"header"}>
@@ -110,6 +113,6 @@ export const Header = ({ setIsOpenMenu, isOpenMenu }) => {
                 <Search setIsOpenMenu={setIsOpenMenu} />
             </div>
         </div>
-    </div>
-}
+    </div>;
+};
 export default Header;

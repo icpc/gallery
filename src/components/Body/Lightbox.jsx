@@ -1,12 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
-import "../../styles/Body.css"
-import PhotoInfo from "./PhotoInfo";
-import FaceDiv from "./FaceDiv";
+import { useEffect, useRef, useState } from "react";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { IconButton } from "@mui/material";
+import styled from "styled-components";
+
+import PhotoParser from "../../Util/PhotoParser";
+
 import Control from "./Control";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import PhotoParser from '../../Util/PhotoParser';
-import { IconButton } from '@mui/material';
-import styled from 'styled-components';
+import FaceDiv from "./FaceDiv";
+import PhotoInfo from "./PhotoInfo";
+
+import "../../styles/Body.css";
 
 const Lightbox = ({
     isSlideShow,

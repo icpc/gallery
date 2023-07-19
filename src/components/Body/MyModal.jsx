@@ -1,8 +1,9 @@
-import React from 'react';
-import "../../styles/Body.css"
+import { useAppContext } from "../AppContext";
+
 import Lightbox from "./Lightbox";
 import Slideshow from "./Slideshow";
-import { useAppContext } from '../AppContext';
+
+import "../../styles/Body.css";
 
 const MyModal = ({
     photo,
@@ -20,7 +21,7 @@ const MyModal = ({
         if (e.target.classList.contains("dismiss")) {
             setFullscreenPhotoIndex(null);
         }
-    }
+    };
 
     return (
         <div className="overlay dismiss" onClick={handleClick}>

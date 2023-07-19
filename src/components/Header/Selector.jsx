@@ -1,4 +1,3 @@
-import React from 'react';
 import MySelect from "../UI/Select/MySelect";
 
 const Selector = ({ leftIcon, func, name, value, options }) => {

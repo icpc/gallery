@@ -1,12 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
-import "../../consts"
-import InfiniteScroll from 'react-infinite-scroller';
-import "../../styles/Body.css"
-import "../../styles/App.css"
-import MyModal from "./MyModal";
+import { useEffect, useRef, useState } from "react";
+import InfiniteScroll from "react-infinite-scroller";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
+import "../../consts";
+
+import usePhotoLoader from "../../Util/PhotoLoader";
 import { useAppContext } from "../AppContext";
-import useMediaQuery from '@mui/material/useMediaQuery';
-import usePhotoLoader from '../../Util/PhotoLoader';
+
+import MyModal from "./MyModal";
+
+import "../../styles/Body.css";
+import "../../styles/App.css";
 
 const Body = () => {
     const { data, setFullscreenPhotoId } = useAppContext();
@@ -15,7 +19,7 @@ const Body = () => {
 
     const { hasMorePhotos, loadMorePhotos, photosByEvent, photosList } = usePhotoLoader();
 
-    const desktop = useMediaQuery('(min-width: 900px)');
+    const desktop = useMediaQuery("(min-width: 900px)");
 
     const [fullscreenPhoto, setFullscreenPhoto] = useState(null);
     const [fullscreenIndex, setFullscreenIndex] = useState(null);
@@ -58,40 +62,39 @@ const Body = () => {
 
     const handleRotationRight = () => {
         handleClick(photosList[fullscreenIndex + 1], fullscreenIndex + 1);
-    }
+    };
 
     const handleRotationLeft = () => {
         handleClick(photosList[fullscreenIndex - 1], fullscreenIndex - 1);
-    }
+    };
 
     useEffect(() => {
         const target = document.getElementsByTagName("body")[0];
         const listener = (e) => {
             if (fullscreenPhoto) {
                 switch (e.key) {
-                    case "ArrowLeft":
-                        if (leftArrow) {
-                            handleRotationLeft();
-                        }
-                        break;
-                    case "ArrowRight":
-                        if (rightArrow) {
-                            handleRotationRight()
-                        }
-                        break;
-                    case "Escape":
-                        setFullscreenPhotoId(null);
-                        break;
-                    default:
-                        break;
+                case "ArrowLeft":
+                    if (leftArrow) {
+                        handleRotationLeft();
+                    }
+                    break;
+                case "ArrowRight":
+                    if (rightArrow) {
+                        handleRotationRight();
+                    }
+                    break;
+                case "Escape":
+                    setFullscreenPhotoId(null);
+                    break;
+                default:
+                    break;
                 }
             }
         };
         target.onkeydown = listener;
         return () => {
             target.removeEventListener("onkeydown", listener);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        };
     }, [fullscreenPhoto]);
 
     function groupPhotosByYear(photos) {
@@ -122,7 +125,7 @@ const Body = () => {
                     );
                 })}
             </div>
-        )
+        );
     }
 
     function renderPhotos(photos) {

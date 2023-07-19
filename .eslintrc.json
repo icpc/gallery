@@ -5,11 +5,12 @@
   "env": {
     "node": true,
     "browser": true,
-    "es2021": true
+    "es2022": true
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime"
   ],
   "settings": {
     "react": {
@@ -20,11 +21,12 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 12,
+    "ecmaVersion": 2022,
     "sourceType": "module"
   },
   "plugins": [
-    "react"
+    "react",
+    "simple-import-sort"
   ],
   "rules": {
     "indent": [
@@ -58,12 +60,41 @@
     "react/prop-types": [
       "off"
     ],
-    "sort-imports": [
+    "simple-import-sort/imports": [
       "error",
       {
-        "ignoreCase": true,
-        "ignoreDeclarationSort": true
+        "groups": [
+          // Packages `react` related packages come first.
+          [
+            "^react",
+            "^@?\\w"
+          ],
+          // Internal packages.
+          [
+            "^(@|components)(/.*|$)"
+          ],
+          // Side effect imports.
+          [
+            "^\\u0000"
+          ],
+          // Parent imports. Put `..` last.
+          [
+            "^\\.\\.(?!/?$)",
+            "^\\.\\./?$"
+          ],
+          // Other relative imports. Put same-folder imports and `.` last.
+          [
+            "^\\./(?=.*/)(?!/?$)",
+            "^\\.(?!/?$)",
+            "^\\./?$"
+          ],
+          // Style imports.
+          [
+            "^.+\\.?(css)$"
+          ]
+        ]
       }
-    ]
+    ],
+    "simple-import-sort/exports": "error"
   }
 }

@@ -1,5 +1,6 @@
-import {api_key, PER_PAGE, user_id, TAG_EVENT, TAG_TEAM, TAG_ALBUM} from "../consts";
 import axios from "axios";
+
+import { api_key, PER_PAGE, TAG_ALBUM, TAG_EVENT, TAG_TEAM, user_id } from "../consts";
 
 export default class PhotoService {
     static extras = "tags,url_m,url_c,url_l,url_o,description,date_upload,date_taken";

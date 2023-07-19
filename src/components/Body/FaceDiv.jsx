@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import "../../styles/theme-variables.css"
+
+import "../../styles/theme-variables.css";
 
 const Rectangle = styled.fieldset`
   top: ${props => props.top * 100 + "%"};
@@ -30,8 +31,8 @@ const FaceDiv = ({ person, face, setFace }) => {
             setHidden(true);
         }
     },
-        [face, person]
-    )
+    [face, person]
+    );
 
     return (
         <FaceWrapper>
@@ -42,7 +43,7 @@ const FaceDiv = ({ person, face, setFace }) => {
                 right={person?.position?.right}
                 onMouseLeave={() => setFace(null)} onMouseEnter={() => setFace(person)}
             >
-                <legend align="center" style={{ transform: "rotatex(180deg)" }}>{person.name}</legend>
+                <legend style={{ transform: "rotatex(180deg)" }}>{person.name}</legend>
             </Rectangle>
         </FaceWrapper>
     );

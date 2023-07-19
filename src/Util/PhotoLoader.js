@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 
-import PhotoService from "./PhotoService";
-import { getEventData } from "./DataLoader";
 import { useAppContext } from "../components/AppContext";
+
+import { getEventData } from "./DataLoader";
+import PhotoService from "./PhotoService";
 
 
 /**
@@ -72,11 +73,11 @@ const usePhotoLoader = () => {
     async function loadMorePhotos() {
         let response;
         if (internalEvent) {
-            response = await PhotoService.getAllWithEvent(data.year, encodeURIComponent(internalEvent), page)
+            response = await PhotoService.getAllWithEvent(data.year, encodeURIComponent(internalEvent), page);
         } else if (data.team) {
-            response = await PhotoService.getAllWithTeam(data.year, encodeURIComponent(data.team), page)
+            response = await PhotoService.getAllWithTeam(data.year, encodeURIComponent(data.team), page);
         } else if (data.person) {
-            response = await PhotoService.getAllWithPerson(data.year, encodeURIComponent(data.person), page)
+            response = await PhotoService.getAllWithPerson(data.year, encodeURIComponent(data.person), page);
         } else if (data.text) {
             response = await PhotoService.getAllWithText(encodeURIComponent(data.text), page);
         }

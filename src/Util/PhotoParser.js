@@ -1,5 +1,6 @@
+import { TAG_ALBUM, TAG_EVENT, TAG_PERSON, TAG_PHOTOGRAPHER, TAG_TEAM } from "../consts";
+
 import PhotoService from "./PhotoService";
-import {TAG_EVENT, TAG_TEAM, TAG_ALBUM, TAG_PERSON, TAG_PHOTOGRAPHER} from "../consts";
 
 
 export default class PhotoParser {
@@ -16,7 +17,7 @@ export default class PhotoParser {
             top: this.convertRel(position.substr(4, 4)),
             right: this.convertRel(position.substr(8, 4)),
             bottom: this.convertRel(position.substr(12, 4)),
-        }
+        };
     }
 
     static convertNum(text) {
@@ -48,7 +49,7 @@ export default class PhotoParser {
                     continue;
                 }
                 if (tag.startsWith(TAG_PERSON)) {
-                    person.push({name: tag.replaceAll(TAG_PERSON+"$", "")});
+                    person.push({ name: tag.replaceAll(TAG_PERSON+"$", "") });
                     continue;
                 }
                 if (tag.startsWith(TAG_ALBUM)) {
@@ -59,14 +60,14 @@ export default class PhotoParser {
                     photographer.push(tag.replaceAll(TAG_PHOTOGRAPHER+"$", ""));
                     continue;
                 }
-                if (tag.indexOf('(') !== -1) {
-                    const name = tag.substr(0, tag.indexOf('('));
+                if (tag.indexOf("(") !== -1) {
+                    const name = tag.substr(0, tag.indexOf("("));
                     if (name === "") {
                         continue;
                     }
                     person.push({
                         name: name,
-                        position: this.getPosition(tag.substr(tag.indexOf('(') + 1, tag.indexOf(')', tag.indexOf('(')) - tag.indexOf('(') - 1))
+                        position: this.getPosition(tag.substr(tag.indexOf("(") + 1, tag.indexOf(")", tag.indexOf("(")) - tag.indexOf("(") - 1))
                     });
                 }
             }

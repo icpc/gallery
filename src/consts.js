@@ -4,15 +4,15 @@ console.log(import.meta.env);
 const consts = await import(`../${dataFolder}/consts.js`);
 export const getRawEventData = async (year) => {
     return (await import(`../${dataFolder}/${year}.event`)).default;
-}
+};
 
 export const getRawTeamData = async (year) => {
     return (await import(`../${dataFolder}/${year}.team`)).default;
-}
+};
 
 export const getRawPeopleData = async (year) => {
     return (await import(`../${dataFolder}/${year}.people`)).default;
-}
+};
 
 console.log(`Using ${dataFolder} folder for consts.js`);
 console.log(`Loaded \n${JSON.stringify(consts, undefined, 4)}`);

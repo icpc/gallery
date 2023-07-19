@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import "../../styles/Search.css"
-import "../../styles/Header.css"
-import { useAppContext } from '../AppContext';
-import { useMediaQuery } from '@mui/material';
+import { useState } from "react";
+import { useMediaQuery } from "@mui/material";
+
+import { useAppContext } from "../AppContext";
+
+import "../../styles/Search.css";
+import "../../styles/Header.css";
 
 const Search = ({ setIsOpenMenu }) => {
     const { setText } = useAppContext();
 
-    const desktop = useMediaQuery('(min-width: 900px)')
+    const desktop = useMediaQuery("(min-width: 900px)");
 
     const [inputText, setInputText] = useState("");
     const set = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         if (inputText !== "") {
             setText(inputText);
             setInputText("");
@@ -20,7 +22,7 @@ const Search = ({ setIsOpenMenu }) => {
                 setIsOpenMenu(false);
             }
         }
-    }
+    };
 
     return (
         <div className="search">

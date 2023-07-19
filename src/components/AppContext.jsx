@@ -1,6 +1,7 @@
-import {createContext, useCallback, useContext, useState, useEffect} from 'react'
-import {DEFAULT_EVENT, LAST_YEAR} from '../consts';
-import {useSearchParams} from 'react-router-dom';
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
+import { DEFAULT_EVENT, LAST_YEAR } from "../consts";
 
 /**
  * Data for the entire app.
@@ -26,28 +27,28 @@ const defaultContext = {
     person: null,
     team: null,
     fullscreenPhotoId: null,
-}
+};
 
 const AppContext = createContext(null);
 
 function parseSearchParams(searchParams) {
     let searchParamsData = {};
-    if (searchParams.has('photo')) {
-        searchParamsData.fullscreenPhotoId = searchParams.get('photo');
+    if (searchParams.has("photo")) {
+        searchParamsData.fullscreenPhotoId = searchParams.get("photo");
     }
-    if (searchParams.has('query')) {
-        searchParamsData.text = decodeURIComponent(searchParams.get('query'));
+    if (searchParams.has("query")) {
+        searchParamsData.text = decodeURIComponent(searchParams.get("query"));
         searchParamsData.year = null;
     } else {
-        if (searchParams.has('album')) {
-            searchParamsData.year = decodeURIComponent(searchParams.get('album'));
+        if (searchParams.has("album")) {
+            searchParamsData.year = decodeURIComponent(searchParams.get("album"));
         }
-        if (searchParams.has('event')) {
-            searchParamsData.event = decodeURIComponent(searchParams.get('event'));
-        } else if (searchParams.has('team')) {
-            searchParamsData.team = decodeURIComponent(searchParams.get('team'));
-        } else if (searchParams.has('person')) {
-            searchParamsData.person = decodeURIComponent(searchParams.get('person'));
+        if (searchParams.has("event")) {
+            searchParamsData.event = decodeURIComponent(searchParams.get("event"));
+        } else if (searchParams.has("team")) {
+            searchParamsData.team = decodeURIComponent(searchParams.get("team"));
+        } else if (searchParams.has("person")) {
+            searchParamsData.person = decodeURIComponent(searchParams.get("person"));
         } else {
             searchParamsData.event = DEFAULT_EVENT;
         }
@@ -55,7 +56,7 @@ function parseSearchParams(searchParams) {
     return searchParamsData;
 }
 
-function serializeSearchParams({year, event, text, person, team, fullscreenPhotoId}) {
+function serializeSearchParams({ year, event, text, person, team, fullscreenPhotoId }) {
     let searchParams = {};
     if (year != null) {
         searchParams.album = year;
@@ -86,7 +87,7 @@ function attachYearIfNull(data) {
 }
 
 
-const AppContextProvider = ({children}) => {
+const AppContextProvider = ({ children }) => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     /**
@@ -114,7 +115,7 @@ const AppContextProvider = ({children}) => {
             ...defaultContext,
             year: newYear,
             event: DEFAULT_EVENT,
-        })
+        });
     }, []);
 
     const setText = useCallback((newText) => {
@@ -125,7 +126,7 @@ const AppContextProvider = ({children}) => {
             text: newText,
             person: null,
             team: null,
-        })
+        });
     }, [data]);
 
     const setEvent = useCallback((newEvent) => {
@@ -137,7 +138,7 @@ const AppContextProvider = ({children}) => {
                 person: null,
                 team: null,
             })
-        )
+        );
     }, [data]);
 
 
@@ -150,7 +151,7 @@ const AppContextProvider = ({children}) => {
                 person: newPerson,
                 team: null,
             })
-        )
+        );
     }, [data]);
 
     const setTeam = useCallback((newTeam) => {
@@ -162,14 +163,14 @@ const AppContextProvider = ({children}) => {
                 person: null,
                 team: newTeam,
             })
-        )
+        );
     }, [data]);
 
     const setFullscreenPhotoId = useCallback((newIndex) => {
         setData({
             ...data,
             fullscreenPhotoId: newIndex,
-        })
+        });
     }, [data]);
 
     return (<AppContext.Provider value={{
@@ -182,8 +183,8 @@ const AppContextProvider = ({children}) => {
         setFullscreenPhotoId,
     }}>
         {children}
-    </AppContext.Provider>)
-}
+    </AppContext.Provider>);
+};
 
 /**
  * The provider component for the AppContext object.
@@ -201,9 +202,9 @@ const AppContextProvider = ({children}) => {
 const useAppContext = () => {
     const context = useContext(AppContext);
     if (context === undefined || context === null) {
-        throw new Error(`useAppContext must be called within AppContextProvider`)
+        throw new Error("useAppContext must be called within AppContextProvider");
     }
-    return context
-}
+    return context;
+};
 
-export {useAppContext, AppContextProvider};
+export { AppContextProvider,useAppContext };

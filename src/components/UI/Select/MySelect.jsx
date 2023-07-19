@@ -1,13 +1,13 @@
-import React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Autocomplete from "@mui/material/Autocomplete";
 import Paper from "@mui/material/Paper";
-import {styled} from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
 
 
-const MyTextField = styled(TextField)(({theme}) => ({
+const MyTextField = styled(TextField)(() => ({
     "& .MuiInputBase-input.MuiAutocomplete-input": {
+
         color: "white",
         fontSize: "1rem",
         marginLeft: "25px",
@@ -34,7 +34,7 @@ const MyTextField = styled(TextField)(({theme}) => ({
     }
 }));
 
-const MyPaper = styled(Paper)((theme) => ({
+const MyPaper = styled(Paper)(() => ({
     "& .MuiAutocomplete-listbox": {
         backgroundColor: "#2E2E2E",
         color: "#8A8A8A"
@@ -42,10 +42,10 @@ const MyPaper = styled(Paper)((theme) => ({
 }));
 
 const CustomPopper = function (props) {
-    return <MyPaper {...props} style={{backgroundColor: "#2E2E2E", color: "#8A8A8A"}}/>;
+    return <MyPaper {...props} style={{ backgroundColor: "#2E2E2E", color: "#8A8A8A" }}/>;
 };
 
-const MySelect = ({options, name = "", onChange, value, leftIcon}) => {
+const MySelect = ({ options, name = "", onChange, value, leftIcon }) => {
     return (
         <Autocomplete
             disablePortal
@@ -54,7 +54,7 @@ const MySelect = ({options, name = "", onChange, value, leftIcon}) => {
             options={options}
             onChange={(event, newValue, reason) => {
                 if (reason === "selectOption") {
-                    onChange(newValue)
+                    onChange(newValue);
                 } else {
                     onChange("clear");
                 }
@@ -77,6 +77,6 @@ const MySelect = ({options, name = "", onChange, value, leftIcon}) => {
             PaperComponent={CustomPopper}
         />
     );
-}
+};
 
 export default MySelect;

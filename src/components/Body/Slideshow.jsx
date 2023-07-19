@@ -1,6 +1,8 @@
-import React from 'react';
-import "../../styles/Body.css"
+import React from "react";
+
 import Control from "./Control";
+
+import "../../styles/Body.css";
 
 const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handleRotationRight, rightArrow }) => {
     const timeoutRef = React.useRef(null);
@@ -16,7 +18,7 @@ const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handleRotationRight, ri
         timeoutRef.current = setTimeout(
             () => {
                 if (rightArrow) {
-                    handleRotationRight()
+                    handleRotationRight();
                 } else {
                     setIsSlideShow(false);
                 }
@@ -27,7 +29,6 @@ const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handleRotationRight, ri
         return () => {
             resetTimeout();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [photo]);
 
     return (

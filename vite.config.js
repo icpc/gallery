@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 import dataRawPlugin from "vite-raw-plugin";
 
 export default defineConfig({
@@ -10,7 +10,7 @@ export default defineConfig({
         port: 3000,
     },
     build: {
-        target: 'esnext',
+        target: "esnext",
         emptyOutDir: true,
         outDir: process.env.PUBLIC_URL,
     },

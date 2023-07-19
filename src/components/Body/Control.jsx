@@ -1,16 +1,16 @@
-import React from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
+import CloseIcon from "@mui/icons-material/Close";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { IconButton } from "@mui/material";
+
 import { useAppContext } from "../AppContext";
-import { IconButton } from '@mui/material';
 
 const Control = ({ isSlideShow, setIsSlideShow }) => {
     const { setFullscreenPhotoId } = useAppContext();
 
     const slideShow = () => {
         setIsSlideShow(!isSlideShow);
-    }
+    };
 
     return (
         <div className="control">
