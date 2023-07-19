@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { useAppContext } from "./components/AppContext";
 import Body from "./components/Body/Body";
@@ -12,25 +11,14 @@ import "./styles/App.css";
 
 
 function App() {
-    const desktop = useMediaQuery("(min-width: 900px)");
-
-    const { data, setIsOpenMenu } = useAppContext();
-
-    useEffect(() => {
-        if (desktop) {
-            setIsOpenMenu(true);
-        } else {
-            setIsOpenMenu(false);
-        }
-    }, [desktop]);
+    const { desktop, mobile } = useAppContext();
 
     return (
         <div className="content-layout">
-            {console.log(data)}
             <Logo />
             <Header />
             {desktop && <Sidebar />}
-            {!desktop && <MobileYearWrapper />}
+            {mobile && <MobileYearWrapper />}
             <Body />
         </div>
     );

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useMediaQuery } from "@mui/material";
 
 import { places, years } from "../../consts";
 import calendarIcon from "../../images/calender.svg";
@@ -19,9 +18,7 @@ import "../../styles/DropdownMenu.css";
 
 
 export const Header = () => {
-    const { data, setYear, setEvent, setPerson, setTeam, isOpenMenu, setIsOpenMenu } = useAppContext();
-
-    const desktop = useMediaQuery("(min-width: 900px)");
+    const { data, setYear, setEvent, setPerson, setTeam, isOpenMenu, setIsOpenMenu, desktop, mobile } = useAppContext();
 
     const [events, setEvents] = React.useState([]);
     const [people, setPeople] = React.useState([]);

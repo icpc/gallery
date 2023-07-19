@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useMediaQuery } from "@mui/material";
 
 import { useAppContext } from "../AppContext";
 
@@ -7,9 +6,7 @@ import "../../styles/Search.css";
 import "../../styles/Header.css";
 
 const Search = () => {
-    const { setText, setIsOpenMenu } = useAppContext();
-
-    const desktop = useMediaQuery("(min-width: 900px)");
+    const { setText, setIsOpenMenu, desktop, mobile } = useAppContext();
 
     const [inputText, setInputText] = useState("");
     const set = (e) => {
@@ -18,7 +15,7 @@ const Search = () => {
             setText(inputText);
             setInputText("");
 
-            if (!desktop) {
+            if (mobile) {
                 setIsOpenMenu(false);
             }
         }

@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { DEFAULT_EVENT, LAST_YEAR } from "../consts";
 
@@ -101,8 +102,19 @@ const AppContextProvider = ({ children }) => {
         ...parseSearchParams(searchParams),
     });
 
+    const desktop = useMediaQuery("(min-width: 900px)");
+    const mobile = !desktop;
+
     const [isSlideShow, setIsSlideShow] = useState(false);
-    const [isOpenMenu, setIsOpenMenu] = useState(false);
+    const [isOpenMenu, setIsOpenMenu] = useState(desktop);
+
+    useEffect(() => {
+        if (desktop) {
+            setIsOpenMenu(true);
+        } else {
+            setIsOpenMenu(false);
+        }
+    }, [desktop]);
 
     useEffect(() => {
         setSearchParams(
@@ -187,6 +199,8 @@ const AppContextProvider = ({ children }) => {
         setIsSlideShow,
         isOpenMenu,
         setIsOpenMenu,
+        desktop,
+        mobile,
     }}>
         {children}
     </AppContext.Provider>);
@@ -207,6 +221,8 @@ const AppContextProvider = ({ children }) => {
  *  setIsSlideShow: function,
  *  isOpenMenu: boolean,
  *  setIsOpenMenu: function,
+ *  desktop: boolean,
+ *  mobile: boolean,
  * }}.
  */
 const useAppContext = () => {
@@ -217,4 +233,4 @@ const useAppContext = () => {
     return context;
 };
 
-export { AppContextProvider,useAppContext };
+export { AppContextProvider, useAppContext };

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import "../../consts";
 
@@ -14,12 +13,10 @@ import "../../styles/Body.css";
 import "../../styles/App.css";
 
 const Body = () => {
-    const { data, setFullscreenPhotoId, setIsSlideShow } = useAppContext();
+    const { data, setFullscreenPhotoId, setIsSlideShow, desktop } = useAppContext();
     const scrollRef = useRef(null);
 
     const { hasMorePhotos, loadMorePhotos, photosByEvent, photosList } = usePhotoLoader();
-
-    const desktop = useMediaQuery("(min-width: 900px)");
 
     const [fullscreenPhoto, setFullscreenPhoto] = useState(null);
     const [fullscreenIndex, setFullscreenIndex] = useState(null);
@@ -117,7 +114,7 @@ const Body = () => {
                     )}
                 </InfiniteScroll>
             </div>
-            {(!hasMorePhotos() && photosList.length === 0) && <div className="photo-list-message">No photo</div>}
+            {!hasMorePhotos() && photosList.length === 0 && <div className="photo-list-message">No photo</div>}
             {fullscreenPhoto != null && <MyModal photo={fullscreenPhoto}
                 handleRotationRight={handleRotationRight}
                 handleRotationLeft={handleRotationLeft}
