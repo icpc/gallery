@@ -1,8 +1,10 @@
 import TableOfContents from "./TableOfContents";
 
+import "../styles/Sidebar.css";
+
 const Sidebar = () => {
     return (
-        <div className={"sidebar"} style={{ marginLeft: "1rem" }}>
+        <div className={"sidebar"}>
             <TableOfContents/>
         </div>
     );

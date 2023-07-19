@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { useAppContext } from "./components/AppContext";
 import Body from "./components/Body/Body";
 import Header from "./components/Header/Header";
