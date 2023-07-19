@@ -15,11 +15,11 @@ const MyModal = ({
     setIsSlideShow
 }) => {
 
-    const { setFullscreenPhotoIndex } = useAppContext();
+    const { setFullscreenPhotoId } = useAppContext();
 
     const handleClick = (e) => {
         if (e.target.classList.contains("dismiss")) {
-            setFullscreenPhotoIndex(null);
+            setFullscreenPhotoId(null);
         }
     };
 

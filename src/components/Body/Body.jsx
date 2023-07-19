@@ -8,6 +8,7 @@ import usePhotoLoader from "../../Util/PhotoLoader";
 import { useAppContext } from "../AppContext";
 
 import MyModal from "./MyModal";
+import PhotoGridByYear from "./PhotoGridByYear";
 
 import "../../styles/Body.css";
 import "../../styles/App.css";
@@ -26,9 +27,8 @@ const Body = () => {
     const [rightArrow, setRightArrow] = useState(null);
     const [leftArrow, setLeftArrow] = useState(null);
 
-    const handleClick = (_, index) => {
-        const photo = photosList[index];
-        setFullscreenPhotoId(photo.id);
+    const handleClick = (id) => {
+        setFullscreenPhotoId(id);
     };
 
     useEffect(() => {
@@ -61,11 +61,11 @@ const Body = () => {
     }, [data.fullscreenPhotoId, photosList, hasMorePhotos, loadMorePhotos]);
 
     const handleRotationRight = () => {
-        handleClick(photosList[fullscreenIndex + 1], fullscreenIndex + 1);
+        handleClick(photosList[fullscreenIndex + 1].id);
     };
 
     const handleRotationLeft = () => {
-        handleClick(photosList[fullscreenIndex - 1], fullscreenIndex - 1);
+        handleClick(photosList[fullscreenIndex - 1].id);
     };
 
     useEffect(() => {
@@ -97,65 +97,6 @@ const Body = () => {
         };
     }, [fullscreenPhoto]);
 
-    function groupPhotosByYear(photos) {
-        const photosByYear = {};
-        photos.forEach((photo) => {
-            if (!photosByYear[photo.year]) {
-                photosByYear[photo.year] = [];
-            }
-            photosByYear[photo.year].push(photo);
-        });
-        return photosByYear;
-    }
-
-    function putPhotosInMasonry(photos) {
-        return (
-            <div className="masonry">
-                {photos.map((photo) => {
-                    let index = photosList.indexOf(photo);
-                    return (
-                        <figure key={photo.id} className="masonry-brick">
-                            <img
-                                className="preview"
-                                src={photo?.url_preview}
-                                alt={photo.url_preview}
-                                onClick={() => handleClick(photo, index)}
-                            />
-                        </figure>
-                    );
-                })}
-            </div>
-        );
-    }
-
-    function renderPhotos(photos) {
-        const photosByYear = groupPhotosByYear(photos);
-
-        if (Object.keys(photosByYear).length < 2) {
-            return (putPhotosInMasonry(photos));
-        }
-
-        return (
-            <div>
-                {Object.entries(photosByYear).sort().reverse().map(([year, photos]) => (
-                    <div key={year}>
-                        <h2 className="event-title">{year}</h2>
-                        {putPhotosInMasonry(photos)}
-                    </div>
-                ))}
-            </div>
-        );
-    }
-
-    function renderEvent(event, photos) {
-        return (
-            <div key={event}>
-                {event && <h1 className="event-title">{event}</h1>}
-                {renderPhotos(photos)}
-            </div>
-        );
-    }
-
     return (
         <div className="body" ref={scrollRef}>
             {desktop && data.text && <h1 style={{ width: "100%" }}>{data.text}</h1>}
@@ -169,9 +110,12 @@ const Body = () => {
                     useWindow={false}
                     getScrollParent={() => scrollRef.current}
                 >
-                    {Array.from(photosByEvent).map(([event, photos]) => {
-                        return renderEvent(event, photos);
-                    })}
+                    {Array.from(photosByEvent).map(([event, photos]) =>
+                        <div key={event}>
+                            {event && <h1 className="event-title">{event}</h1>}
+                            <PhotoGridByYear photos={photos} handleClick={handleClick} />
+                        </div>
+                    )}
                 </InfiniteScroll>
             </div>
             {(!hasMorePhotos() && photosList.length === 0) && <div className="photo-list-message">No photo</div>}

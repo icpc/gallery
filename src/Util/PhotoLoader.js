@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 
 import { useAppContext } from "../components/AppContext";
 
@@ -21,6 +22,8 @@ const usePhotoLoader = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [internalEvent, setInternalEvent] = useState(undefined);
+    const [fetching, setFetching] = useState(false);
+    const [axiosCancelTokenSource, setAxiosCancelTokenSource] = useState(new axios.CancelToken.source());
 
     const [events, setEvents] = useState([]);
 
@@ -32,18 +35,20 @@ const usePhotoLoader = () => {
     }, [data.year]);
 
     useEffect(() => {
+        axiosCancelTokenSource.cancel();
         setPhotosByEvent(new Map());
         setPage(1);
         setInternalEvent(data.event);
         setTotalPages(1);
+        setAxiosCancelTokenSource(new axios.CancelToken.source());
     }, [data.year, data.event, data.text, data.team, data.person]);
 
     const onlyUnique = (value, index, self) => self.findIndex(photo => photo.id === value.id) === index;
 
-    const appendPhotos = (event, photos) => {
+    function appendPhotos(photosByEvent, event, photos) {
         const appendedEventPhotos = [...(photosByEvent.get(event) || []), ...photos];
-        setPhotosByEvent(new Map(photosByEvent.set(event, appendedEventPhotos.filter(onlyUnique))));
-    };
+        return new Map(photosByEvent.set(event, appendedEventPhotos.filter(onlyUnique)));
+    }
 
     function getNextEvent(currentEvent) {
         if (currentEvent === undefined || events === undefined)
@@ -70,35 +75,54 @@ const usePhotoLoader = () => {
         return page <= totalPages || getNextEvent(internalEvent) !== null;
     }
 
-    async function loadMorePhotos() {
-        let response;
-        if (internalEvent) {
-            response = await PhotoService.getAllWithEvent(data.year, encodeURIComponent(internalEvent), page);
-        } else if (data.team) {
-            response = await PhotoService.getAllWithTeam(data.year, encodeURIComponent(data.team), page);
-        } else if (data.person) {
-            response = await PhotoService.getAllWithPerson(data.year, encodeURIComponent(data.person), page);
-        } else if (data.text) {
-            response = await PhotoService.getAllWithText(encodeURIComponent(data.text), page);
+    const loadMorePhotos = async () => {
+        if (fetching) {
+            return;
         }
 
-        if (response) {
-            if (page > response.data.photos.pages && getNextEvent(internalEvent) !== null) {
-                setPage(1);
-                setInternalEvent(getNextEvent(internalEvent));
-                return;
-            }
-            appendPhotos(internalEvent, response.data.photos.photo.map(({ datetaken, url_m, url_o, url_l, id }) => ({
-                url_preview: url_m ?? url_o,
-                url: url_l ?? url_o,
-                id,
-                origin: url_o,
-                year: new Date(datetaken)?.getUTCFullYear(),
-            })));
-            setTotalPages(response.data.photos.pages);
-            setPage(page + 1);
+        setFetching(true);
+
+        const nextEvent = getNextEvent(internalEvent);
+        if (page > totalPages && nextEvent !== null) {
+            setPage(1);
+            setInternalEvent(nextEvent);
+            setFetching(false);
+            return;
         }
-    }
+
+        const config = {
+            cancelToken: axiosCancelTokenSource.token,
+        };
+
+        try {
+            let response;
+            if (internalEvent) {
+                response = await PhotoService.getAllWithEvent(data.year, encodeURIComponent(internalEvent), page, config);
+            } else if (data.team) {
+                response = await PhotoService.getAllWithTeam(data.year, encodeURIComponent(data.team), page, config);
+            } else if (data.person) {
+                response = await PhotoService.getAllWithPerson(data.year, encodeURIComponent(data.person), page, config);
+            } else if (data.text) {
+                response = await PhotoService.getAllWithText(encodeURIComponent(data.text), page, config);
+            }
+
+            if (response) {
+                const newPhotosByEvent = appendPhotos(photosByEvent, internalEvent, response.data.photos.photo.map(({ datetaken, url_m, url_o, url_l, id }) => ({
+                    url_preview: url_m ?? url_o,
+                    url: url_l ?? url_o,
+                    id,
+                    origin: url_o,
+                    year: new Date(datetaken)?.getUTCFullYear(),
+                })));
+                setTotalPages(response.data.photos.pages);
+                setPage(page + 1);
+
+                setPhotosByEvent(newPhotosByEvent);
+            }
+        } finally {
+            setFetching(false);
+        }
+    };
 
     return { hasMorePhotos, loadMorePhotos, photosByEvent, photosList };
 };
