@@ -5,8 +5,8 @@ import { IconButton } from "@mui/material";
 
 import { useAppContext } from "../AppContext";
 
-const Control = ({ isSlideShow, setIsSlideShow }) => {
-    const { setFullscreenPhotoId } = useAppContext();
+const Control = () => {
+    const { setFullscreenPhotoId, isSlideShow, setIsSlideShow } = useAppContext();
 
     const slideShow = () => {
         setIsSlideShow(!isSlideShow);

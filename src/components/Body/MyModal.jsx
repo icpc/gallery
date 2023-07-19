@@ -10,12 +10,9 @@ const MyModal = ({
     handleRotationLeft,
     handleRotationRight,
     leftArrow,
-    rightArrow,
-    isSlideShow,
-    setIsSlideShow
+    rightArrow
 }) => {
-
-    const { setFullscreenPhotoId } = useAppContext();
+    const { setFullscreenPhotoId, isSlideShow } = useAppContext();
 
     const handleClick = (e) => {
         if (e.target.classList.contains("dismiss")) {
@@ -26,10 +23,8 @@ const MyModal = ({
     return (
         <div className="overlay dismiss" onClick={handleClick}>
             {isSlideShow
-                ? <Slideshow setIsSlideShow={setIsSlideShow} isSlideShow={isSlideShow} photo={photo}
-                    handleRotationRight={handleRotationRight} rightArrow={rightArrow} />
-                : <Lightbox setIsSlideShow={setIsSlideShow} isSlideShow={isSlideShow} photo={photo}
-                    handleRotationRight={handleRotationRight} handleRotationLeft={handleRotationLeft}
+                ? <Slideshow photo={photo} handleRotationRight={handleRotationRight} rightArrow={rightArrow} />
+                : <Lightbox photo={photo} handleRotationRight={handleRotationRight} handleRotationLeft={handleRotationLeft}
                     leftArrow={leftArrow} rightArrow={rightArrow} />}
         </div>
     );

@@ -12,8 +12,6 @@ import PhotoInfo from "./PhotoInfo";
 import "../../styles/Body.css";
 
 const Lightbox = ({
-    isSlideShow,
-    setIsSlideShow,
     photo,
     handleRotationLeft,
     handleRotationRight,
@@ -45,17 +43,19 @@ const Lightbox = ({
                     alt={"fullsize"}
                 />
                 <Faces>
-                    {photoInfo?.person?.map(person => (<FaceDiv imgRef={imgRef} person={person} face={face} setFace={setFace} key={person.name + "facediv" + person.position.top} />))}
+                    {photoInfo?.person?.map(person =>
+                        (<FaceDiv imgRef={imgRef} person={person}
+                            face={face} setFace={setFace}
+                            key={person.name + "facediv" + person.position.top} />))}
                 </Faces>
             </div>
-            <Control isSlideShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
+            <Control />
             <PhotoInfo photo={photo} photoInfo={photoInfo} setFace={setFace} />
             {leftArrow && <div className="overlay-arrows_left">
                 <IconButton onClick={handleRotationLeft}>
                     <ArrowForwardIosIcon className="icon-button" style={{ transform: "scale(-1, 1)" }} />
                 </IconButton>
-            </div>
-            }
+            </div>}
             {rightArrow && <div className="overlay-arrows_right">
                 <IconButton onClick={handleRotationRight}>
                     <ArrowForwardIosIcon className="icon-button" />

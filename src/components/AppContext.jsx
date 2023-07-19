@@ -101,6 +101,9 @@ const AppContextProvider = ({ children }) => {
         ...parseSearchParams(searchParams),
     });
 
+    const [isSlideShow, setIsSlideShow] = useState(false);
+    const [isOpenMenu, setIsOpenMenu] = useState(false);
+
     useEffect(() => {
         setSearchParams(
             serializeSearchParams(data));
@@ -141,7 +144,6 @@ const AppContextProvider = ({ children }) => {
         );
     }, [data]);
 
-
     const setPerson = useCallback((newPerson) => {
         setData(
             attachYearIfNull({
@@ -181,6 +183,10 @@ const AppContextProvider = ({ children }) => {
         setPerson,
         setTeam,
         setFullscreenPhotoId,
+        isSlideShow,
+        setIsSlideShow,
+        isOpenMenu,
+        setIsOpenMenu,
     }}>
         {children}
     </AppContext.Provider>);
@@ -197,6 +203,10 @@ const AppContextProvider = ({ children }) => {
  *  setPerson: function,
  *  setTeam: function,
  *  setFullscreenPhotoId: function,
+ *  isSlideShow: boolean,
+ *  setIsSlideShow: function,
+ *  isOpenMenu: boolean,
+ *  setIsOpenMenu: function,
  * }}.
  */
 const useAppContext = () => {

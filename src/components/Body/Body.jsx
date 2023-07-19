@@ -14,8 +14,7 @@ import "../../styles/Body.css";
 import "../../styles/App.css";
 
 const Body = () => {
-    const { data, setFullscreenPhotoId } = useAppContext();
-    const [isSlideShow, setIsSlideShow] = useState(false);
+    const { data, setFullscreenPhotoId, setIsSlideShow } = useAppContext();
     const scrollRef = useRef(null);
 
     const { hasMorePhotos, loadMorePhotos, photosByEvent, photosList } = usePhotoLoader();
@@ -124,8 +123,6 @@ const Body = () => {
                 handleRotationLeft={handleRotationLeft}
                 rightArrow={rightArrow}
                 leftArrow={leftArrow}
-                isSlideShow={isSlideShow}
-                setIsSlideShow={setIsSlideShow}
             />}
         </div>
     );

@@ -1,11 +1,15 @@
 import React from "react";
 
+import { useAppContext } from "../AppContext";
+
 import Control from "./Control";
 
 import "../../styles/Body.css";
 
-const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handleRotationRight, rightArrow }) => {
+const Slideshow = ({ photo, handleRotationRight, rightArrow }) => {
     const timeoutRef = React.useRef(null);
+
+    const { setIsSlideShow } = useAppContext();
 
     function resetTimeout() {
         if (timeoutRef.current) {
@@ -34,7 +38,7 @@ const Slideshow = ({ isSlideShow, setIsSlideShow, photo, handleRotationRight, ri
     return (
         <div className="dismiss">
             <div className="wrapper">
-                <Control isSlideShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
+                <Control />
                 <div className="img-container">
                     <img className="full" src={photo.url} alt={"fullsize"} />
                 </div>
