@@ -1,18 +1,18 @@
-import { createContext, useCallback, useContext, useState, useEffect } from 'react'
-import { DEFAULT_EVENT, LAST_YEAR } from '../consts';
-import { useSearchParams } from 'react-router-dom';
+import {createContext, useCallback, useContext, useState, useEffect} from 'react'
+import {DEFAULT_EVENT, LAST_YEAR} from '../consts';
+import {useSearchParams} from 'react-router-dom';
 
 /**
- * Data for the entire app. 
- * Exactly one of event, text, person, team should be non-null at the same time. 
+ * Data for the entire app.
+ * Exactly one of event, text, person, team should be non-null at the same time.
  * If query is not null, team should be null.
  * @typedef {Object} DefaultContext
  * @property {string|null} year
  * @property {string|null} event
- * @property {string|null} text 
- * @property {string|null} person 
- * @property {string|null} team 
- * @property {string|null} fullscreenPhotoId 
+ * @property {string|null} text
+ * @property {string|null} person
+ * @property {string|null} team
+ * @property {string|null} fullscreenPhotoId
  */
 
 /**
@@ -29,7 +29,6 @@ const defaultContext = {
 }
 
 const AppContext = createContext(null);
-
 
 function parseSearchParams(searchParams) {
     let searchParamsData = {};
@@ -56,7 +55,7 @@ function parseSearchParams(searchParams) {
     return searchParamsData;
 }
 
-function serizalizeSearchParams({ year, event, text, person, team, fullscreenPhotoId }) {
+function serializeSearchParams({year, event, text, person, team, fullscreenPhotoId}) {
     let searchParams = {};
     if (year != null) {
         searchParams.album = year;
@@ -87,7 +86,7 @@ function attachYearIfNull(data) {
 }
 
 
-const AppContextProvider = ({ children }) => {
+const AppContextProvider = ({children}) => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     /**
@@ -103,7 +102,7 @@ const AppContextProvider = ({ children }) => {
 
     useEffect(() => {
         setSearchParams(
-            serizalizeSearchParams(data));
+            serializeSearchParams(data));
     }, [data, setSearchParams]);
 
     /**
@@ -189,8 +188,6 @@ const AppContextProvider = ({ children }) => {
 /**
  * The provider component for the AppContext object.
  * @function AppContextProvider
- * @param {Object} props.
- * @param {React.ReactNode} props.children.
  * @returns {{
  *  data: DefaultContext,
  *  setYear: function,
@@ -209,4 +206,4 @@ const useAppContext = () => {
     return context
 }
 
-export { useAppContext, AppContextProvider };
+export {useAppContext, AppContextProvider};
