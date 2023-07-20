@@ -1,10 +1,8 @@
 @import "./theme-variables.css";
 
 .body {
-    height: calc(100vh - 143px);
-
+    height: calc(100vh - 150px);
     gap: 2em;
-    margin: 0 calc(1rem - 10px) 0 1rem;
     overflow: auto;
     border-radius: 8px;
 }
@@ -128,11 +126,6 @@
 
 .body .face {
     position: absolute;
-}
-
-.event-title {
-    margin-top: 0.83em;
-    margin-bottom: 0.83em;
 }
 
 .overlay {

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
+import { Box,Typography } from "@mui/material";
 
 import "../../consts";
 
@@ -10,7 +11,6 @@ import MyModal from "./MyModal";
 import PhotoGridByYear from "./PhotoGridByYear";
 
 import "../../styles/Body.css";
-import "../../styles/App.css";
 
 const Body = () => {
     const { data, setFullscreenPhotoId, setIsSlideShow, desktop } = useAppContext();
@@ -96,25 +96,22 @@ const Body = () => {
     return (
         <div className="body" ref={scrollRef}>
             {desktop && data.text && <h1 style={{ width: "100%" }}>{data.text}</h1>}
-            <div >
-                <InfiniteScroll
-                    style={{ paddingBottom: "10px", width: "100%" }}
-                    loadMore={loadMorePhotos}
-                    hasMore={hasMorePhotos()}
-                    initialLoad={true}
-                    loader={<div className="photo-list-message" key={0}>Loading ...</div>}
-                    useWindow={false}
-                    getScrollParent={() => scrollRef.current}
-                >
-                    {Array.from(photosByEvent).map(([event, photos]) =>
-                        <div key={event}>
-                            {event && <h1 className="event-title">{event}</h1>}
-                            <PhotoGridByYear photos={photos} handleClick={handleClick} />
-                        </div>
-                    )}
-                </InfiniteScroll>
-            </div>
-            {!hasMorePhotos() && photosList.length === 0 && <div className="photo-list-message">No photo</div>}
+            <InfiniteScroll
+                loadMore={loadMorePhotos}
+                hasMore={hasMorePhotos()}
+                initialLoad={true}
+                loader={<Typography variant="h1" key={0}>Loading ...</Typography>}
+                useWindow={false}
+                getScrollParent={() => scrollRef.current}
+            >
+                {Array.from(photosByEvent).map(([event, photos]) =>
+                    <Box key={event}>
+                        {event && <Typography variant="h1">{event}</Typography>}
+                        <PhotoGridByYear photos={photos} handleClick={handleClick} />
+                    </Box>
+                )}
+            </InfiniteScroll>
+            {!hasMorePhotos() && photosList.length === 0 && <Typography variant="h1">No photo</Typography>}
             {fullscreenPhoto != null && <MyModal photo={fullscreenPhoto}
                 handleRotationRight={handleRotationRight}
                 handleRotationLeft={handleRotationLeft}

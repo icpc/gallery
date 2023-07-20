@@ -1,7 +1,7 @@
+import { Box, Typography } from "@mui/material";
+
 import { CONTEST_NAME, places } from "../../consts";
 import { useAppContext } from "../AppContext";
-
-import "../../styles/App.css";
 
 
 const MobileYearWrapper = () => {
@@ -12,16 +12,16 @@ const MobileYearWrapper = () => {
     };
 
     if (data.text) {
-        return <div className="mobile-year-wrapper" onClick={toggleMenu}>
-            <div className="year">{data.text}</div>
-        </div>;
+        return <Box onClick={toggleMenu}>
+            <Typography variant="h4">{data.text}</Typography>
+        </Box>;
     }
 
     return (
-        <div className="mobile-year-wrapper" onClick={toggleMenu}>
-            <div className="year">{CONTEST_NAME} {data.year}</div>
-            <div className="place">{places[data.year]}</div>
-        </div>
+        <Box onClick={toggleMenu} mt={1} mb={1}>
+            <Typography variant="h4">{CONTEST_NAME} {data.year}</Typography>
+            <Typography variant="h5">{places[data.year]}</Typography>
+        </Box>
     );
 };
 

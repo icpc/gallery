@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import "../../styles/theme-variables.css";
+import "../../styles/FaceDiv.css";
 
 const Rectangle = styled.fieldset`
   top: ${props => props.top * 100 + "%"};
@@ -17,35 +17,20 @@ const Rectangle = styled.fieldset`
 
 
 const FaceDiv = ({ person, face, setFace }) => {
-    const [hidden, setHidden] = useState(true);
-
-
-    const FaceWrapper = styled.div`
-        opacity: ${hidden ? "0" : "1"};
-    `;
-
-    useEffect(() => {
-        if (face === person) {
-            setHidden(false);
-        } else {
-            setHidden(true);
-        }
-    },
-    [face, person]
-    );
+    const hidden = face !== person;
 
     return (
-        <FaceWrapper>
-            <Rectangle
-                top={person?.position?.top}
-                bottom={person?.position?.bottom}
-                left={person?.position?.left}
-                right={person?.position?.right}
-                onMouseLeave={() => setFace(null)} onMouseEnter={() => setFace(person)}
-            >
-                <legend style={{ transform: "rotatex(180deg)" }}>{person.name}</legend>
-            </Rectangle>
-        </FaceWrapper>
+        <Rectangle
+            top={person?.position?.top}
+            bottom={person?.position?.bottom}
+            left={person?.position?.left}
+            right={person?.position?.right}
+            className={hidden ? "hidden" : ""}
+            onMouseLeave={() => setFace(null)}
+            onMouseEnter={() => setFace(person)}
+        >
+            <legend style={{ transform: "rotatex(180deg)" }}>{person.name}</legend>
+        </Rectangle>
     );
 };
 

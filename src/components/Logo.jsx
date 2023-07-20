@@ -1,31 +1,22 @@
+import { Box, Link, Stack } from "@mui/material";
+
 import { LAST_YEAR } from "../consts";
 import logo from "../images/logo2.svg";
 
-import { useAppContext } from "./AppContext";
-
-import "../styles/App.css";
-
-
-const Logo = () => {
-    const { desktop } = useAppContext();
-
-    if (desktop) {
-        return (
-            <a className="logo" href={"?album=" + LAST_YEAR}
-                style={{ marginLeft: "1rem", marginTop: "40px", display: "flex", justifyContent: "center" }}>
-                <img className={"logo"} src={logo}
-                    style={{ height: "56px", maxWidth: "100%" }} alt={"go home page"} /></a>
-
-        );
-    } else {
-        return (
-            <a className="logo" href={"?album=" + LAST_YEAR}
-                style={{ marginLeft: "1rem", marginTop: "10px", display: "flex", justifyContent: "left" }}>
-                <img className={"logo"} src={logo}
-                    alt={"go home page"} /></a>
-
-        );
-    }
+const MobileLogo = () => {
+    return (
+        <Link href={`?album=${LAST_YEAR}`}>
+            <Box component="img" src={logo} alt="go home page" width="200px"/>
+        </Link>
+    );
 };
 
-export default Logo;
+const DesktopLogo = () => {
+    return (
+        <Link href={`?album=${LAST_YEAR}`} sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Box component="img" src={logo} alt="go home page" height="56px" />
+        </Link>
+    );
+};
+
+export { DesktopLogo, MobileLogo };

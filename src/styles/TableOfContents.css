@@ -6,7 +6,7 @@ nav {
     top: 24px; /* How far down the page you want your ToC to live */
 
     /* Give table of contents a scrollbar */
-    max-height: calc(100vh - 160px);
+    height: calc(100vh - 150px);
     overflow: auto;
     font-style: normal;
     font-weight: 700;
