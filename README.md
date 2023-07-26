@@ -63,7 +63,7 @@ Even though flickr stores tags in their initial form, it is important to remembe
 
 ## Configuration
 
-[`src/const.js`](https://github.com/masha237/gallery/blob/master/src/consts.js) contais access detail and general year setup. 
+[`src/const.js`](https://github.com/icpc/gallery/blob/main/data/consts.js) contais access detail and general year setup. 
 
 This repository supports multiple galleries, each with its own dedicated [`/data/`](https://github.com/icpc/gallery/tree/main/data) folder.
 Each year is represented by three files in this folder: ```.event```, ```.people``` and ```.team``` with one item per line.
