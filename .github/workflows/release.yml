@@ -75,10 +75,9 @@ jobs:
           ls
           mv gallery/* .
           rm -rf gallery
-      - name: Upload artifact
-        uses: actions/upload-artifact@master
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@master
         with:
-          name: github-pages
           path: dist
   deploy:
     name: Deploy to GitHub Pages
