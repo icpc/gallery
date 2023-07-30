@@ -88,6 +88,9 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
     steps:    
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
