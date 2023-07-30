@@ -7,22 +7,6 @@ on:
     branches:
       - 'main'
 
-#  workflow_dispatch:
-#    inputs:
-#      version:
-#        description: Name of release (in the format of X.Y.Z and without 'v' prefix)
-#        required: true
-#      publish:
-#        type: boolean
-#        description: Would release be published
-#        required: true
-#        default: true
-#      draft:
-#        type: boolean
-#        description: Publish draft first
-#        required: true
-#        default: true
-
 jobs:
   build:
     name: Create artifacts from master
@@ -52,14 +36,13 @@ jobs:
         with:
           name: build-${{ matrix.public_url }}
           path: ${{ matrix.public_url }}.zip
-          if-no-files-found: error
   merge:
     name: Merge zips into one
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: .
       - name: Unzip all zip from multiple zips
@@ -76,34 +59,22 @@ jobs:
         with:
           name: all
           path: build-all
-          if-no-files-found: error
-#      - name: Zip all
-#        run: |
-#          cd build-all
-#          zip -r all.zip */*
-#          ls
-#      - name: Upload
-#        uses: actions/upload-artifact@master
-#        with:
-#          name: all
-#          path: build-all/all.zip
-#          if-no-files-found: error
-#  release:
-#    name: Create release
-#    runs-on: ubuntu-latest
-#    needs: merge
-#    if: ${{ github.event.inputs.publish }}
-#    steps:
-#      - name: Download artifacts
-#        uses: actions/download-artifact@v2
-#        with:
-#          path: .
-#      - name: Create release
-#        uses: "marvinpinto/action-automatic-releases@latest"
-#        with:
-#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-#          prerelease: false
-#          automatic_release_tag: "v${{ github.event.inputs.version }}"
-#          draft: ${{ github.event.inputs.draft }}
-#          files: |
-#            all/*.zip
+  repack-gh-pages:
+    name: Repack GitHub Pages
+    needs: merge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ./build-all
+      - name: Make gallery default
+        run: |
+          cd build-all
+          mv gallery/* .
+      - name: Upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: github-pages
+          path: build-all
+          
