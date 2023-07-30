@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: build-${{ matrix.folder }}
-          path: ${{ matrix.folder }}.zip
+          path: ${{ matrix.public_url }}.zip
   repack-gh-pages:
     name: Repack GitHub Pages
     runs-on: ubuntu-latest
