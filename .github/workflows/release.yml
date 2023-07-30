@@ -67,10 +67,11 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          path: ./build-all
+          name: all
+          path: ./dist
       - name: Make gallery default
         run: |
-          cd build-all
+          cd dist
           ls
           mv gallery/* .
           rm -rf gallery
@@ -78,4 +79,4 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: github-pages
-          path: build-all
+          path: all
