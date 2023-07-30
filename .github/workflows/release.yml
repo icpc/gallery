@@ -71,10 +71,11 @@ jobs:
       - name: Make gallery default
         run: |
           cd build-all
+          ls
           mv gallery/* .
+          rm -rf gallery
       - name: Upload artifact
         uses: actions/upload-artifact@master
         with:
           name: github-pages
           path: build-all
-          
