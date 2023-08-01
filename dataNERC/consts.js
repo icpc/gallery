@@ -26,6 +26,8 @@ export const places =
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";
 export const user_id = "141939107@N06";
+export const title = "NERC Gallery";
+export const description = "NERC Photo Gallery.";
 
 export const FLICKR_IMAGE_PREFIX = "https://www.flickr.com/photos/icpcnews/";
 
