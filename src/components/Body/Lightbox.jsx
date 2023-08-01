@@ -27,9 +27,15 @@ const Lightbox = ({
     const [face, setFace] = useState(null);
     const imgRef = useRef(null);
 
-    const Faces = styled.div`
-        width: ${imgRef?.current?.width}px;
+    const aspectRatio = (imgRef) => imgRef?.current?.naturalWidth / imgRef?.current?.naturalHeight;
+
+    const FacesWrapper = styled.div`
+        width: ${aspectRatio(imgRef) * imgRef?.current?.height}px;
         height: ${imgRef?.current?.height}px;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
         position: absolute;
     `;
 
@@ -42,12 +48,12 @@ const Lightbox = ({
                     src={photo.url}
                     alt={"fullsize"}
                 />
-                <Faces>
+                <FacesWrapper>
                     {photoInfo?.person?.map(person =>
-                        (<FaceDiv imgRef={imgRef} person={person}
+                        (<FaceDiv person={person}
                             face={face} setFace={setFace}
                             key={person.name + "facediv" + person.position.top} />))}
-                </Faces>
+                </FacesWrapper>
             </div>
             <Control />
             <PhotoInfo photo={photo} photoInfo={photoInfo} setFace={setFace} />
