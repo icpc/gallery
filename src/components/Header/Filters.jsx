@@ -30,28 +30,28 @@ const Filters = () => {
 
     function formatOptions(a) {
         return a.map(x => {
-            return { label: x };
+            return { data: x, label: x };
         });
     }
 
     function formatYearOption(a) {
         return a.map(x => {
-            return { year: x, label: x + " " + places[x] };
+            return { data: x, label: x + " " + places[x] };
         });
     }
 
     function selectItem(item, func) {
         if (item === "clear") {
-            setYear(data.year);
+            setYear(data.data);
         } else {
-            func(item.label);
+            func(item.data);
         }
     }
     return (
         <Stack direction={desktop ? "row" : "column"} spacing={desktop ? 1 : 0.5}>
             {!desktop &&
                 <Selector options={formatYearOption(years)} leftIcon={calendarIcon} name={"Select year"} onChange={selectedItem => {
-                    const year = selectedItem.year;
+                    const year = selectedItem.data;
                     setYear(year);
                 }} value={data.year} />}
             <Selector options={formatOptions(events)} name={"Select event"} leftIcon={eventIcon} onChange={selectedItem => {

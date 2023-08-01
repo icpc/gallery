@@ -1,5 +1,5 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Autocomplete, InputAdornment, Paper, TextField } from "@mui/material";
+import { Autocomplete, Paper, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const TextFieldWithIcon = styled(TextField)(() => ({
@@ -20,6 +20,7 @@ const Selector = ({ leftIcon, onChange, name, value, options }) => {
                 disablePortal
                 value={value}
                 options={options}
+                isOptionEqualToValue={(option, value) => option.data === value}
                 onChange={(event, newValue, reason) => {
                     if (reason === "selectOption") {
                         onChange(newValue);
