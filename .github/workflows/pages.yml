@@ -16,12 +16,12 @@ jobs:
           - public_url: gallery # wf
             data_folder: data
             folder: gallery
-          - public_url: gallery/galleryNAC # nac
+          - public_url: gallery/nac # nac
             data_folder: dataNAC
-            folder: galleryNAC
-          - public_url: gallery/galleryNERC # nerc
+            folder: nac
+          - public_url: gallery/nerc # nerc
             data_folder: dataNERC
-            folder: galleryNERC
+            folder: nerc
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v3
