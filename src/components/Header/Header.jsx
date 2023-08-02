@@ -1,6 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Box, Collapse, IconButton, Stack } from "@mui/material";
+import { Collapse, IconButton, Stack } from "@mui/material";
 
 import { useAppContext } from "../AppContext";
 import { MobileLogo } from "../Logo";
