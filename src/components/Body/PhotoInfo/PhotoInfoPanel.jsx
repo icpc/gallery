@@ -32,7 +32,7 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
         const photoLink = FLICKR_IMAGE_PREFIX + photo.id;
         const tags = SerializePhotoInfo(photoInfo).join(", ");
         const subject = `Photo info update ${photo.id}`;
-        const body = `Photo link: ${photoLink}\n\nTags: ${tags}`;
+        const body = `Photo link: ${photoLink}\n\nGallery link: ${window.location.href}\n\nTags: ${tags}`;
         const mailtoLink = `mailto:${SUGGESTIONS_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         return mailtoLink;
     }
