@@ -19,7 +19,7 @@ const Lightbox = ({
 
     return (
         <div className="wrapper">
-            <ImageWithFaceSelection photo={photo} alt={"fullscreen image"} face={face} setFace={setFace}/>
+            <ImageWithFaceSelection key={photo.id} photo={photo} alt={"fullscreen image"} face={face} setFace={setFace}/>
             {!editMode && <Control />}
             <PhotoInfoPanel photo={photo} setFace={setFace} />
             {leftArrow && !editMode && <div className="overlay-arrows_left">
