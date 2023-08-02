@@ -1,14 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
 
-import { ParsePhotoInfo } from "../../Util/PhotoParser";
-import PhotoService from "../../Util/PhotoService";
-
+import { usePhotoInfo } from "./PhotoInfo/PhotoInfoContext";
+import PhotoInfoPanel from "./PhotoInfo/PhotoInfoPanel";
 import Control from "./Control";
 import FaceDiv from "./FaceDiv";
-import PhotoInfo from "./PhotoInfo";
 
 import "../../styles/Body.css";
 
@@ -19,18 +17,7 @@ const Lightbox = ({
     leftArrow,
     rightArrow
 }) => {
-    const [photoInfo, setPhotoInfo] = useState(null);
-
-    useEffect(() => {
-        PhotoService.getPhotoInfo(photo.id)
-            .then(response => {
-                const tags = response.data.photo.tags.tag?.map(tag => tag.raw);
-                const description = response.data.photo.description._content;
-                const newPhotoInfo = ParsePhotoInfo(tags, description);
-                setPhotoInfo(newPhotoInfo);
-            }
-            );
-    }, [photo.id]);
+    const { photoInfo, editMode } = usePhotoInfo();
 
     const [face, setFace] = useState(null);
     const imgRef = useRef(null);
@@ -63,14 +50,14 @@ const Lightbox = ({
                         face={face} setFace={setFace}
                         key={person.name + "facediv" + person.position.top} />))}
             </FacesWrapper>
-            <Control />
-            <PhotoInfo photo={photo} photoInfo={photoInfo} setFace={setFace} />
-            {leftArrow && <div className="overlay-arrows_left">
+            {!editMode && <Control />}
+            <PhotoInfoPanel photo={photo} setFace={setFace}/>
+            {leftArrow && !editMode && <div className="overlay-arrows_left">
                 <IconButton onClick={handleRotationLeft}>
                     <ArrowForwardIosIcon className="icon-button" style={{ transform: "scale(-1, 1)" }} />
                 </IconButton>
             </div>}
-            {rightArrow && <div className="overlay-arrows_right">
+            {rightArrow && !editMode && <div className="overlay-arrows_right">
                 <IconButton onClick={handleRotationRight}>
                     <ArrowForwardIosIcon className="icon-button" />
                 </IconButton>

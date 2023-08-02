@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
-import { Box,Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import "../../consts";
 
 import usePhotoLoader from "../../Util/PhotoLoader";
 import { useAppContext } from "../AppContext";
 
+import { PhotoInfoProvider } from "./PhotoInfo/PhotoInfoContext";
 import MyModal from "./MyModal";
 import PhotoGridByYear from "./PhotoGridByYear";
 

@@ -1,3 +1,9 @@
+import { AddCircleOutline } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
+
+import { usePhotoInfo } from "./PhotoInfoContext";
+
+
 const ComaSeparated = (list) => {
     return list.map((item, index) => [
         index > 0 && ", ",
@@ -5,21 +11,29 @@ const ComaSeparated = (list) => {
     ]);
 };
 
-const PhotographerInfo = ({ photoInfo }) => {
+const PhotographerInfo = () => {
+    const { photoInfo } = usePhotoInfo();
+
     if (!photoInfo || photoInfo.photographer.length === 0) {
         return null;
     }
 
-    const photographer = photoInfo.photographer;
+    const photographer = photoInfo.photographer.map(photographer => (
+        <span key={photographer}>
+            {photographer}
+        </span>
+    ));
 
     return (
         <div>
-            Photographer: {photographer.join(", ")}
+            Photographer: {ComaSeparated(photographer)}
         </div>
     );
 };
 
-const AlbumInfo = ({ photoInfo }) => {
+const AlbumInfo = () => {
+    const { photoInfo, editMode } = usePhotoInfo();
+
     if (!photoInfo || photoInfo.album.length === 0) {
         return null;
     }
@@ -38,7 +52,9 @@ const AlbumInfo = ({ photoInfo }) => {
     );
 };
 
-const EventInfo = ({ photoInfo }) => {
+const EventInfo = () => {
+    const { photoInfo, editMode } = usePhotoInfo();
+
     if (!photoInfo || photoInfo.event.length === 0) {
         return null;
     }
@@ -57,7 +73,9 @@ const EventInfo = ({ photoInfo }) => {
     );
 };
 
-const TeamInfo = ({ photoInfo }) => {
+const TeamInfo = () => {
+    const { photoInfo } = usePhotoInfo();
+
     if (!photoInfo || photoInfo.team.length === 0) {
         return null;
     }
@@ -76,7 +94,9 @@ const TeamInfo = ({ photoInfo }) => {
     );
 };
 
-const PersonInfo = ({ photoInfo, setFace }) => {
+const PersonInfo = ({ setFace }) => {
+    const { photoInfo } = usePhotoInfo();
+
     if (!photoInfo || photoInfo.person.length === 0) {
         return null;
     }
@@ -103,4 +123,4 @@ const PersonInfo = ({ photoInfo, setFace }) => {
     );
 };
 
-export { AlbumInfo, EventInfo, PersonInfo,PhotographerInfo, TeamInfo };
+export { AlbumInfo, EventInfo, PersonInfo, PhotographerInfo, TeamInfo };

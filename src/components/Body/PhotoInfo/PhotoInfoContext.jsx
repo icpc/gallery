@@ -1,0 +1,70 @@
+import { createContext, useContext, useEffect, useState } from "react";
+
+import { ParsePhotoInfo } from "../../../Util/PhotoInfoHelper";
+import PhotoService from "../../../Util/PhotoService";
+import { useAppContext } from "../../AppContext";
+
+const PhotoInfoContext = createContext(null);
+
+const PhotoInfoProvider = ({ children }) => {
+    const { data } = useAppContext();
+
+    const [photoInfo, setPhotoInfo] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+
+    useEffect(() => {
+        const fullscreenPhotoId = data.fullscreenPhotoId;
+        if (fullscreenPhotoId === null) {
+            return;
+        }
+        PhotoService.getPhotoInfo(fullscreenPhotoId)
+            .then(response => {
+                const tags = response.data?.photo?.tags?.tag?.map(tag => tag.raw);
+                const description = response.data?.photo?.description._content;
+                const newPhotoInfo = ParsePhotoInfo(tags, description);
+                setPhotoInfo(newPhotoInfo);
+            }
+            );
+    }, [data.fullscreenPhotoId]);
+
+    function setEvents(newEvents) {
+        setPhotoInfo({ ...photoInfo, events: newEvents });
+    }
+
+    function setPeople(newPeople) {
+        setPhotoInfo({ ...photoInfo, people: newPeople });
+    }
+
+    function setAlbum(newAlbum) {
+        setPhotoInfo({ ...photoInfo, album: newAlbum });
+    }
+
+    function setPhotographer(newPhotographer) {
+        setPhotoInfo({ ...photoInfo, photographer: newPhotographer });
+    }
+
+    return (
+        <PhotoInfoContext.Provider value={{
+            photoInfo,
+            setPhotoInfo,
+            editMode,
+            setEditMode,
+            setEvents,
+            setPeople,
+            setAlbum,
+            setPhotographer
+        }}>
+            {children}
+        </PhotoInfoContext.Provider>
+    );
+};
+
+const usePhotoInfo = () => {
+    const context = useContext(PhotoInfoContext);
+    if (context === undefined || context === null) {
+        throw new Error("usePhotoInfo must be called within PhotoInfoProvider");
+    }
+    return context;
+};
+
+export { PhotoInfoProvider, usePhotoInfo };
