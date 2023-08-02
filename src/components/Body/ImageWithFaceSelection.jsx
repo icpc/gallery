@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactCrop from "react-image-crop";
-import { Autocomplete, Box, Paper, TextField } from "@mui/material";
+import { Autocomplete, Box, createFilterOptions, Paper, TextField } from "@mui/material";
 
 import { getPeopleData } from "../../Util/DataLoader";
 import { useAppContext } from "../AppContext";
@@ -61,6 +61,8 @@ const ImageWithFaceSelection = ({ photo, alt = "", face, setFace }) => {
     }
 
 
+    const filterOptions = createFilterOptions({ limit: 200 });
+
     return (
         <Box width={width} height={height}>
             <ReactCrop
@@ -92,6 +94,7 @@ const ImageWithFaceSelection = ({ photo, alt = "", face, setFace }) => {
                     elevation={3}
                 >
                     <Autocomplete
+                        filterOptions={filterOptions}
                         options={people}
                         freeSolo
                         renderInput={(params) => (

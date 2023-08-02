@@ -5,6 +5,7 @@ import { useAppContext } from "../components/AppContext";
 
 import { getEventData } from "./DataLoader";
 import PhotoService from "./PhotoService";
+import UniqueList from "./UniqueList";
 
 
 /**
@@ -55,11 +56,10 @@ const usePhotoLoader = () => {
         setAxiosCancelTokenSource(new axios.CancelToken.source());
     }, [data.year, data.event, data.text, data.team, data.person]);
 
-    const onlyUnique = (value, index, self) => self.findIndex(photo => photo.id === value.id) === index;
-
+    
     function appendPhotos(photosByEvent, event, photos) {
         const appendedEventPhotos = [...(photosByEvent.get(event) || []), ...photos];
-        return new Map(photosByEvent.set(event, appendedEventPhotos.filter(onlyUnique)));
+        return new Map(photosByEvent.set(event, UniqueList(appendedEventPhotos, photo => photo.id)));
     }
 
     function getNextEvent(currentEvent) {

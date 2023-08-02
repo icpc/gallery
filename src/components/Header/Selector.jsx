@@ -1,5 +1,5 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Autocomplete, Paper, TextField } from "@mui/material";
+import { Autocomplete, createFilterOptions, Paper, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const TextFieldWithIcon = styled(TextField)(() => ({
@@ -11,11 +11,13 @@ const TextFieldWithIcon = styled(TextField)(() => ({
     },
 }));
 
+const filterOptions = createFilterOptions({ limit: 200 });
 
 const Selector = ({ leftIcon, onChange, name, value, options }) => {
     return (
         <Paper>
             <Autocomplete
+                filterOptions={filterOptions}
                 fullWidth
                 disablePortal
                 value={value}
