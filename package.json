@@ -13,6 +13,7 @@
     "react": "^18.0.2",
     "react-dom": "^18.0.2",
     "react-helmet": "^6.1.0",
+    "react-image-crop": "^10.1.5",
     "react-infinite-scroller": "^1.2.6",
     "react-masonry-infinite": "^1.2.2",
     "react-router-dom": "^6.3.0",

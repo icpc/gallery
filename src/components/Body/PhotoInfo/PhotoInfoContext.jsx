@@ -36,6 +36,10 @@ const PhotoInfoProvider = ({ children }) => {
         setPhotoInfo({ ...photoInfo, person: newPerson });
     }
 
+    function appendPerson(newPerson) {
+        setPerson([...photoInfo.person, newPerson]);
+    }
+
     function setAlbum(newAlbum) {
         setPhotoInfo({ ...photoInfo, album: newAlbum });
     }
@@ -55,7 +59,8 @@ const PhotoInfoProvider = ({ children }) => {
             setEvents,
             setPerson,
             setAlbum,
-            setPhotographer
+            setPhotographer,
+            appendPerson,
         }}>
             {children}
         </PhotoInfoContext.Provider>
