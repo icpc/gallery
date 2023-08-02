@@ -20,12 +20,32 @@ const Filters = () => {
     const [teams, setTeams] = useState([]);
 
     useEffect(() => {
-        async function fetchData() {
-            setEvents(await getEventData(data.year));
-            setPeople(await getPeopleData(data.year));
-            setTeams(await getTeamData(data.year));
-        }
-        fetchData();
+        let isCancelled = false;
+
+        getEventData(data.year)
+            .then(eventsData => {
+                if (!isCancelled) {
+                    setEvents(eventsData);
+                }
+            });
+
+        getPeopleData(data.year)
+            .then(peopleData => {
+                if (!isCancelled) {
+                    setPeople(peopleData);
+                }
+            });
+
+        getTeamData(data.year)
+            .then(teamData => {
+                if (!isCancelled) {
+                    setTeams(teamData);
+                }
+            });
+
+        return () => {
+            isCancelled = true;
+        };
     }, [data.year]);
 
     function formatOptions(a) {
@@ -47,6 +67,7 @@ const Filters = () => {
             func(item.data);
         }
     }
+
     return (
         <Stack direction={desktop ? "row" : "column"} spacing={desktop ? 1 : 0.5}>
             {!desktop &&

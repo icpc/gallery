@@ -18,6 +18,10 @@ import PhotoService from "./PhotoService";
 const usePhotoLoader = () => {
     const { data } = useAppContext();
 
+    /**
+     * State hook that stores a Map object containing photo objects grouped by event.
+     * @type {[Map, function]} - A tuple containing the current state value and a function to update it.
+     */
     const [photosByEvent, setPhotosByEvent] = useState(new Map());
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -28,10 +32,18 @@ const usePhotoLoader = () => {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        async function fetchData() {
-            setEvents(await getEventData(data.year));
-        }
-        fetchData();
+        let isCancelled = false;
+
+        getEventData(data.year)
+            .then(eventsData => {
+                if (!isCancelled) {
+                    setEvents(eventsData);
+                }
+            });
+
+        return () => {
+            isCancelled = true;
+        };
     }, [data.year]);
 
     useEffect(() => {
@@ -75,6 +87,10 @@ const usePhotoLoader = () => {
         return page <= totalPages || getNextEvent(internalEvent) !== null;
     }
 
+    /**
+     * Loads more photos.
+     * Only one loadMorePhotos call can be active at a time.
+     */
     const loadMorePhotos = async () => {
         if (fetching) {
             return;
