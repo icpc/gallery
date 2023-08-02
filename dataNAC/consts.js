@@ -19,6 +19,7 @@ export const title = "NAC Gallery";
 export const description = "NAC Photo Gallery.";
 
 export const FLICKR_IMAGE_PREFIX = "https://www.flickr.com/photos/icpcnews/";
+export const SUGGESTIONS_EMAIL = "lidia+galleryNAC@icpc.global";
 
 export const TAG_EVENT = "event";
 export const TAG_TEAM = "team";

@@ -30,6 +30,7 @@ export const title = "NERC Gallery";
 export const description = "NERC Photo Gallery.";
 
 export const FLICKR_IMAGE_PREFIX = "https://www.flickr.com/photos/icpcnews/";
+export const SUGGESTIONS_EMAIL = "lidia+galleryNERC@icpc.global";
 
 export const TAG_EVENT = "event";
 export const TAG_TEAM = "team";

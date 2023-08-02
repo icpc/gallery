@@ -7,7 +7,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 
-import { FLICKR_IMAGE_PREFIX } from "../../../consts";
+import { FLICKR_IMAGE_PREFIX, SUGGESTIONS_EMAIL } from "../../../consts";
 import { SerializePhotoInfo } from "../../../Util/PhotoInfoHelper";
 
 import { usePhotoInfo } from "./PhotoInfoContext";
@@ -28,6 +28,15 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
         enqueueSnackbar("New tags copied to clipboard", { variant: "success", autoHideDuration: 2000 });
     }
 
+    function mailtoLink() {
+        const photoLink = FLICKR_IMAGE_PREFIX + photo.id;
+        const tags = SerializePhotoInfo(photoInfo).join(", ");
+        const subject = `Photo info update ${photo.id}`;
+        const body = `Photo link: ${photoLink}\n\nTags: ${tags}`;
+        const mailtoLink = `mailto:${SUGGESTIONS_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        return mailtoLink;
+    }
+
     function toogleHidden() {
         setHidden(!hidden);
     }
@@ -44,8 +53,13 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
             <div className="control-bottom">
                 {toolTipsHidden &&
                     <Tooltip title="Send changes">
-                        <Button variant="contained" size="large" onClick={() => finishEditing()}>
-                        Done
+                        <Button
+                            href={mailtoLink()}
+                            target="_blank"
+                            variant="contained"
+                            size="large"
+                            onClick={() => finishEditing()}>
+                            Done
                         </Button>
                     </Tooltip>}
                 {!toolTipsHidden &&

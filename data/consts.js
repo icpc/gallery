@@ -34,6 +34,7 @@ export const title = "ICPC Gallery";
 export const description = "The International Collegiate Programming Contest World Finals Photo Gallery.";
 
 export const FLICKR_IMAGE_PREFIX = "https://www.flickr.com/photos/icpcnews/";
+export const SUGGESTIONS_EMAIL = "lidia+gallery@icpc.global";
 
 export const TAG_EVENT = "event";
 export const TAG_TEAM = "team";

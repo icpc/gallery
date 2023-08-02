@@ -34,6 +34,7 @@ export const LAST_YEAR = consts.LAST_YEAR;
 export const CONTEST_NAME = consts.CONTEST_NAME;
 export const DEFAULT_EVENT = consts.DEFAULT_EVENT;
 export const FLICKR_IMAGE_PREFIX = consts.FLICKR_IMAGE_PREFIX;
+export const SUGGESTIONS_EMAIL = consts.SUGGESTIONS_EMAIL;
 // todo: somehow replace this without redeclaration
 export const DEBUG = import.meta.env.mode === "development";
 
