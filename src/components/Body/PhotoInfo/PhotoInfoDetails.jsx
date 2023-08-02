@@ -1,6 +1,3 @@
-import { AddCircleOutline } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-
 import { usePhotoInfo } from "./PhotoInfoContext";
 
 
@@ -32,7 +29,7 @@ const PhotographerInfo = () => {
 };
 
 const AlbumInfo = () => {
-    const { photoInfo, editMode } = usePhotoInfo();
+    const { photoInfo } = usePhotoInfo();
 
     if (!photoInfo || photoInfo.album.length === 0) {
         return null;
@@ -53,7 +50,7 @@ const AlbumInfo = () => {
 };
 
 const EventInfo = () => {
-    const { photoInfo, editMode } = usePhotoInfo();
+    const { photoInfo } = usePhotoInfo();
 
     if (!photoInfo || photoInfo.event.length === 0) {
         return null;

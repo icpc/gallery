@@ -7,7 +7,6 @@ import "../../consts";
 import usePhotoLoader from "../../Util/PhotoLoader";
 import { useAppContext } from "../AppContext";
 
-import { PhotoInfoProvider } from "./PhotoInfo/PhotoInfoContext";
 import MyModal from "./MyModal";
 import PhotoGridByYear from "./PhotoGridByYear";
 

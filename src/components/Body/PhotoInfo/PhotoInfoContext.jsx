@@ -11,6 +11,7 @@ const PhotoInfoProvider = ({ children }) => {
 
     const [photoInfo, setPhotoInfo] = useState(null);
     const [editMode, setEditMode] = useState(false);
+    const [face, setFace] = useState(null);
 
     useEffect(() => {
         const fullscreenPhotoId = data.fullscreenPhotoId;
@@ -31,8 +32,8 @@ const PhotoInfoProvider = ({ children }) => {
         setPhotoInfo({ ...photoInfo, events: newEvents });
     }
 
-    function setPeople(newPeople) {
-        setPhotoInfo({ ...photoInfo, people: newPeople });
+    function setPerson(newPerson) {
+        setPhotoInfo({ ...photoInfo, person: newPerson });
     }
 
     function setAlbum(newAlbum) {
@@ -49,8 +50,10 @@ const PhotoInfoProvider = ({ children }) => {
             setPhotoInfo,
             editMode,
             setEditMode,
+            face,
+            setFace,
             setEvents,
-            setPeople,
+            setPerson,
             setAlbum,
             setPhotographer
         }}>

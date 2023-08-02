@@ -16,9 +16,7 @@ const Rectangle = styled.fieldset`
 `;
 
 
-const FaceDiv = ({ person, face, setFace }) => {
-    const hidden = face !== person;
-
+const FaceDiv = ({ person, hidden, setFace }) => {
     return (
         <Rectangle
             top={person?.position?.top}
