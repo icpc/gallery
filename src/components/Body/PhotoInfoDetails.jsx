@@ -1,5 +1,3 @@
-import { TAG_ALBUM, TAG_EVENT, TAG_PERSON, TAG_PHOTOGRAPHER, TAG_TEAM } from "../../consts";
-
 const ComaSeparated = (list) => {
     return list.map((item, index) => [
         index > 0 && ", ",
@@ -8,11 +6,11 @@ const ComaSeparated = (list) => {
 };
 
 const PhotographerInfo = ({ photoInfo }) => {
-    if (!photoInfo || photoInfo[TAG_PHOTOGRAPHER].length === 0) {
+    if (!photoInfo || photoInfo.photographer.length === 0) {
         return null;
     }
 
-    const photographer = photoInfo[TAG_PHOTOGRAPHER];
+    const photographer = photoInfo.photographer;
 
     return (
         <div>
@@ -22,13 +20,13 @@ const PhotographerInfo = ({ photoInfo }) => {
 };
 
 const AlbumInfo = ({ photoInfo }) => {
-    if (!photoInfo || photoInfo[TAG_ALBUM].length === 0) {
+    if (!photoInfo || photoInfo.album.length === 0) {
         return null;
     }
 
     const formatLink = (album) => `?album=${album}`.replaceAll(" ", "+");
 
-    const albumLinks = photoInfo[TAG_ALBUM].map(album =>
+    const albumLinks = photoInfo.album.map(album =>
         <a key={album} href={formatLink(album)}>
             {album}
         </a>);
@@ -41,13 +39,13 @@ const AlbumInfo = ({ photoInfo }) => {
 };
 
 const EventInfo = ({ photoInfo }) => {
-    if (!photoInfo || photoInfo[TAG_EVENT].length === 0) {
+    if (!photoInfo || photoInfo.event.length === 0) {
         return null;
     }
 
-    const formatLink = (event) => `?album=${photoInfo[TAG_ALBUM][0]}&event=${event}`.replaceAll(" ", "+");
+    const formatLink = (event) => `?album=${photoInfo.album[0]}&event=${event}`.replaceAll(" ", "+");
 
-    const eventLinks = photoInfo[TAG_EVENT].map(event =>
+    const eventLinks = photoInfo.event.map(event =>
         <a key={event} href={formatLink(event)}>
             {event}
         </a>);
@@ -60,13 +58,13 @@ const EventInfo = ({ photoInfo }) => {
 };
 
 const TeamInfo = ({ photoInfo }) => {
-    if (!photoInfo || photoInfo[TAG_TEAM].length === 0) {
+    if (!photoInfo || photoInfo.team.length === 0) {
         return null;
     }
 
-    const formatLink = (team) => `?album=${photoInfo[TAG_ALBUM][0]}&team=${team}`.replaceAll(" ", "+");
+    const formatLink = (team) => `?album=${photoInfo.album[0]}&team=${team}`.replaceAll(" ", "+");
 
-    const teamLinks = photoInfo[TAG_TEAM].map(team =>
+    const teamLinks = photoInfo.team.map(team =>
         <a key={team} href={formatLink(team)}>
             {team}
         </a>);
@@ -79,13 +77,13 @@ const TeamInfo = ({ photoInfo }) => {
 };
 
 const PersonInfo = ({ photoInfo, setFace }) => {
-    if (!photoInfo || !photoInfo[TAG_PERSON]) {
+    if (!photoInfo || photoInfo.person.length === 0) {
         return null;
     }
 
-    const sortedPersons = photoInfo[TAG_PERSON].sort((a, b) => a.position.left - b.position.left);
+    const sortedPersons = photoInfo.person.sort((a, b) => a.position.left - b.position.left);
 
-    const formatLink = (person) => `?album=${photoInfo[TAG_ALBUM][0]}&person=${person.name}`.replaceAll(" ", "+");
+    const formatLink = (person) => `?album=${photoInfo.album[0]}&person=${person.name}`.replaceAll(" ", "+");
 
     const personLinks = sortedPersons.map(person =>
         <a key={person} href={formatLink(person)}

@@ -3,7 +3,8 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { IconButton } from "@mui/material";
 import styled from "styled-components";
 
-import PhotoParser from "../../Util/PhotoParser";
+import { ParsePhotoInfo } from "../../Util/PhotoParser";
+import PhotoService from "../../Util/PhotoService";
 
 import Control from "./Control";
 import FaceDiv from "./FaceDiv";
@@ -21,7 +22,14 @@ const Lightbox = ({
     const [photoInfo, setPhotoInfo] = useState(null);
 
     useEffect(() => {
-        PhotoParser.getPhotoInfo(photo.id, setPhotoInfo);
+        PhotoService.getPhotoInfo(photo.id)
+            .then(response => {
+                const tags = response.data.photo.tags.tag?.map(tag => tag.raw);
+                const description = response.data.photo.description._content;
+                const newPhotoInfo = ParsePhotoInfo(tags, description);
+                setPhotoInfo(newPhotoInfo);
+            }
+            );
     }, [photo.id]);
 
     const [face, setFace] = useState(null);
@@ -48,13 +56,13 @@ const Lightbox = ({
                     src={photo.url}
                     alt={"fullsize"}
                 />
-                <FacesWrapper>
-                    {photoInfo?.person?.map(person =>
-                        (<FaceDiv person={person}
-                            face={face} setFace={setFace}
-                            key={person.name + "facediv" + person.position.top} />))}
-                </FacesWrapper>
             </div>
+            <FacesWrapper>
+                {photoInfo?.person?.map(person =>
+                    (<FaceDiv person={person}
+                        face={face} setFace={setFace}
+                        key={person.name + "facediv" + person.position.top} />))}
+            </FacesWrapper>
             <Control />
             <PhotoInfo photo={photo} photoInfo={photoInfo} setFace={setFace} />
             {leftArrow && <div className="overlay-arrows_left">
