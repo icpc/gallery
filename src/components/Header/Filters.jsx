@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Stack } from "@mui/material";
 
 import { places, years } from "../../consts";
