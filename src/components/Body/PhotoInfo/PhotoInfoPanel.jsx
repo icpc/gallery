@@ -1,17 +1,20 @@
 import { useState } from "react";
+import Close from "@mui/icons-material/Close";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
+import EmailIcon from "@mui/icons-material/Email";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Button, IconButton, Stack, Tooltip } from "@mui/material";
+import { Box, colors, IconButton, Stack, Tooltip } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 
 import { FLICKR_IMAGE_PREFIX, SUGGESTIONS_EMAIL } from "../../../consts";
 import { SerializePhotoInfo } from "../../../Util/PhotoInfoHelper";
 
 import { usePhotoInfo } from "./PhotoInfoContext";
-import { AlbumInfo, EventInfo, PersonInfo, PhotographerInfo, TeamInfo } from "./PhotoInfoDetails";
+import { AlbumEdit, AlbumInfo, EventEdit, EventInfo, PersonEdit,PersonInfo, PhotographerEdit, PhotographerInfo, TeamEdit, TeamInfo } from "./PhotoInfoDetails";
 
 import "../../../styles/PhotoInfo.css";
 
@@ -45,24 +48,59 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
 
     return (
         <div className="photoInfo">
-            {!hidden && PhotographerInfo()}
-            {!hidden && AlbumInfo()}
-            {!hidden && EventInfo()}
-            {!hidden && TeamInfo()}
-            {!hidden && PersonInfo({ setFace })}
+            {!hidden && !editMode && <Box>
+                <PhotographerInfo />
+                <AlbumInfo />
+                <EventInfo />
+                <TeamInfo />
+                <PersonInfo setFace={setFace} />
+            </Box>}
 
+            {editMode && <Box>
+                <PersonEdit />
+                <EventEdit />
+                <Stack direction="row" spacing={1}>
+                    <PhotographerEdit />
+                    <AlbumEdit />
+                    <TeamEdit />
+                </Stack>
+            </Box>}
 
             <div className="control-bottom">
                 {editMode &&
-                    <Tooltip title="Exit editing mode">
-                        <Button
-                            variant="contained"
-                            size="large"
-                            color="error"
-                            onClick={() => setEditMode(false)}>
-                            Exit
-                        </Button>
-                    </Tooltip>}
+                    <Stack direction="row" spacing={1}>
+                        <Tooltip title="Send your suggestion using Gmail">
+                            <IconButton
+                                href={gmailLink}
+                                target="_blank"
+                                variant="contained"
+                                onClick={() => setEditMode(false)}>
+                                <EmailIcon fontSize="large" color="error" />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Send your suggestion using your system mail provider">
+                            <IconButton
+                                href={mailtoLink}
+                                target="_blank"
+                                variant="contained"
+                                onClick={() => setEditMode(false)}>
+                                <EmailIcon fontSize="large" />
+                            </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Copy tags to clipboard">
+                            <IconButton
+                                variant="contained"
+                                onClick={() => copyToClipboard()}>
+                                <ContentCopyIcon fontSize="large" />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Exit editing mode">
+                            <IconButton onClick={() => setEditMode(false)}>
+                                <Close fontSize="large" />
+                            </IconButton>
+                        </Tooltip>
+                    </Stack>}
                 {!toolTipsHidden &&
                     <Tooltip title="Edit photo info">
                         <IconButton onClick={() => setEditMode(true)}>
@@ -90,46 +128,7 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
                         </IconButton>
                     </Tooltip>}
             </div>
-
-
-            {editMode &&
-                <Stack direction="row" spacing={1}>
-                    <Tooltip title="Send your suggestion using Gmail">
-                        <Button
-                            href={gmailLink}
-                            target="_blank"
-                            variant="contained"
-                            size="large"
-                            color="error"
-                            onClick={() => setEditMode(false)}>
-                            Send via Gmail
-                        </Button>
-                    </Tooltip>
-
-                    <Tooltip title="Send your suggestion using your system mail provider">
-                        <Button
-                            href={mailtoLink}
-                            target="_blank"
-                            variant="contained"
-                            color="info"
-                            size="large"
-                            onClick={() => setEditMode(false)}>
-                            Send via mail client
-                        </Button>
-                    </Tooltip>
-
-                    <Tooltip title="Copy tags to clipboard">
-                        <Button
-                            variant="contained"
-                            size="large"
-                            color="success"
-                            onClick={() => copyToClipboard()}>
-                            Copy to clipboard
-                        </Button>
-                    </Tooltip>
-                </Stack>}
         </div>
-
     );
 };
 

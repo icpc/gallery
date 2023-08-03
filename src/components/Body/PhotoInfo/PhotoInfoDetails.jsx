@@ -16,34 +16,9 @@ const ComaSeparated = (list) => {
 // TODO: Unify
 
 const PhotographerInfo = () => {
-    const { photoInfo, editMode, setPhotographer } = usePhotoInfo();
+    const { photoInfo } = usePhotoInfo();
 
-    if (!photoInfo) {
-        return null;
-    }
-
-    if (editMode) {
-        return (
-            <Autocomplete
-                multiple
-                freeSolo
-                options={[]}
-                value={photoInfo.photographer}
-                onChange={(event, newValue) => {
-                    setPhotographer(newValue);
-                }}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Photographer"
-                        variant="outlined"
-                    />
-                )}
-            />
-        );
-    }
-
-    if (photoInfo.photographer.length === 0) {
+    if (!photoInfo || photoInfo.photographer.length === 0) {
         return null;
     }
 
@@ -60,35 +35,37 @@ const PhotographerInfo = () => {
     );
 };
 
-const AlbumInfo = () => {
-    const { photoInfo, editMode, setAlbum } = usePhotoInfo();
+const PhotographerEdit = () => {
+    const { photoInfo, setPhotographer } = usePhotoInfo();
 
     if (!photoInfo) {
         return null;
     }
 
-    if (editMode) {
-        return (
-            <Autocomplete
-                multiple
-                freeSolo
-                options={years}
-                value={photoInfo.album}
-                onChange={(event, newValue) => {
-                    setAlbum(newValue);
-                }}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Album"
-                        variant="outlined"
-                    />
-                )}
-            />
-        );
-    }
+    return (
+        <Autocomplete
+            multiple
+            freeSolo
+            options={[]}
+            value={photoInfo.photographer}
+            onChange={(event, newValue) => {
+                setPhotographer(newValue);
+            }}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    label="Photographer"
+                    variant="filled"
+                />
+            )}
+        />
+    );
+};
 
-    if (photoInfo.album.length === 0) {
+const AlbumInfo = () => {
+    const { photoInfo } = usePhotoInfo();
+
+    if (!photoInfo || photoInfo.album.length === 0) {
         return null;
     }
 
@@ -106,36 +83,37 @@ const AlbumInfo = () => {
     );
 };
 
-const EventInfo = () => {
-    const { photoInfo, editMode, setEvent } = usePhotoInfo();
-    const { events } = useAppContext();
+const AlbumEdit = () => {
+    const { photoInfo, setAlbum } = usePhotoInfo();
 
     if (!photoInfo) {
         return null;
     }
 
-    if (editMode) {
-        return (
-            <Autocomplete
-                multiple
-                freeSolo
-                options={events}
-                value={photoInfo.event}
-                onChange={(event, newValue) => {
-                    setEvent(newValue);
-                }}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Event"
-                        variant="outlined"
-                    />
-                )}
-            />
-        );
-    }
+    return (
+        <Autocomplete
+            multiple
+            freeSolo
+            options={years}
+            value={photoInfo.album}
+            onChange={(event, newValue) => {
+                setAlbum(newValue);
+            }}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    label="Album"
+                    variant="filled"
+                />
+            )}
+        />
+    );
+};
 
-    if (photoInfo.event.length === 0) {
+const EventInfo = () => {
+    const { photoInfo } = usePhotoInfo();
+
+    if (!photoInfo || photoInfo.event.length === 0) {
         return null;
     }
 
@@ -153,36 +131,38 @@ const EventInfo = () => {
     );
 };
 
-const TeamInfo = () => {
-    const { photoInfo, editMode, setTeam } = usePhotoInfo();
-    const { teams } = useAppContext();
+const EventEdit = () => {
+    const { photoInfo, setEvent } = usePhotoInfo();
+    const { events } = useAppContext();
 
     if (!photoInfo) {
         return null;
     }
 
-    if (editMode) {
-        return (
-            <Autocomplete
-                multiple
-                freeSolo
-                options={teams}
-                value={photoInfo.team}
-                onChange={(event, newValue) => {
-                    setTeam(newValue);
-                }}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Team"
-                        variant="outlined"
-                    />
-                )}
-            />
-        );
-    }
+    return (
+        <Autocomplete
+            multiple
+            freeSolo
+            options={events}
+            value={photoInfo.event}
+            onChange={(event, newValue) => {
+                setEvent(newValue);
+            }}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    label="Event"
+                    variant="filled"
+                />
+            )}
+        />
+    );
+};
 
-    if (photoInfo.team.length === 0) {
+const TeamInfo = () => {
+    const { photoInfo } = usePhotoInfo();
+
+    if (!photoInfo || photoInfo.team.length === 0) {
         return null;
     }
 
@@ -200,35 +180,38 @@ const TeamInfo = () => {
     );
 };
 
-const PersonInfo = ({ setFace }) => {
-    const { photoInfo, editMode, setPerson } = usePhotoInfo();
+const TeamEdit = () => {
+    const { photoInfo, setTeam } = usePhotoInfo();
+    const { teams } = useAppContext();
 
     if (!photoInfo) {
         return null;
     }
 
-    if (editMode) {
-        return (
-            <Autocomplete
-                multiple
-                options={[]}
-                value={photoInfo.person.map(person => person.name)}
-                onChange={(event, newValue) => {
-                    setPerson(newValue);
-                }}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Person"
-                        placeholder="Drag to add new face"
-                        variant="outlined"
-                    />
-                )}
-            />
-        );
-    }
+    return (
+        <Autocomplete
+            multiple
+            freeSolo
+            options={teams}
+            value={photoInfo.team}
+            onChange={(event, newValue) => {
+                setTeam(newValue);
+            }}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    label="Team"
+                    variant="filled"
+                />
+            )}
+        />
+    );
+};
 
-    if (photoInfo.person.length === 0) {
+const PersonInfo = ({ setFace }) => {
+    const { photoInfo } = usePhotoInfo();
+
+    if (!photoInfo || photoInfo.person.length === 0) {
         return null;
     }
 
@@ -251,4 +234,32 @@ const PersonInfo = ({ setFace }) => {
     );
 };
 
-export { AlbumInfo, EventInfo, PersonInfo, PhotographerInfo, TeamInfo };
+const PersonEdit = () => {
+    const { photoInfo, setPerson } = usePhotoInfo();
+
+    if (!photoInfo) {
+        return null;
+    }
+
+    return (
+        <Autocomplete
+            multiple
+            options={[]}
+            value={photoInfo.person.map(person => person.name)}
+            onChange={(event, newValue) => {
+                setPerson(newValue);
+            }}
+            fullWidth={false}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    label="Person"
+                    placeholder="Drag to add new face"
+                    variant="filled"
+                />
+            )}
+        />
+    );
+};
+
+export { AlbumEdit, AlbumInfo, EventEdit, EventInfo, PersonEdit,PersonInfo, PhotographerEdit, PhotographerInfo, TeamEdit, TeamInfo };

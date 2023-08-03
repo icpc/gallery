@@ -48,6 +48,10 @@ const PhotoInfoProvider = ({ children }) => {
         setPhotoInfo({ ...photoInfo, photographer: newPhotographer });
     }
 
+    function setTeam(newTeam) {
+        setPhotoInfo({ ...photoInfo, team: newTeam });
+    }
+
     return (
         <PhotoInfoContext.Provider value={{
             photoInfo,
@@ -59,6 +63,7 @@ const PhotoInfoProvider = ({ children }) => {
             setEvents,
             setPerson,
             setAlbum,
+            setTeam,
             setPhotographer,
             appendPerson,
         }}>
