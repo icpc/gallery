@@ -7,11 +7,12 @@ import EmailIcon from "@mui/icons-material/Email";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Box, colors, IconButton, Stack, Tooltip } from "@mui/material";
+import { Box, Grid, IconButton, Stack, Tooltip } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 
 import { FLICKR_IMAGE_PREFIX, SUGGESTIONS_EMAIL } from "../../../consts";
 import { SerializePhotoInfo } from "../../../Util/PhotoInfoHelper";
+import { useAppContext } from "../../AppContext";
 
 import { usePhotoInfo } from "./PhotoInfoContext";
 import { AlbumEdit, AlbumInfo, EventEdit, EventInfo, PersonEdit,PersonInfo, PhotographerEdit, PhotographerInfo, TeamEdit, TeamInfo } from "./PhotoInfoDetails";
@@ -19,12 +20,13 @@ import { AlbumEdit, AlbumInfo, EventEdit, EventInfo, PersonEdit,PersonInfo, Phot
 import "../../../styles/PhotoInfo.css";
 
 const PhotoInfoPanel = ({ setFace, photo }) => {
+    const { desktop } = useAppContext();
     const { editMode, setEditMode, photoInfo } = usePhotoInfo();
 
     const [hidden, setHidden] = useState(false);
 
     const toolTipsHidden = editMode;
-
+    const changesPane = editMode && desktop;
 
     const photoLink = FLICKR_IMAGE_PREFIX + photo.id;
     const tags = SerializePhotoInfo(photoInfo).join(", ");
@@ -48,7 +50,7 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
 
     return (
         <div className="photoInfo">
-            {!hidden && !editMode && <Box>
+            {!hidden && !changesPane && <Box>
                 <PhotographerInfo />
                 <AlbumInfo />
                 <EventInfo />
@@ -56,15 +58,24 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
                 <PersonInfo setFace={setFace} />
             </Box>}
 
-            {editMode && <Box>
-                <PersonEdit />
-                <EventEdit />
-                <Stack direction="row" spacing={1}>
-                    <PhotographerEdit />
-                    <AlbumEdit />
-                    <TeamEdit />
-                </Stack>
-            </Box>}
+            {changesPane && 
+                <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                        <PersonEdit />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <EventEdit />
+                    </Grid>
+                    <Grid item xs="auto">
+                        <TeamEdit />
+                    </Grid>
+                    <Grid item xs="auto">
+                        <PhotographerEdit />
+                    </Grid>
+                    <Grid item xs="auto">
+                        <AlbumEdit />
+                    </Grid>
+                </Grid>}
 
             <div className="control-bottom">
                 {editMode &&
