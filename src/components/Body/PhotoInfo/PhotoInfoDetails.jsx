@@ -1,3 +1,8 @@
+import { Autocomplete, TextField } from "@mui/material";
+
+import { years } from "../../../consts";
+import { useAppContext } from "../../AppContext";
+
 import { usePhotoInfo } from "./PhotoInfoContext";
 
 
@@ -8,10 +13,37 @@ const ComaSeparated = (list) => {
     ]);
 };
 
-const PhotographerInfo = () => {
-    const { photoInfo } = usePhotoInfo();
+// TODO: Unify
 
-    if (!photoInfo || photoInfo.photographer.length === 0) {
+const PhotographerInfo = () => {
+    const { photoInfo, editMode, setPhotographer } = usePhotoInfo();
+
+    if (!photoInfo) {
+        return null;
+    }
+
+    if (editMode) {
+        return (
+            <Autocomplete
+                multiple
+                freeSolo
+                options={[]}
+                value={photoInfo.photographer}
+                onChange={(event, newValue) => {
+                    setPhotographer(newValue);
+                }}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Photographer"
+                        variant="standard"
+                    />
+                )}
+            />
+        );
+    }
+
+    if (photoInfo.photographer.length === 0) {
         return null;
     }
 
@@ -29,9 +61,34 @@ const PhotographerInfo = () => {
 };
 
 const AlbumInfo = () => {
-    const { photoInfo } = usePhotoInfo();
+    const { photoInfo, editMode, setAlbum } = usePhotoInfo();
 
-    if (!photoInfo || photoInfo.album.length === 0) {
+    if (!photoInfo) {
+        return null;
+    }
+
+    if (editMode) {
+        return (
+            <Autocomplete
+                multiple
+                freeSolo
+                options={years}
+                value={photoInfo.album}
+                onChange={(event, newValue) => {
+                    setAlbum(newValue);
+                }}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Album"
+                        variant="outlined"
+                    />
+                )}
+            />
+        );
+    }
+
+    if (photoInfo.album.length === 0) {
         return null;
     }
 
@@ -50,9 +107,35 @@ const AlbumInfo = () => {
 };
 
 const EventInfo = () => {
-    const { photoInfo } = usePhotoInfo();
+    const { photoInfo, editMode, setEvent } = usePhotoInfo();
+    const { events } = useAppContext();
 
-    if (!photoInfo || photoInfo.event.length === 0) {
+    if (!photoInfo) {
+        return null;
+    }
+
+    if (editMode) {
+        return (
+            <Autocomplete
+                multiple
+                freeSolo
+                options={events}
+                value={photoInfo.event}
+                onChange={(event, newValue) => {
+                    setEvent(newValue);
+                }}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Event"
+                        variant="outlined"
+                    />
+                )}
+            />
+        );
+    }
+
+    if (photoInfo.event.length === 0) {
         return null;
     }
 
@@ -71,9 +154,35 @@ const EventInfo = () => {
 };
 
 const TeamInfo = () => {
-    const { photoInfo } = usePhotoInfo();
+    const { photoInfo, editMode, setTeam } = usePhotoInfo();
+    const { teams } = useAppContext();
 
-    if (!photoInfo || photoInfo.team.length === 0) {
+    if (!photoInfo) {
+        return null;
+    }
+
+    if (editMode) {
+        return (
+            <Autocomplete
+                multiple
+                freeSolo
+                options={teams}
+                value={photoInfo.team}
+                onChange={(event, newValue) => {
+                    setTeam(newValue);
+                }}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Team"
+                        variant="outlined"
+                    />
+                )}
+            />
+        );
+    }
+
+    if (photoInfo.team.length === 0) {
         return null;
     }
 
@@ -92,9 +201,34 @@ const TeamInfo = () => {
 };
 
 const PersonInfo = ({ setFace }) => {
-    const { photoInfo } = usePhotoInfo();
+    const { photoInfo, editMode, setPerson } = usePhotoInfo();
 
-    if (!photoInfo || photoInfo.person.length === 0) {
+    if (!photoInfo) {
+        return null;
+    }
+
+    if (editMode) {
+        return (
+            <Autocomplete
+                multiple
+                options={[]}
+                value={photoInfo.person.map(person => person.name)}
+                onChange={(event, newValue) => {
+                    setPerson(newValue);
+                }}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Person"
+                        placeholder="Drag to add new face"
+                        variant="outlined"
+                    />
+                )}
+            />
+        );
+    }
+
+    if (photoInfo.person.length === 0) {
         return null;
     }
 
@@ -109,9 +243,6 @@ const PersonInfo = ({ setFace }) => {
             {person.name}
         </a>);
 
-    if (personLinks.length === 0) {
-        return null;
-    }
 
     return (
         <div>

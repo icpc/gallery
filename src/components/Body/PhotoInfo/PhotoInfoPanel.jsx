@@ -4,7 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { Button, IconButton, Stack, Tooltip } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 
 import { FLICKR_IMAGE_PREFIX, SUGGESTIONS_EMAIL } from "../../../consts";
@@ -22,20 +22,22 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
 
     const toolTipsHidden = editMode;
 
-    function finishEditing() {
+
+    const photoLink = FLICKR_IMAGE_PREFIX + photo.id;
+    const tags = SerializePhotoInfo(photoInfo).join(", ");
+
+    function copyToClipboard() {
         setEditMode(false);
-        navigator.clipboard.writeText(SerializePhotoInfo(photoInfo).join(", "));
+        navigator.clipboard.writeText(tags);
         enqueueSnackbar("New tags copied to clipboard", { variant: "success", autoHideDuration: 2000 });
     }
+    
+    const emailBody = `Photo link: ${photoLink}\n\nGallery link: ${window.location.href}\n\nTags: ${tags}`;
+    const emailSubject = `Photo info update ${photo.id}`;
 
-    function mailtoLink() {
-        const photoLink = FLICKR_IMAGE_PREFIX + photo.id;
-        const tags = SerializePhotoInfo(photoInfo).join(", ");
-        const subject = `Photo info update ${photo.id}`;
-        const body = `Photo link: ${photoLink}\n\nGallery link: ${window.location.href}\n\nTags: ${tags}`;
-        const mailtoLink = `mailto:${SUGGESTIONS_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        return mailtoLink;
-    }
+    const mailtoLink = `mailto:${SUGGESTIONS_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+    const gmailLink = `https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to=${encodeURIComponent(SUGGESTIONS_EMAIL)}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 
     function toogleHidden() {
         setHidden(!hidden);
@@ -51,17 +53,6 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
 
 
             <div className="control-bottom">
-                {toolTipsHidden &&
-                    <Tooltip title="Send changes">
-                        <Button
-                            href={mailtoLink()}
-                            target="_blank"
-                            variant="contained"
-                            size="large"
-                            onClick={() => finishEditing()}>
-                            Done
-                        </Button>
-                    </Tooltip>}
                 {!toolTipsHidden &&
                     <Tooltip title="Edit photo info">
                         <IconButton onClick={() => setEditMode(true)}>
@@ -89,6 +80,44 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
                         </IconButton>
                     </Tooltip>}
             </div>
+
+
+            {editMode &&
+                <Stack direction="row" spacing={2}>
+                    <Tooltip title="Send your suggestion using Gmail">
+                        <Button
+                            href={gmailLink}
+                            target="_blank"
+                            variant="contained"
+                            size="large"
+                            color="error"
+                            onClick={() => setEditMode(false)}>
+                            Send via Gmail
+                        </Button>
+                    </Tooltip>
+
+                    <Tooltip title="Send your suggestion using your system mail provider">
+                        <Button
+                            href={mailtoLink}
+                            target="_blank"
+                            variant="contained"
+                            size="large"
+                            onClick={() => setEditMode(false)}>
+                            Send via mail client
+                        </Button>
+                    </Tooltip>
+
+                    <Tooltip title="Copy tags to clipboard">
+                        <Button
+                            variant="contained"
+                            size="large"
+                            color="success"
+                            onClick={() => copyToClipboard()}>
+                            Copy to clipboard
+                        </Button>
+                    </Tooltip>
+
+                </Stack>}
         </div>
 
     );
