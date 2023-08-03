@@ -31,7 +31,7 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
         navigator.clipboard.writeText(tags);
         enqueueSnackbar("New tags copied to clipboard", { variant: "success", autoHideDuration: 2000 });
     }
-    
+
     const emailBody = `Photo link: ${photoLink}\n\nGallery link: ${window.location.href}\n\nTags: ${tags}`;
     const emailSubject = `Photo info update ${photo.id}`;
 
@@ -53,6 +53,16 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
 
 
             <div className="control-bottom">
+                {editMode &&
+                    <Tooltip title="Exit editing mode">
+                        <Button
+                            variant="contained"
+                            size="large"
+                            color="error"
+                            onClick={() => setEditMode(false)}>
+                            Exit
+                        </Button>
+                    </Tooltip>}
                 {!toolTipsHidden &&
                     <Tooltip title="Edit photo info">
                         <IconButton onClick={() => setEditMode(true)}>
@@ -83,7 +93,7 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
 
 
             {editMode &&
-                <Stack direction="row" spacing={2}>
+                <Stack direction="row" spacing={1}>
                     <Tooltip title="Send your suggestion using Gmail">
                         <Button
                             href={gmailLink}
@@ -101,6 +111,7 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
                             href={mailtoLink}
                             target="_blank"
                             variant="contained"
+                            color="info"
                             size="large"
                             onClick={() => setEditMode(false)}>
                             Send via mail client
@@ -116,7 +127,6 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
                             Copy to clipboard
                         </Button>
                     </Tooltip>
-
                 </Stack>}
         </div>
 
