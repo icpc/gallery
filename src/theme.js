@@ -66,13 +66,6 @@ const theme = createTheme({
                 },
             },
         },
-        MuiInputLabel: {
-            styleOverrides: {
-                shrink: {
-                    display: "none",
-                },
-            },
-        },
     },
 });
 

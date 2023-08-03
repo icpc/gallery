@@ -9,6 +9,9 @@ const TextFieldWithIcon = styled(TextField)(() => ({
     "& .MuiInputLabel-root": {
         marginLeft: "25px"
     },
+    "& .MuiInputLabel-shrink": {
+        display: "none",
+    },
 }));
 
 const filterOptions = createFilterOptions({ limit: 200 });
