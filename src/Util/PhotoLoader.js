@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { album } from "lightbox2";
 
 import { useAppContext } from "../components/AppContext";
 import { TAG_ALBUM } from "../consts";
