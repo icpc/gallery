@@ -3,7 +3,7 @@ import axios from "axios";
 import { api_key, PER_PAGE, TAG_ALBUM, TAG_EVENT, TAG_TEAM, user_id } from "../consts";
 
 export default class PhotoService {
-    static extras = "tags,url_m,url_c,url_l,url_o,description,date_upload,date_taken";
+    static extras = "tags,machine_tags,url_m,url_c,url_l,url_o,description,date_upload,date_taken";
     static parameters = `&per_page=${PER_PAGE}&extras=${PhotoService.extras}&format=json&nojsoncallback=?`;
 
     static getAllWithEvent(year, event = "Photo%20Tour", page = 1, config = {}) {

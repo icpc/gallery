@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { album } from "lightbox2";
 
 import { useAppContext } from "../components/AppContext";
+import { TAG_ALBUM } from "../consts";
 
 import { getEventData } from "./DataLoader";
 import PhotoService from "./PhotoService";
@@ -72,6 +74,15 @@ const usePhotoLoader = () => {
         return null;
     }
 
+    function albumFromTags(tags) {
+        const albumTag = TAG_ALBUM.toLowerCase();
+        const tag = tags.split(" ").find(tag => tag.startsWith(albumTag));
+        if (tag === undefined) {
+            return null;
+        }
+        return tag.replaceAll(albumTag, "");
+    }
+
     /**
      * Returns a flattened array of all photos from all events.
      * @returns {Array} - An array of photo objects.
@@ -123,14 +134,14 @@ const usePhotoLoader = () => {
             }
 
             if (response) {
-                const newPhotosByEvent = appendPhotos(photosByEvent, internalEvent, response.data.photos.photo.map(({ datetaken, url_m, url_o, url_l, id, width_o, width_l, height_o, height_l }) => ({
+                const newPhotosByEvent = appendPhotos(photosByEvent, internalEvent, response.data.photos.photo.map(({ datetaken, url_m, url_o, url_l, id, width_o, width_l, height_o, height_l, tags }) => ({
                     url_preview: url_m ?? url_o,
                     url: url_l ?? url_o,
                     width: width_l ?? width_o,
                     height: height_l ?? height_o,
                     id,
                     origin: url_o,
-                    year: new Date(datetaken)?.getUTCFullYear(),
+                    year: albumFromTags(tags),
                 })));
                 setTotalPages(response.data.photos.pages);
                 setPage(page + 1);
