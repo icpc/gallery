@@ -95,6 +95,9 @@ function ParsePhotoInfo(tags, description) {
 }
 
 function SerializePhotoInfo(photoInfo) {
+    if (!photoInfo) {
+        return [];
+    }
     let tags = [];
     for (const event of photoInfo.event) {
         tags.push(TAG_EVENT + "$" + event);
