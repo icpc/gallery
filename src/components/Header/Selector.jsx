@@ -9,9 +9,6 @@ const TextFieldWithIcon = styled(TextField)(() => ({
     "& .MuiInputLabel-root": {
         marginLeft: "25px"
     },
-    "& .MuiInputLabel-shrink": {
-        display: "none",
-    },
 }));
 
 const filterOptions = createFilterOptions({ limit: 200 });
@@ -35,7 +32,7 @@ const Selector = ({ leftIcon, onChange, name, value, options }) => {
                 }}
                 renderInput={(params) =>
                     <TextFieldWithIcon {...params}
-                        label={name}
+                        placeholder={name}
                         style={{
                             backgroundImage: `url(${leftIcon})`,
                             backgroundRepeat: "no-repeat",

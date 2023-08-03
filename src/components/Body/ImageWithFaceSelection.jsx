@@ -100,7 +100,7 @@ const ImageWithFaceSelection = ({ photo, alt = "", face, setFace }) => {
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                label="Enter a name"
+                                placeholder="Enter a name"
                             />
                         )}
                         onChange={(event, newValue) => createPerson(newValue, crop)}
