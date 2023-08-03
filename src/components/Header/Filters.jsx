@@ -62,7 +62,7 @@ const Filters = () => {
 
     function selectItem(item, func) {
         if (item === "clear") {
-            setYear(data.data);
+            setYear(data.year);
         } else {
             func(item.data);
         }
