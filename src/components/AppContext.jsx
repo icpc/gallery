@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { DEFAULT_EVENT, LAST_YEAR } from "../consts";
+import { getEventData, getPeopleData, getTeamData } from "../Util/DataLoader";
 
 /**
  * Data for the entire app.
@@ -187,6 +188,39 @@ const AppContextProvider = ({ children }) => {
         });
     }, [data]);
 
+    const [events, setEvents] = useState([]);
+    const [people, setPeople] = useState([]);
+    const [teams, setTeams] = useState([]);
+
+    useEffect(() => {
+        let isCancelled = false;
+
+        getEventData(data.year)
+            .then(eventsData => {
+                if (!isCancelled) {
+                    setEvents(eventsData);
+                }
+            });
+
+        getPeopleData(data.year)
+            .then(peopleData => {
+                if (!isCancelled) {
+                    setPeople(peopleData);
+                }
+            });
+
+        getTeamData(data.year)
+            .then(teamData => {
+                if (!isCancelled) {
+                    setTeams(teamData);
+                }
+            });
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [data.year]);
+
     return (<AppContext.Provider value={{
         data,
         setYear,
@@ -201,6 +235,9 @@ const AppContextProvider = ({ children }) => {
         setIsOpenMenu,
         desktop,
         mobile,
+        events, 
+        people,
+        teams
     }}>
         {children}
     </AppContext.Provider>);
@@ -223,6 +260,9 @@ const AppContextProvider = ({ children }) => {
  *  setIsOpenMenu: function,
  *  desktop: boolean,
  *  mobile: boolean,
+ *  teams: Array,
+ *  people: Array,
+ *  events: Array,
  * }}.
  */
 const useAppContext = () => {

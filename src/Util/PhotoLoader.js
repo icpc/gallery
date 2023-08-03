@@ -4,7 +4,6 @@ import axios from "axios";
 import { useAppContext } from "../components/AppContext";
 import { TAG_ALBUM } from "../consts";
 
-import { getEventData } from "./DataLoader";
 import PhotoService from "./PhotoService";
 import UniqueList from "./UniqueList";
 
@@ -18,7 +17,7 @@ import UniqueList from "./UniqueList";
  * - photosList: An array of all photo objects.
  */
 const usePhotoLoader = () => {
-    const { data } = useAppContext();
+    const { data, events } = useAppContext();
 
     /**
      * State hook that stores a Map object containing photo objects grouped by event.
@@ -30,23 +29,6 @@ const usePhotoLoader = () => {
     const [internalEvent, setInternalEvent] = useState(undefined);
     const [fetching, setFetching] = useState(false);
     const [axiosCancelTokenSource, setAxiosCancelTokenSource] = useState(new axios.CancelToken.source());
-
-    const [events, setEvents] = useState([]);
-
-    useEffect(() => {
-        let isCancelled = false;
-
-        getEventData(data.year)
-            .then(eventsData => {
-                if (!isCancelled) {
-                    setEvents(eventsData);
-                }
-            });
-
-        return () => {
-            isCancelled = true;
-        };
-    }, [data.year]);
 
     useEffect(() => {
         axiosCancelTokenSource.cancel();

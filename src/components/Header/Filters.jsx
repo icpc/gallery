@@ -6,47 +6,13 @@ import calendarIcon from "../../images/calender.svg";
 import eventIcon from "../../images/event.svg";
 import personIcon from "../../images/person.svg";
 import teamIcon from "../../images/team.svg";
-import { getEventData, getPeopleData, getTeamData } from "../../Util/DataLoader";
 import { useAppContext } from "../AppContext";
 
 import Search from "./Search";
 import Selector from "./Selector";
 
 const Filters = () => {
-    const { data, setYear, setEvent, setPerson, setTeam, setIsOpenMenu, desktop } = useAppContext();
-
-    const [events, setEvents] = useState([]);
-    const [people, setPeople] = useState([]);
-    const [teams, setTeams] = useState([]);
-
-    useEffect(() => {
-        let isCancelled = false;
-
-        getEventData(data.year)
-            .then(eventsData => {
-                if (!isCancelled) {
-                    setEvents(eventsData);
-                }
-            });
-
-        getPeopleData(data.year)
-            .then(peopleData => {
-                if (!isCancelled) {
-                    setPeople(peopleData);
-                }
-            });
-
-        getTeamData(data.year)
-            .then(teamData => {
-                if (!isCancelled) {
-                    setTeams(teamData);
-                }
-            });
-
-        return () => {
-            isCancelled = true;
-        };
-    }, [data.year]);
+    const { data, setYear, setEvent, setPerson, setTeam, setIsOpenMenu, desktop, events, people, teams } = useAppContext();
 
     function formatOptions(a) {
         return a.map(x => {
