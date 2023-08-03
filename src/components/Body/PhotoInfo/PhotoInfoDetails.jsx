@@ -36,7 +36,7 @@ const PhotographerInfo = () => {
                     <TextField
                         {...params}
                         label="Photographer"
-                        variant="standard"
+                        variant="outlined"
                     />
                 )}
             />
