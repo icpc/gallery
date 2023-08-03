@@ -1,5 +1,7 @@
 import { TAG_ALBUM, TAG_EVENT, TAG_PERSON, TAG_PHOTOGRAPHER, TAG_TEAM } from "../consts";
 
+import UniqueList from "./UniqueList";
+
 const MAX_INT = 65535;
 
 const convertRel = (text) => convertNum(text) / MAX_INT;
@@ -84,6 +86,11 @@ function ParsePhotoInfo(tags, description) {
             photoInfo.person.push(parsedPerson);
         }
     }
+    photoInfo.event = UniqueList(photoInfo.event);
+    photoInfo.team = UniqueList(photoInfo.team);
+    photoInfo.album = UniqueList(photoInfo.album);
+    photoInfo.photographer = UniqueList(photoInfo.photographer);
+
     return photoInfo;
 }
 
