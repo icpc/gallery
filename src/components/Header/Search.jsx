@@ -27,7 +27,7 @@ const Search = () => {
                     fullWidth
                     value={inputText}
                     onChange={e => setInputText(e.target.value)}
-                    placeholder="Search..."
+                    placeholder="Global search..."
                     InputProps={{
                         endAdornment: (
                             <IconButton type="submit">
