@@ -1,14 +1,20 @@
 export const years = [
-    "2023","RC 2022-2023","2022", "RC 2021-2022", "2021", "2020"
+    "RC 2023-2024","2023","RC 2022-2023","2022", "RC 2021-2022", "2021", "2020", "RC-2015-2016","RC-2014-2015","RC-2013-2014","RC-2012-2013","RC-2011-2012"
 ];
 export const places =
     {
+        "RC 2023-2024": "Regional Contests",
         "2023": "NAC, Orlando, FL",
         "RC 2022-2023": "Regional Contests",
         "2022": "NAC, Orlando, FL",
         "RC 2021-2022": "Regional Contests",
         "2021": "NAC, Online",
-        "2020": "NAC, Atlanta, GA"
+        "2020": "NAC, Atlanta, GA",
+        "RC 2015-2016": "Contests",
+        "RC 2014-2015": "Contests",
+        "RC 2013-2014": "Contests",
+        "RC 2012-2013": "Contests",
+        "RC 2011-2012": "Contests"
     }
 ;
 
