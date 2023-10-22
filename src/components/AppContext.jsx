@@ -16,6 +16,7 @@ import { getEventData, getPeopleData, getTeamData } from "../Util/DataLoader";
  * @property {string|null} person
  * @property {string|null} team
  * @property {string|null} fullscreenPhotoId
+ * @property {boolean} slideShow
  */
 
 /**
@@ -29,6 +30,7 @@ const defaultContext = {
     person: null,
     team: null,
     fullscreenPhotoId: null,
+    slideShow: false,
 };
 
 const AppContext = createContext(null);
@@ -37,6 +39,9 @@ function parseSearchParams(searchParams) {
     let searchParamsData = {};
     if (searchParams.has("photo")) {
         searchParamsData.fullscreenPhotoId = searchParams.get("photo");
+    }
+    if (searchParams.has("slideshow")) {
+        searchParamsData.slideShow = searchParams.get("slideshow");
     }
     if (searchParams.has("query")) {
         searchParamsData.text = decodeURIComponent(searchParams.get("query"));
@@ -58,7 +63,7 @@ function parseSearchParams(searchParams) {
     return searchParamsData;
 }
 
-function serializeSearchParams({ year, event, text, person, team, fullscreenPhotoId }) {
+function serializeSearchParams({ year, event, text, person, team, fullscreenPhotoId, slideShow }) {
     let searchParams = {};
     if (year != null) {
         searchParams.album = year;
@@ -77,6 +82,9 @@ function serializeSearchParams({ year, event, text, person, team, fullscreenPhot
     }
     if (fullscreenPhotoId != null) {
         searchParams.photo = fullscreenPhotoId;
+    }
+    if (slideShow) {
+        searchParams.slideshow = true;
     }
     return searchParams;
 }
@@ -106,7 +114,6 @@ const AppContextProvider = ({ children }) => {
     const desktop = useMediaQuery("(min-width: 900px)");
     const mobile = !desktop;
 
-    const [isSlideShow, setIsSlideShow] = useState(false);
     const [isOpenMenu, setIsOpenMenu] = useState(desktop);
 
     useEffect(() => {
@@ -185,6 +192,15 @@ const AppContextProvider = ({ children }) => {
         setData({
             ...data,
             fullscreenPhotoId: newIndex,
+        });
+    }, [data]);
+
+    const isSlideShow = data.slideShow;
+
+    const setIsSlideShow = useCallback((newIsSlideShow) => {
+        setData({
+            ...data,
+            slideShow: newIsSlideShow,
         });
     }, [data]);
 
