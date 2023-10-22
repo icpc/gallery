@@ -115,7 +115,7 @@ const usePhotoLoader = () => {
             }
 
             if (response) {
-                const newPhotosByEvent = appendPhotos(photosByEvent, internalEvent, response.data.photos.photo.map(({ datetaken, url_m, url_o, url_l, id, width_o, width_l, height_o, height_l, tags }) => ({
+                const newPhotosByEvent = appendPhotos(photosByEvent, internalEvent, response.data.photos.photo.map(({ url_m, url_o, url_l, id, width_o, width_l, height_o, height_l, tags }) => ({
                     url_preview: url_m ?? url_o,
                     url: url_l ?? url_o,
                     width: width_l ?? width_o,
