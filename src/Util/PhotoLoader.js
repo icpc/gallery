@@ -49,7 +49,7 @@ const usePhotoLoader = () => {
         if (currentEvent === undefined || events === undefined)
             return null;
         const index = events.findIndex(event => event === currentEvent);
-        if (index !== -1 && index + 1 < events.length) {
+        if (index + 1 < events.length) {
             return events[index + 1];
         }
         return null;
@@ -93,6 +93,7 @@ const usePhotoLoader = () => {
         const nextEvent = getNextEvent(internalEvent);
         if (page > totalPages && nextEvent !== null) {
             setPage(1);
+            setTotalPages(1);
             setInternalEvent(nextEvent);
             setFetching(false);
             return;
