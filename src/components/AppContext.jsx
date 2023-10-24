@@ -116,6 +116,8 @@ const AppContextProvider = ({ children }) => {
 
     const [isOpenMenu, setIsOpenMenu] = useState(desktop);
 
+    const isSlideShow = data.slideShow;
+
     useEffect(() => {
         if (desktop) {
             setIsOpenMenu(true);
@@ -133,76 +135,80 @@ const AppContextProvider = ({ children }) => {
      * Sets the year.
      * This function removes all other data from the context.
      */
-    const setYear = useCallback((newYear) => {
+    const setYear = (newYear) => {
         setData({
             ...defaultContext,
             year: newYear,
             event: DEFAULT_EVENT,
         });
-    }, []);
+    };
 
-    const setText = useCallback((newText) => {
-        setData({
-            ...data,
-            year: null,
-            event: null,
-            text: newText,
-            person: null,
-            team: null,
+    const setText = (newText) => {
+        setData(prevState => {
+            return attachYearIfNull({
+                ...prevState,
+                year: null,
+                event: null,
+                text: newText,
+                person: null,
+                team: null,
+            });
         });
-    }, [data]);
+    };
 
-    const setEvent = useCallback((newEvent) => {
-        setData(
-            attachYearIfNull({
-                ...data,
+    const setEvent = (newEvent) => {
+        setData(prevState => {
+            return attachYearIfNull({
+                ...prevState,
                 event: newEvent,
                 text: null,
                 person: null,
                 team: null,
-            })
-        );
-    }, [data]);
+            });
+        });
+    };
 
-    const setPerson = useCallback((newPerson) => {
-        setData(
-            attachYearIfNull({
-                ...data,
+    const setPerson = (newPerson) => {
+        setData(prevState => {
+            return attachYearIfNull({
+                ...prevState,
                 event: null,
                 text: null,
                 person: newPerson,
                 team: null,
-            })
-        );
-    }, [data]);
+            });
+        });
+    };
 
-    const setTeam = useCallback((newTeam) => {
-        setData(
-            attachYearIfNull({
-                ...data,
+    const setTeam = (newTeam) => {
+        setData(prevState => {
+            return attachYearIfNull({
+                ...prevState,
                 event: null,
                 text: null,
                 person: null,
                 team: newTeam,
-            })
-        );
-    }, [data]);
-
-    const setFullscreenPhotoId = useCallback((newIndex) => {
-        setData({
-            ...data,
-            fullscreenPhotoId: newIndex,
+            });
         });
-    }, [data]);
+    };
 
-    const isSlideShow = data.slideShow;
-
-    const setIsSlideShow = useCallback((newIsSlideShow) => {
-        setData({
-            ...data,
-            slideShow: newIsSlideShow,
+    const setFullscreenPhotoId = (newFullscreenPhotoId) => {
+        setData(prevState => {
+            return {
+                ...prevState,
+                fullscreenPhotoId: newFullscreenPhotoId,
+            };
         });
-    }, [data]);
+    };
+
+    const setIsSlideShow = (newIsSlideShow) => {
+        setData(prevState => {
+            return {
+                ...prevState,
+                slideShow: newIsSlideShow,
+            };
+        });
+    };
 
     const [events, setEvents] = useState([]);
     const [people, setPeople] = useState([]);

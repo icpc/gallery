@@ -50,11 +50,16 @@ const Body = () => {
         } else {
             setFullscreenIndex(null);
             setFullscreenPhoto(null);
-            setIsSlideShow(false);
             setLeftArrow(false);
             setRightArrow(false);
         }
     }, [data.fullscreenPhotoId, photosList, hasMorePhotos, loadMorePhotos]);
+
+    useEffect(() => {
+        if (data.fullscreenPhotoId === null) {
+            setIsSlideShow(false);
+        }
+    }, [data.fullscreenPhotoId]);
 
     const handleRotationRight = () => {
         handleClick(photosList[fullscreenIndex + 1].id);
