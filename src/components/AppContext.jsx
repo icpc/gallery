@@ -41,7 +41,7 @@ function parseSearchParams(searchParams) {
         searchParamsData.fullscreenPhotoId = searchParams.get("photo");
     }
     if (searchParams.has("slideshow")) {
-        searchParamsData.slideShow = Boolean(searchParams.get("slideshow"));
+        searchParamsData.slideShow = searchParams.get("slideshow");
     }
     if (searchParams.has("query")) {
         searchParamsData.text = decodeURIComponent(searchParams.get("query"));
@@ -109,7 +109,7 @@ const AppContextProvider = ({ children }) => {
     const [data, setData] = useState({
         ...defaultContext,
         ...parseSearchParams(searchParams),
-    }, []);
+    });
 
     const desktop = useMediaQuery("(min-width: 900px)");
     const mobile = !desktop;
@@ -127,14 +127,7 @@ const AppContextProvider = ({ children }) => {
     useEffect(() => {
         setSearchParams(
             serializeSearchParams(data));
-    }, [data.year,
-        data.event,
-        data.text,
-        data.person,
-        data.team,
-        data.fullscreenPhotoId,
-        data.slideShow,
-        setSearchParams]);
+    }, [data, setSearchParams]);
 
     /**
      * Sets the year.
@@ -258,7 +251,7 @@ const AppContextProvider = ({ children }) => {
         setIsOpenMenu,
         desktop,
         mobile,
-        events,
+        events, 
         people,
         teams
     }}>
