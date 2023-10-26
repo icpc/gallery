@@ -145,14 +145,14 @@ const AppContextProvider = ({ children }) => {
 
     const setText = (newText) => {
         setData(prevState => {
-            return attachYearIfNull({
+            return {
                 ...prevState,
                 year: null,
                 event: null,
                 text: newText,
                 person: null,
                 team: null,
-            });
+            };
         });
     };
 
