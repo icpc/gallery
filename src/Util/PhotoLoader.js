@@ -46,10 +46,10 @@ const usePhotoLoader = () => {
     }
 
     function getNextEvent(currentEvent) {
-        if (currentEvent === undefined || events === undefined)
+        if (currentEvent == null || events === undefined)
             return null;
         const index = events.findIndex(event => event === currentEvent);
-        if (index + 1 < events.length) {
+        if (index === -1 || index + 1 < events.length) {
             return events[index + 1];
         }
         return null;
