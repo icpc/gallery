@@ -3,7 +3,7 @@ export const years = [
 ];
 export const places =
     {
-        "2023": "Saint-Petersburg, Novosibirsk, Astana",
+        "2023": "SPb, Novosibirsk, Astana, Kutaisi",
         "RC 2023-2024": "Regional Contests",
         "2022": "SPb, Tinkoff Arena",
         "RC 2022-2023": "Regional Contests",
