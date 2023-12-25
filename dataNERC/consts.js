@@ -1,26 +1,27 @@
 export const years = [
-    "RC 2023-2024", "2022", "RC 2022-2023", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2004", "2003", "2001", "2000"
+    "2023", "RC 2023-2024", "2022", "RC 2022-2023", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2004", "2003", "2001", "2000"
 ];
 export const places =
     {
+        "2023": "Saint-Petersburg, Novosibirsk, Astana",
         "RC 2023-2024": "Regional Contests",
-        "2022": "Tinkoff Arena",
+        "2022": "SPb, Tinkoff Arena",
         "RC 2022-2023": "Regional Contests",
-        "2021": "Tinkoff Arena",
+        "2021": "SPb, Tinkoff Arena",
         "2020": "SPb, My history park",
         "2019": "SPb, My history park",
-        "2018": "ITMO University",
-        "2017": "ITMO University",
-        "2016": "ITMO University",
-        "2015": "ITMO University",
-        "2014": "ITMO University",
-        "2013": "ITMO University",
-        "2012": "ITMO University",
-        "2011": "ITMO University",
+        "2018": "SPb, ITMO University",
+        "2017": "SPb, ITMO University",
+        "2016": "SPb, ITMO University",
+        "2015": "SPb, ITMO University",
+        "2014": "SPb, ITMO University",
+        "2013": "SPb, ITMO University",
+        "2012": "SPb, ITMO University",
+        "2011": "SPb, ITMO University",
         "2004": "SPb, Palace of Youth Creativity",
         "2003": "SPb, Palace of Youth Creativity",
         "2001": "SPb, Palace of Youth Creativity",
-        "2000": "SPb, Palace of Youth Creativity",
+        "2000": "SPb, Palace of Youth Creativity"
     }
 ;
 
@@ -44,6 +45,6 @@ export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
-export const LAST_YEAR = "2022";
+export const LAST_YEAR = "2023";
 export const CONTEST_NAME = "";
 export const DEFAULT_EVENT = "Photo Tour";
