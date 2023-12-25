@@ -21,6 +21,19 @@ jobs:
             data_folder: dataNAC
           - public_url: galleryNERC # nerc
             data_folder: dataNERC
+          - public_url: galleryLAC # lac
+            data_folder: dataLAC
+          - public_url: galleryAE # ae
+            data_folder: dataAE
+          - public_url: galleryAW # aw
+            data_folder: dataAW
+          - public_url: galleryAP # ap
+            data_folder: dataAP
+          - public_url: galleryEU # eu
+            data_folder: dataEU
+          - public_url: galleryACPC # acpc
+            data_folder: dataACPC
+    
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v3
