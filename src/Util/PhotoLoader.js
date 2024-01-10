@@ -28,15 +28,15 @@ const usePhotoLoader = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [internalEvent, setInternalEvent] = useState(undefined);
     const [fetching, setFetching] = useState(false);
-    const [axiosCancelTokenSource, setAxiosCancelTokenSource] = useState(new axios.CancelToken.source());
+    const [axiosCancelController, setAxiosCancelController] = useState(new AbortController());
 
     useEffect(() => {
-        axiosCancelTokenSource.cancel();
+        axiosCancelController.abort();
         setPhotosByEvent(new Map());
         setPage(1);
         setInternalEvent(data.event);
         setTotalPages(1);
-        setAxiosCancelTokenSource(new axios.CancelToken.source());
+        setAxiosCancelController(new AbortController());
     }, [data.year, data.event, data.text, data.team, data.person]);
 
     
@@ -100,7 +100,7 @@ const usePhotoLoader = () => {
         }
 
         const config = {
-            cancelToken: axiosCancelTokenSource.token,
+            signal: axiosCancelController.signal,
         };
 
         try {
