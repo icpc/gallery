@@ -1,10 +1,10 @@
 export const years = [
-    "RC 2023-2024", "2023"
+    "2024, RC 2023-2024"
 ];
 export const places =
     {
+        "2024": "EUC, Prague"
         "RC 2023-2024": "Regional Contests",
-        "2023": ""
     }
 ;
 
@@ -27,6 +27,6 @@ export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
-export const LAST_YEAR = "2023";
+export const LAST_YEAR = "2024";
 export const CONTEST_NAME = "";
 export const DEFAULT_EVENT = "Photo Tour";
