@@ -13,5 +13,14 @@ export default defineConfig({
         target: "esnext",
         emptyOutDir: true,
         outDir: process.env.PUBLIC_URL,
+        rollupOptions: {
+            output: {
+                manualChunks: (id) => {
+                    if (id.includes('react')) {
+                        return 'r';
+                    }
+                }
+            }
+        }
     },
 });
