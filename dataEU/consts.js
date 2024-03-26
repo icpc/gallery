@@ -1,9 +1,9 @@
 export const years = [
-    "2024, RC 2023-2024"
+    "2024", "RC 2023-2024"
 ];
 export const places =
     {
-        "2024": "EUC, Prague"
+        "2024": "EUC, Prague",
         "RC 2023-2024": "Regional Contests"
     }
 ;
