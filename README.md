@@ -46,6 +46,8 @@ The gallery is built on top of the flickr api backend. All metadata is stored in
 * team, for example `team$Aalto University`
 * person, for example `Bill Poucher(1761524d3f579a4d)`. The data in parenthesis denotes face location within the image in Picasa standard.
 
+Visit [tutorial](https://docs.google.com/document/d/1yBeLEYyGG2FpZGjBmAHP37gJAnKGtA56hAf1XjW8d18/edit#heading=h.iv1qq69p60ub) for more info.
+
 ## Picasa Standard Face Tag
 The 16 characters enclosed in rect64(…) is a 64-bit hexadecimal number which can be broken up into four 16-bit numbers used to identify the position of the rectangle used to mark the face. 
 
