@@ -1,8 +1,10 @@
 export const years = [
-    "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001"
+    "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001"
 ];
 export const places =
     {
+        "2023": "Luxor, Egypt, 47th",
+        "2022": "Luxor, Egypt, 46th",
         "2021": "Dhaka, Bangladesh",
         "2020": "Moscow, Russia",
         "2019": "Porto, Portugal",
@@ -46,6 +48,6 @@ export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
-export const LAST_YEAR = "2021";
+export const LAST_YEAR = "2023";
 export const CONTEST_NAME = "World Finals";
 export const DEFAULT_EVENT = "Photo Tour";
