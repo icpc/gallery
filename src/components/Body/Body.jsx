@@ -62,7 +62,11 @@ const Body = () => {
     }, [data.fullscreenPhotoId]);
 
     const handleRotationRight = () => {
-        handleClick(photosList[fullscreenIndex + 1].id);
+        let newIndex = fullscreenIndex + 1;
+        if (newIndex >= photosList.length) {
+            newIndex = 0;
+        }
+        handleClick(photosList[newIndex].id);
     };
 
     const handleRotationLeft = () => {

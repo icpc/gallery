@@ -1,39 +1,19 @@
 import React from "react";
 
-import { useAppContext } from "../AppContext";
-
 import Control from "./Control";
 
 import "../../styles/Body.css";
 
-const Slideshow = ({ photo, handleRotationRight, rightArrow }) => {
-    const timeoutRef = React.useRef(null);
-
-    const { setIsSlideShow } = useAppContext();
-
-    function resetTimeout() {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-        }
-    }
-
+const Slideshow = ({ photo, handleRotationRight }) => {
     React.useEffect(() => {
-        resetTimeout();
-        timeoutRef.current = setTimeout(
-            () => {
-                if (rightArrow) {
-                    handleRotationRight();
-                } else {
-                    setIsSlideShow(false);
-                }
-            },
-            3000
-        );
+        const interval = setInterval(() => {
+            handleRotationRight();
+        }, 3000);
 
         return () => {
-            resetTimeout();
+            clearInterval(interval);
         };
-    }, [photo]);
+    }, [handleRotationRight]);
 
     return (
         <div className="dismiss">
