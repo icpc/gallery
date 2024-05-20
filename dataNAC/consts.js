@@ -1,8 +1,9 @@
 export const years = [
-    "RC 2023-2024","2023","RC 2022-2023","2022", "RC 2021-2022", "2021", "2020", "RC 2019-2020", "RC 2018-2019", "RC 2016-2017", "RC 2015-2016","RC 2014-2015", "2014", "RC 2013-2014", "2013", "RC 2012-2013","RC 2011-2012"
+    "2024", "RC 2023-2024","2023","RC 2022-2023","2022", "RC 2021-2022", "2021", "2020", "RC 2019-2020", "RC 2018-2019", "RC 2016-2017", "RC 2015-2016","RC 2014-2015", "2014", "RC 2013-2014", "2013", "RC 2012-2013","RC 2011-2012"
 ];
 export const places =
     {
+        "2024": "NAC, Orlando, FL",
         "RC 2023-2024": "Regional Contests",
         "2023": "NAC, Orlando, FL",
         "RC 2022-2023": "Regional Contests",
@@ -42,6 +43,6 @@ export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
-export const LAST_YEAR = "2023";
+export const LAST_YEAR = "2024";
 export const CONTEST_NAME = "";
 export const DEFAULT_EVENT = "Photo Tour";
