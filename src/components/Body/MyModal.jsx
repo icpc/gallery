@@ -21,7 +21,7 @@ const MyModal = ({
     };
 
     return (
-        <div className="overlay dismiss" onClick={handleClick}>
+        <div className="overlay dismiss" onClick={handleClick} style={{ backgroundColor: isSlideShow ? "black" : "" }}>
             {isSlideShow
                 ? <Slideshow photo={photo} handleRotationRight={handleRotationRight} />
                 : <Lightbox photo={photo} handleRotationRight={handleRotationRight} handleRotationLeft={handleRotationLeft}
