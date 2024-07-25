@@ -67,16 +67,6 @@ jobs:
           unzip '*.zip'
           rm *.zip
           ls
-      - name: Upload to ftp
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ftp.u.icpc.global
-          port: 21
-          protocol: ftps
-          username: live@u.icpc.global
-          password: ${{ secrets.ftp_password }}
-          local-dir: build-all/
-          dry-run: true
       - name: Upload raw
         uses: actions/upload-artifact@v4
         with:
