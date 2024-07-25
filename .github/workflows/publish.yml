@@ -47,6 +47,6 @@ jobs:
           protocol: ftps
           username: live@u.icpc.global
           password: ${{ secrets.ftp_password }}
-          local-dir: build-${{ matrix.public_url }}/
+          local-dir: ${{ matrix.public_url }}/
           server-dir: ${{ matrix.public_url }}/
           dry-run: true
