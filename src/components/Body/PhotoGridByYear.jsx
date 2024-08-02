@@ -26,7 +26,7 @@ const PhotoGridByYear = ({ photos, handleClick }) => {
         const yearA = a[0];
         const yearB = b[0];
         const yearIndex = (targetYear) => places.findIndex(({ year }) => year === targetYear);
-        const indexDiff = yearIndex(yearA) - yearIndex(yearB);
+        const indexDiff = yearIndex(yearB) - yearIndex(yearA);
         if (indexDiff !== 0) {
             return indexDiff;
         }
