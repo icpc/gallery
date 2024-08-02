@@ -13,7 +13,7 @@ const TextFieldWithIcon = styled(TextField)(() => ({
 
 const filterOptions = createFilterOptions({ limit: 200 });
 
-const Selector = ({ leftIcon, onChange, name, value, options }) => {
+const Selector = ({ leftIcon, onChange, name, value, options, disableClearable = false }) => {
     return (
         <Paper>
             <Autocomplete
@@ -40,7 +40,8 @@ const Selector = ({ leftIcon, onChange, name, value, options }) => {
                         }}
                     />
                 }
-                popupIcon={< ExpandMoreIcon />}
+                popupIcon={<ExpandMoreIcon />}
+                disableClearable={disableClearable}
             />
         </Paper>
     );

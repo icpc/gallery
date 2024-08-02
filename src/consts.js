@@ -16,8 +16,7 @@ export const getRawPeopleData = async (year) => {
 
 console.log(`Using ${dataFolder} folder for consts.js`);
 console.log(`Loaded \n${JSON.stringify(consts, undefined, 4)}`);
-export const years = consts.years;
-export const places = consts.places;
+export const places = consts.places.map(([year, place, contestName]) => ({ "year": year, "place": place, "contestName": contestName }));
 export const api_key = consts.api_key;
 export const user_id = consts.user_id;
 export const title = consts.title;
@@ -31,7 +30,6 @@ export const SVG_WIDTH = consts.SVG_WIDTH;
 export const SVG_HEIGHT = consts.SVG_HEIGHT;
 export const PER_PAGE = consts.PER_PAGE;
 export const LAST_YEAR = consts.LAST_YEAR;
-export const CONTEST_NAME = consts.CONTEST_NAME;
 export const DEFAULT_EVENT = consts.DEFAULT_EVENT;
 export const FLICKR_IMAGE_PREFIX = consts.FLICKR_IMAGE_PREFIX;
 export const SUGGESTIONS_EMAIL = consts.SUGGESTIONS_EMAIL;

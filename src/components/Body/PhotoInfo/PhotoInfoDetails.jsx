@@ -1,6 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
 
-import { years } from "../../../consts";
+import { places } from "../../../consts";
 import { useAppContext } from "../../AppContext";
 
 import { usePhotoInfo } from "./PhotoInfoContext";
@@ -94,7 +94,7 @@ const AlbumEdit = () => {
         <Autocomplete
             multiple
             freeSolo
-            options={years}
+            options={places.map(({ year }) => year)}
             value={photoInfo.album}
             onChange={(event, newValue) => {
                 setAlbum(newValue);
@@ -262,4 +262,4 @@ const PersonEdit = () => {
     );
 };
 
-export { AlbumEdit, AlbumInfo, EventEdit, EventInfo, PersonEdit,PersonInfo, PhotographerEdit, PhotographerInfo, TeamEdit, TeamInfo };
+export { AlbumEdit, AlbumInfo, EventEdit, EventInfo, PersonEdit, PersonInfo, PhotographerEdit, PhotographerInfo, TeamEdit, TeamInfo };

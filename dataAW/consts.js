@@ -1,12 +1,7 @@
-export const years = [
-    "RC 2023-2024", "2023"
+export const places = [
+    ["RC 2023-2024", "Regional Contests", ""],
+    ["2023", "", ""]
 ];
-export const places =
-    {
-        "RC 2023-2024": "Regional Contests",
-        "2023": ""
-    }
-;
 
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";
@@ -28,5 +23,4 @@ export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
 export const LAST_YEAR = "2023";
-export const CONTEST_NAME = "";
 export const DEFAULT_EVENT = "Photo Tour";

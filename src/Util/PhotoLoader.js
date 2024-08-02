@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 
 import { useAppContext } from "../components/AppContext";
-import { TAG_ALBUM } from "../consts";
+import { places, TAG_ALBUM } from "../consts";
 
 import PhotoService from "./PhotoService";
 import UniqueList from "./UniqueList";
@@ -39,7 +38,7 @@ const usePhotoLoader = () => {
         setAxiosCancelController(new AbortController());
     }, [data.year, data.event, data.text, data.team, data.person]);
 
-    
+
     function appendPhotos(photosByEvent, event, photos) {
         const appendedEventPhotos = [...(photosByEvent.get(event) || []), ...photos];
         return new Map(photosByEvent.set(event, UniqueList(appendedEventPhotos, photo => photo.id)));
@@ -59,9 +58,14 @@ const usePhotoLoader = () => {
         const albumTag = TAG_ALBUM.toLowerCase();
         const tag = tags.split(" ").find(tag => tag.startsWith(albumTag));
         if (tag === undefined) {
-            return null;
+            return "Unknown";
         }
-        return tag.replaceAll(albumTag, "");
+        const targetTag = tag.replaceAll(albumTag, "");
+        const found_tag = places.map(({ year }) => year).find((year) => (year.toLowerCase().replace(/[-_\s]/g, "") === targetTag));
+        if (found_tag === undefined) {
+            return "Unknown";
+        }
+        return found_tag;
     }
 
     /**

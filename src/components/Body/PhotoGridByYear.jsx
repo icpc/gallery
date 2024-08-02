@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 
+import { places } from "../../consts";
+
 import PhotoGrid from "./PhotoGrid";
 
 const PhotoGridByYear = ({ photos, handleClick }) => {
@@ -19,9 +21,21 @@ const PhotoGridByYear = ({ photos, handleClick }) => {
         return <PhotoGrid photos={photos} handleClick={handleClick} />;
     }
 
+
+    const compareYears = (a, b) => {
+        const yearA = a[0];
+        const yearB = b[0];
+        const yearIndex = (targetYear) => places.findIndex(({ year }) => year === targetYear);
+        const indexDiff = yearIndex(yearA) - yearIndex(yearB);
+        if (indexDiff !== 0) {
+            return indexDiff;
+        }
+        return yearA.localeCompare(yearB);
+    };
+
     return (
         <div>
-            {Object.entries(photosByYear).sort().reverse().map(([year, photos]) => (
+            {Object.entries(photosByYear).sort(compareYears).reverse().map(([year, photos]) => (
                 <div key={year}>
                     <h2 className="event-title">{year}</h2>
                     <PhotoGrid photos={photos} handleClick={handleClick} />

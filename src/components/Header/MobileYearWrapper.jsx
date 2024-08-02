@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-import { CONTEST_NAME, places } from "../../consts";
+import { places } from "../../consts";
 import { useAppContext } from "../AppContext";
 
 
@@ -17,10 +17,12 @@ const MobileYearWrapper = () => {
         </Box>;
     }
 
+    const place = places.find(({ year }) => year === data.year);
+
     return (
         <Box onClick={toggleMenu} mt={1} mb={1}>
-            <Typography variant="h4">{CONTEST_NAME} {data.year}</Typography>
-            <Typography variant="h5">{places[data.year]}</Typography>
+            <Typography variant="h4">{place?.contestName} {place?.year}</Typography>
+            <Typography variant="h5">{place?.place}</Typography>
         </Box>
     );
 };

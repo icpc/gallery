@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 
-import { places, years } from "../../consts";
+import { places } from "../../consts";
 import calendarIcon from "../../images/calender.svg";
 import eventIcon from "../../images/event.svg";
 import personIcon from "../../images/person.svg";
@@ -20,8 +20,8 @@ const Filters = () => {
     }
 
     function formatYearOption(a) {
-        return a.map(x => {
-            return { data: x, label: x + " " + places[x] };
+        return a.map(({ year, place }) => {
+            return { data: year, label: year + " " + place };
         });
     }
 
@@ -36,10 +36,10 @@ const Filters = () => {
     return (
         <Stack direction={desktop ? "row" : "column"} spacing={desktop ? 1 : 0.5}>
             {!desktop &&
-                <Selector options={formatYearOption(years)} leftIcon={calendarIcon} name={"Select year"} onChange={selectedItem => {
+                <Selector options={formatYearOption(places)} leftIcon={calendarIcon} name={"Select year"} onChange={selectedItem => {
                     const year = selectedItem.data;
                     setYear(year);
-                }} value={data.year} />}
+                }} value={data.year} disableClearable />}
             <Selector options={formatOptions(events)} name={"Select event"} leftIcon={eventIcon} onChange={selectedItem => {
                 selectItem(selectedItem, setEvent);
             }} value={data.event} />

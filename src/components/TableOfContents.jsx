@@ -1,4 +1,4 @@
-import { CONTEST_NAME, places, years } from "../consts";
+import { places } from "../consts";
 
 import { useAppContext } from "./AppContext";
 
@@ -17,16 +17,16 @@ const TableOfContents = () => {
 
     return (
         <nav aria-label="Table of contents">
-            {years.map(year => {
+            {places.map(({ year, place, contestName }) => {
                 if (year !== data.year) {
                     return <div className="year-wrapper" key={year} onClick={event => handleClick(event, year)}>
                         <div className="year">{year}</div>
-                        <div className="place">{places[year]}</div>
+                        <div className="place">{place}</div>
                     </div>;
                 } else {
                     return <div className="year-wrapper" key={year} title="to top" onClick={event => handleClick(event, year)}>
-                        <div className="year big-year">{CONTEST_NAME} {year}</div>
-                        <div className="place big-place">{places[year]}</div>
+                        <div className="year big-year">{contestName} {year}</div>
+                        <div className="place big-place">{place}</div>
                     </div>;
                 }
             })}
