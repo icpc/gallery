@@ -1,10 +1,7 @@
-
-export const places =
-    [
-        ["RC 2023-2024", "Regional Contests", ""],
-        ["2023", "", ""]
-    ];
-
+export const places = [
+  ["RC 2023-2024", "Regional Contests", ""],
+  ["2023", "", ""],
+];
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";
 export const user_id = "141939107@N06";

@@ -1,25 +1,23 @@
-
 export const places = [
-    ["2024", "NAC, Orlando, FL", ""],
-    ["RC 2023-2024", "Regional Contests", ""],
-    ["2023", "NAC, Orlando, FL", ""],
-    ["RC 2022-2023", "Regional Contests", ""],
-    ["2022", "NAC, Orlando, FL", ""],
-    ["RC 2021-2022", "Regional Contests", ""],
-    ["2021", "NAC, Online", ""],
-    ["2020", "NAC, Atlanta, GA", ""],
-    ["RC 2019-2020", "Contests", ""],
-    ["RC 2018-2019", "Contests", ""],
-    ["RC 2016-2017", "Contests", ""],
-    ["RC 2015-2016", "Contests", ""],
-    ["RC 2014-2015", "Contests", ""],
-    ["2014", "NAIPC", ""],
-    ["RC 2013-2014", "Contests", ""],
-    ["2013", "UCIPC", ""],
-    ["RC 2012-2013", "Contests", ""],
-    ["RC 2011-2012", "Contests", ""]
+  ["2024", "NAC, Orlando, FL", ""],
+  ["RC 2023-2024", "Regional Contests", ""],
+  ["2023", "NAC, Orlando, FL", ""],
+  ["RC 2022-2023", "Regional Contests", ""],
+  ["2022", "NAC, Orlando, FL", ""],
+  ["RC 2021-2022", "Regional Contests", ""],
+  ["2021", "NAC, Online", ""],
+  ["2020", "NAC, Atlanta, GA", ""],
+  ["RC 2019-2020", "Contests", ""],
+  ["RC 2018-2019", "Contests", ""],
+  ["RC 2016-2017", "Contests", ""],
+  ["RC 2015-2016", "Contests", ""],
+  ["RC 2014-2015", "Contests", ""],
+  ["2014", "NAIPC", ""],
+  ["RC 2013-2014", "Contests", ""],
+  ["2013", "UCIPC", ""],
+  ["RC 2012-2013", "Contests", ""],
+  ["RC 2011-2012", "Contests", ""],
 ];
-
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";
 export const user_id = "141939107@N06";

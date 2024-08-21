@@ -9,31 +9,41 @@ import ImageWithFaceSelection from "./ImageWithFaceSelection";
 import "../../styles/Body.css";
 
 const Lightbox = ({
-    photo,
-    handleRotationLeft,
-    handleRotationRight,
-    leftArrow,
-    rightArrow
+  photo,
+  handleRotationLeft,
+  handleRotationRight,
+  leftArrow,
+  rightArrow,
 }) => {
-    const { editMode, face, setFace } = usePhotoInfo();
+  const { editMode, face, setFace } = usePhotoInfo();
 
-    return (
-        <div className="wrapper">
-            <ImageWithFaceSelection key={photo.id} photo={photo} alt={"fullscreen image"} face={face} setFace={setFace}/>
-            {!editMode && <Control />}
-            <PhotoInfoPanel photo={photo} setFace={setFace} />
-            {leftArrow && !editMode && <div className="overlay-arrows_left">
-                <IconButton onClick={handleRotationLeft}>
-                    <ArrowForwardIosIcon style={{ transform: "scale(-1, 1)" }} />
-                </IconButton>
-            </div>}
-            {rightArrow && !editMode && <div className="overlay-arrows_right">
-                <IconButton onClick={handleRotationRight}>
-                    <ArrowForwardIosIcon />
-                </IconButton>
-            </div>}
+  return (
+    <div className="wrapper">
+      <ImageWithFaceSelection
+        key={photo.id}
+        photo={photo}
+        alt={"fullscreen image"}
+        face={face}
+        setFace={setFace}
+      />
+      {!editMode && <Control />}
+      <PhotoInfoPanel photo={photo} setFace={setFace} />
+      {leftArrow && !editMode && (
+        <div className="overlay-arrows_left">
+          <IconButton onClick={handleRotationLeft}>
+            <ArrowForwardIosIcon style={{ transform: "scale(-1, 1)" }} />
+          </IconButton>
         </div>
-    );
+      )}
+      {rightArrow && !editMode && (
+        <div className="overlay-arrows_right">
+          <IconButton onClick={handleRotationRight}>
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Lightbox;

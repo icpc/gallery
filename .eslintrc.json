@@ -1,7 +1,5 @@
 {
-  "ignorePatterns": [
-    "build/**"
-  ],
+  "ignorePatterns": ["build/**"],
   "env": {
     "node": true,
     "browser": true,
@@ -10,7 +8,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:react/jsx-runtime"
+    "plugin:react/jsx-runtime",
+    "plugin:prettier/recommended"
   ],
   "settings": {
     "react": {
@@ -24,74 +23,25 @@
     "ecmaVersion": 2022,
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "simple-import-sort"
-  ],
+  "plugins": ["react", "simple-import-sort"],
   "rules": {
-    "indent": [
-      "error",
-      4
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "double"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
-    "eol-last": [
-      "error",
-      "always"
-    ],
-    "no-case-declarations": "off",
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ],
-    "no-unused-vars": [
-      "warn"
-    ],
-    "react/prop-types": [
-      "off"
-    ],
+    "react/prop-types": ["off"],
     "simple-import-sort/imports": [
       "error",
       {
         "groups": [
           // Packages `react` related packages come first.
-          [
-            "^react",
-            "^@?\\w"
-          ],
+          ["^react", "^@?\\w"],
           // Internal packages.
-          [
-            "^(@|components)(/.*|$)"
-          ],
+          ["^(@|components)(/.*|$)"],
           // Side effect imports.
-          [
-            "^\\u0000"
-          ],
+          ["^\\u0000"],
           // Parent imports. Put `..` last.
-          [
-            "^\\.\\.(?!/?$)",
-            "^\\.\\./?$"
-          ],
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
           // Other relative imports. Put same-folder imports and `.` last.
-          [
-            "^\\./(?=.*/)(?!/?$)",
-            "^\\.(?!/?$)",
-            "^\\./?$"
-          ],
+          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
           // Style imports.
-          [
-            "^.+\\.?(css)$"
-          ]
+          ["^.+\\.?(css)$"]
         ]
       }
     ],

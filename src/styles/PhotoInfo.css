@@ -1,42 +1,41 @@
 @import "theme-variables.css";
 
 .photoInfo {
-    width: 100%;
-    background: var(--opacityBGColor);
-    color: var(--mainColor);
-    position: fixed;
-    bottom: 0;
-    padding: 30px 70px 30px 20px;
-    box-sizing: border-box;
-    text-align: left;
-    transition: 1s;
+  width: 100%;
+  background: var(--opacityBGColor);
+  color: var(--mainColor);
+  position: fixed;
+  bottom: 0;
+  padding: 30px 70px 30px 20px;
+  box-sizing: border-box;
+  text-align: left;
+  transition: 1s;
 }
 
-
 .photoInfo a {
-    color: var(--mainColor);
+  color: var(--mainColor);
 }
 
 .photoInfo a:visited {
-    color: white;
+  color: white;
 }
 
 .icon-button {
-    color: var(--mainColor);
+  color: var(--mainColor);
 }
 
 .icon-button:visited {
-    color: white;
+  color: white;
 }
 
 .control-bottom {
-    right: 0;
-    padding-right: 20px;
-    position: absolute;
-    display: flex;
-    flex-direction: row;
-    bottom: 0;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    cursor: pointer;
+  right: 0;
+  padding-right: 20px;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  bottom: 0;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  cursor: pointer;
 }

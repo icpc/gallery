@@ -14,31 +14,43 @@ import theme from "./theme";
 
 import "./styles/App.css";
 
-
 function App() {
-    const { desktop } = useAppContext();
+  const { desktop } = useAppContext();
 
-    return (
-        <ThemeProvider theme={theme}>
-            <Helmet>
-                <title>{title}</title>
-                <meta name="description" content={description}/>
-            </Helmet>
-            <SnackbarProvider />
-            <CssBaseline />
-            <Grid container columns={10} height="100vh" p={2} pb={0} spacing={1}>
-                {desktop &&
-                    <Grid item xs={2} display="flex" flexDirection="column" justifyContent="space-between">
-                        <DesktopLogo />
-                        <Sidebar />
-                    </Grid>}
-                <Grid item xs display="flex" flexDirection="column" justifyContent="space-between">
-                    <Header />
-                    <Body />
-                </Grid>
-            </Grid>
-        </ThemeProvider>
-    );
+  return (
+    <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+      </Helmet>
+      <SnackbarProvider />
+      <CssBaseline />
+      <Grid container columns={10} height="100vh" p={2} pb={0} spacing={1}>
+        {desktop && (
+          <Grid
+            item
+            xs={2}
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+          >
+            <DesktopLogo />
+            <Sidebar />
+          </Grid>
+        )}
+        <Grid
+          item
+          xs
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <Header />
+          <Body />
+        </Grid>
+      </Grid>
+    </ThemeProvider>
+  );
 }
 
 export default App;

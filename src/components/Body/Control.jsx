@@ -6,23 +6,29 @@ import { IconButton } from "@mui/material";
 import { useAppContext } from "../AppContext";
 
 const Control = () => {
-    const { setFullscreenPhotoId, isSlideShow, setIsSlideShow } = useAppContext();
+  const { setFullscreenPhotoId, isSlideShow, setIsSlideShow } = useAppContext();
 
-    const slideShow = () => {
-        setIsSlideShow(!isSlideShow);
-    };
+  const slideShow = () => {
+    setIsSlideShow(!isSlideShow);
+  };
 
-    return (
-        <div className="control">
-            <IconButton className="dismiss" onClick={() => slideShow()}>
-                {isSlideShow ? <PauseIcon className="icon-button" fontSize="large" /> :
-                    <PlayArrowIcon className="icon-button" fontSize="large" />}
-            </IconButton>
-            <IconButton className="dismiss" onClick={() => setFullscreenPhotoId(null)}>
-                <CloseIcon className="icon-button" fontSize="large" />
-            </IconButton>
-        </div>
-    );
+  return (
+    <div className="control">
+      <IconButton className="dismiss" onClick={() => slideShow()}>
+        {isSlideShow ? (
+          <PauseIcon className="icon-button" fontSize="large" />
+        ) : (
+          <PlayArrowIcon className="icon-button" fontSize="large" />
+        )}
+      </IconButton>
+      <IconButton
+        className="dismiss"
+        onClick={() => setFullscreenPhotoId(null)}
+      >
+        <CloseIcon className="icon-button" fontSize="large" />
+      </IconButton>
+    </div>
+  );
 };
 
 export default Control;

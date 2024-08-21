@@ -1,8 +1,7 @@
 export const places = [
-    ["2024", "EUC, Prague", ""],
-    ["RC 2023-2024", "Regional Contests", ""]
+  ["2024", "EUC, Prague", ""],
+  ["RC 2023-2024", "Regional Contests", ""],
 ];
-
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";
 export const user_id = "141939107@N06";

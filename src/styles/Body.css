@@ -1,211 +1,207 @@
 @import "./theme-variables.css";
 
 .body {
-    height: calc(100vh - 150px);
-    gap: 2em;
-    overflow: auto;
-    border-radius: 8px;
+  height: calc(100vh - 150px);
+  gap: 2em;
+  overflow: auto;
+  border-radius: 8px;
 }
 
 .body .control {
-    background: var(--opacityBGColor);
-    position: fixed;
-    top: 40px;
-    right: 40px;
-    cursor: pointer;
+  background: var(--opacityBGColor);
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  cursor: pointer;
 }
 
 .body::-webkit-scrollbar {
-    width: 10px;
-    border-radius: 3px;
+  width: 10px;
+  border-radius: 3px;
 }
 
 .body::-webkit-scrollbar-track {
-    background-color: var(--additionalBGColor);
+  background-color: var(--additionalBGColor);
 }
 
 .body::-webkit-scrollbar-thumb {
-    background-color: var(--mainBGColor);
-    outline: 1px solid var(--additionalColor);
-    border-radius: 3px;
+  background-color: var(--mainBGColor);
+  outline: 1px solid var(--additionalColor);
+  border-radius: 3px;
 }
 
 .masonry {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 3px;
-    width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 3px;
+  width: 100%;
 }
 
-
 .body .preview {
-    object-fit: cover;
-    object-position: top;
-    width: 100%;
+  object-fit: cover;
+  object-position: top;
+  width: 100%;
 
-    border-radius: 8px;
-    height: 100%;
+  border-radius: 8px;
+  height: 100%;
 }
 
 .body .download {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 @media (min-width: 900px) {
-    .masonry-brick {
-        flex: auto;
-        cursor: pointer;
-        height: 300px;
-        min-width: min(150px, 30%);
-        max-width: 35%;
-        margin: 0 0 3px 0;
-        /* Some gutter */
-    }
+  .masonry-brick {
+    flex: auto;
+    cursor: pointer;
+    height: 300px;
+    min-width: min(150px, 30%);
+    max-width: 35%;
+    margin: 0 0 3px 0;
+    /* Some gutter */
+  }
 
-    .masonry-brick:nth-child(7n+1) {
-        width: 33%;
+  .masonry-brick:nth-child(7n + 1) {
+    width: 33%;
+  }
 
-    }
+  .masonry-brick:nth-child(7n + 2) {
+    width: 33%;
+  }
 
-    .masonry-brick:nth-child(7n+2) {
-        width: 33%;
-    }
+  .masonry-brick:nth-child(7n + 3) {
+    width: 33%;
+  }
 
-    .masonry-brick:nth-child(7n+3) {
-        width: 33%;
-    }
+  .masonry-brick:nth-child(7n + 4) {
+    width: 25%;
+  }
 
-    .masonry-brick:nth-child(7n+4) {
-        width: 25%;
-    }
+  .masonry-brick:nth-child(7n + 5) {
+    width: 25%;
+  }
 
-    .masonry-brick:nth-child(7n+5) {
-        width: 25%;
-    }
+  .masonry-brick:nth-child(7n + 6) {
+    width: 25%;
+  }
 
-    .masonry-brick:nth-child(7n+6) {
-        width: 25%;
-    }
-
-    .masonry-brick:nth-child(7n+7) {
-        width: 24%;
-    }
+  .masonry-brick:nth-child(7n + 7) {
+    width: 24%;
+  }
 }
 
 @media (max-width: 900px) {
-    .masonry-brick {
-        flex: auto;
-        cursor: pointer;
-        min-width: min(150px, 30%);
-        margin: 0 0 3px 0;
-        /* Some gutter */
-    }
+  .masonry-brick {
+    flex: auto;
+    cursor: pointer;
+    min-width: min(150px, 30%);
+    margin: 0 0 3px 0;
+    /* Some gutter */
+  }
 
-    .masonry-brick:nth-child(3n+1) {
-        width: 45%;
+  .masonry-brick:nth-child(3n + 1) {
+    width: 45%;
+  }
 
-    }
+  .masonry-brick:nth-child(3n + 2) {
+    width: 45%;
+  }
 
-    .masonry-brick:nth-child(3n+2) {
-        width: 45%;
-    }
-
-    .masonry-brick:nth-child(3n+3) {
-        width: 90%;
-    }
+  .masonry-brick:nth-child(3n + 3) {
+    width: 90%;
+  }
 }
 
 .body .wrapper {
-    display: flex;
-    align-items: center;
-    position: relative;
-    justify-content: center;
-    margin: auto;
-
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  margin: auto;
 }
 
 .body .face {
-    position: absolute;
+  position: absolute;
 }
 
 .overlay {
-    z-index: 100;
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--opacityBGColor);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--opacityBGColor);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .overlay .img-container {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .overlay .full {
-    max-width: 100%;
-    max-height: 100%;
-    height: auto;
-    object-fit: contain;
-    display: block;
-    box-shadow: 3px 5px 7px var(--opacityBGColor);
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  box-shadow: 3px 5px 7px var(--opacityBGColor);
 }
 
-.overlay>span {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 30px;
-    color: var(--mainColor);
-    z-index: 999;
-    cursor: pointer;
+.overlay > span {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 30px;
+  color: var(--mainColor);
+  z-index: 999;
+  cursor: pointer;
 }
 
 .overlay-arrows_left {
-    cursor: pointer;
-    display: flex;
-    background: var(--opacityBGColor);
-    justify-content: center;
-    position: absolute;
-    top: 50%;
-    width: 50px;
-    height: 50px;
-    left: 0;
-    z-index: 999;
+  cursor: pointer;
+  display: flex;
+  background: var(--opacityBGColor);
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  left: 0;
+  z-index: 999;
 }
 
 .overlay-arrows_left svg {
-    width: 50px;
-    height: 50px;
+  width: 50px;
+  height: 50px;
 }
 
 .overlay-arrows_right svg {
-    width: 50px;
-    height: 50px;
+  width: 50px;
+  height: 50px;
 }
 
 .overlay-arrows_right {
-    cursor: pointer;
-    display: flex;
-    background: var(--opacityBGColor);
-    justify-content: center;
-    position: absolute;
-    right: 0;
-    width: 50px;
-    height: 50px;
-    top: 50%;
-    z-index: 999;
+  cursor: pointer;
+  display: flex;
+  background: var(--opacityBGColor);
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  top: 50%;
+  z-index: 999;
 }
 
 .photo-list-message {
-    font-size: 2rem;
-    margin-top: 2rem;
+  font-size: 2rem;
+  margin-top: 2rem;
 }

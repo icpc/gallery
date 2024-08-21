@@ -6,28 +6,39 @@ import Slideshow from "./Slideshow";
 import "../../styles/Body.css";
 
 const MyModal = ({
-    photo,
-    handleRotationLeft,
-    handleRotationRight,
-    leftArrow,
-    rightArrow
+  photo,
+  handleRotationLeft,
+  handleRotationRight,
+  leftArrow,
+  rightArrow,
 }) => {
-    const { setFullscreenPhotoId, isSlideShow } = useAppContext();
+  const { setFullscreenPhotoId, isSlideShow } = useAppContext();
 
-    const handleClick = (e) => {
-        if (e.target.classList.contains("dismiss")) {
-            setFullscreenPhotoId(null);
-        }
-    };
+  const handleClick = (e) => {
+    if (e.target.classList.contains("dismiss")) {
+      setFullscreenPhotoId(null);
+    }
+  };
 
-    return (
-        <div className="overlay dismiss" onClick={handleClick} style={{ backgroundColor: isSlideShow ? "black" : "" }}>
-            {isSlideShow
-                ? <Slideshow photo={photo} handleRotationRight={handleRotationRight} />
-                : <Lightbox photo={photo} handleRotationRight={handleRotationRight} handleRotationLeft={handleRotationLeft}
-                    leftArrow={leftArrow} rightArrow={rightArrow} />}
-        </div>
-    );
+  return (
+    <div
+      className="overlay dismiss"
+      onClick={handleClick}
+      style={{ backgroundColor: isSlideShow ? "black" : "" }}
+    >
+      {isSlideShow ? (
+        <Slideshow photo={photo} handleRotationRight={handleRotationRight} />
+      ) : (
+        <Lightbox
+          photo={photo}
+          handleRotationRight={handleRotationRight}
+          handleRotationLeft={handleRotationLeft}
+          leftArrow={leftArrow}
+          rightArrow={rightArrow}
+        />
+      )}
+    </div>
+  );
 };
 
 export default MyModal;

@@ -1,9 +1,9 @@
 :root {
-    --mainBGColor: #1A1A1A;
-    --mainColor: white;
-    --additionalColor: #8A8A8A;
-    --opacityBGColor: rgba(27, 27, 27, 0.5);
-    --additionalBGColor: #2E2E2E;
-    --colorRectangle: yellow;
-    --borderRectangle: yellow;
+  --mainBGColor: #1a1a1a;
+  --mainColor: white;
+  --additionalColor: #8a8a8a;
+  --opacityBGColor: rgba(27, 27, 27, 0.5);
+  --additionalBGColor: #2e2e2e;
+  --colorRectangle: yellow;
+  --borderRectangle: yellow;
 }

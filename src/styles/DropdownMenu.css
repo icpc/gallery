@@ -1,23 +1,21 @@
 @media (max-width: 900px) {
-    .header-input-wrapper {
-        display: none;
-        width: 100%;
-        right: 0;
-        flex-flow: column wrap;
-        background: var(--opacityBGColor);
-    }
+  .header-input-wrapper {
+    display: none;
+    width: 100%;
+    right: 0;
+    flex-flow: column wrap;
+    background: var(--opacityBGColor);
+  }
 
-    .search {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
+  .search {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 
-
-    .button {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        z-index: 1;
-    }
-
+  .button {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    z-index: 1;
+  }
 }

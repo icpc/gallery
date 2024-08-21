@@ -1,66 +1,62 @@
 @import "theme-variables.css";
 nav {
+  direction: rtl;
+  position: -webkit-sticky; /* For Safari */
+  top: 24px; /* How far down the page you want your ToC to live */
 
-    direction: rtl;
-    position: -webkit-sticky; /* For Safari */
-    top: 24px; /* How far down the page you want your ToC to live */
-
-    /* Give table of contents a scrollbar */
-    height: calc(100vh - 150px);
-    overflow: auto;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 21px;
-    line-height: 24px;
+  /* Give table of contents a scrollbar */
+  height: calc(100vh - 150px);
+  overflow: auto;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 24px;
 }
 
 nav::-webkit-scrollbar {
-    width: 10px;
-    border-radius: 3px;
+  width: 10px;
+  border-radius: 3px;
 }
 
 nav::-webkit-scrollbar-track {
-    background-color: var(--additionalBGColor);
-    border-radius: 3px;
+  background-color: var(--additionalBGColor);
+  border-radius: 3px;
 }
 
 nav::-webkit-scrollbar-thumb {
-    background-color: var(--mainBGColor);
-    outline: 1px solid var(--additionalColor);
-    border-radius: 3px;
+  background-color: var(--mainBGColor);
+  outline: 1px solid var(--additionalColor);
+  border-radius: 3px;
 }
 
 .year-wrapper {
-    direction: ltr;
-    padding-top: 20px;
-    padding-left: 20px;
-    cursor: pointer;
+  direction: ltr;
+  padding-top: 20px;
+  padding-left: 20px;
+  cursor: pointer;
 }
 
 @media (min-width: 900px) {
+  .year {
+    color: var(--mainColor);
+    font-size: 1.4rem;
+  }
 
-    .year {
-        color: var(--mainColor);
-        font-size: 1.4rem;
-    }
+  .place {
+    color: var(--additionalColor);
+    font-size: 1.2rem;
+  }
 
-    .place {
-        color: var(--additionalColor);
-        font-size: 1.2rem;
+  .big-year {
+    line-height: 42px;
+    font-size: 1.7rem;
+    margin-top: 10px;
+  }
 
-    }
-
-    .big-year {
-        line-height: 42px;
-        font-size: 1.7rem;
-        margin-top: 10px;
-    }
-
-
-    .big-place {
-        line-height: 32px;
-        font-size: 1.4rem;
-        margin-top: 10px;
-        /*word-break: break-all;*/
-    }
+  .big-place {
+    line-height: 32px;
+    font-size: 1.4rem;
+    margin-top: 10px;
+    /*word-break: break-all;*/
+  }
 }

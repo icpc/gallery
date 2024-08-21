@@ -8,31 +8,37 @@ import { MobileLogo } from "../Logo";
 import Filters from "./Filters";
 import MobileYearWrappper from "./MobileYearWrapper";
 
-
 const Header = () => {
-    const { isOpenMenu, setIsOpenMenu, mobile } = useAppContext();
+  const { isOpenMenu, setIsOpenMenu, mobile } = useAppContext();
 
-    const toggleMenu = () => {
-        setIsOpenMenu(!isOpenMenu);
-    };
+  const toggleMenu = () => {
+    setIsOpenMenu(!isOpenMenu);
+  };
 
-    return (
-        <Stack sx={{ flexGrow: 1 }} justifyContent="center">
-            {mobile &&
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <MobileLogo />
-                    <IconButton onClick={toggleMenu}>
-                        {!isOpenMenu ? <MenuIcon fontSize="large" />
-                            : <CloseIcon fontSize="large" />}
-                    </IconButton>
-                </Stack>
-            }
-            <Collapse in={isOpenMenu} width="1">
-                <Filters />
-            </Collapse>
-            {mobile && <MobileYearWrappper />}
+  return (
+    <Stack sx={{ flexGrow: 1 }} justifyContent="center">
+      {mobile && (
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <MobileLogo />
+          <IconButton onClick={toggleMenu}>
+            {!isOpenMenu ? (
+              <MenuIcon fontSize="large" />
+            ) : (
+              <CloseIcon fontSize="large" />
+            )}
+          </IconButton>
         </Stack>
-    );
+      )}
+      <Collapse in={isOpenMenu} width="1">
+        <Filters />
+      </Collapse>
+      {mobile && <MobileYearWrappper />}
+    </Stack>
+  );
 };
 
 export default Header;

@@ -3,7 +3,7 @@ name: Publish GitHub Pages
 on:
   push:
     branches:
-      - 'main'
+      - "main"
 
 jobs:
   build:
@@ -41,13 +41,12 @@ jobs:
             data_folder: dataACPC
             folder: acpc
 
-    
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '16'
-          cache: 'npm'
+          node-version: "16"
+          cache: "npm"
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Build
@@ -89,7 +88,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     permissions: write-all
-    steps:    
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

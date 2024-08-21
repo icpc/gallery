@@ -1,7 +1,6 @@
 @import "./theme-variables.css";
 * {
-    font-family: "helvetica", "Urbanist", serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: "helvetica", "Urbanist", serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-
