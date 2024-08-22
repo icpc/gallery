@@ -1,10 +1,10 @@
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { IconButton } from "@mui/material";
 
-import { usePhotoInfo } from "./PhotoInfo/PhotoInfoContext";
-import PhotoInfoPanel from "./PhotoInfo/PhotoInfoPanel";
 import Control from "./Control";
 import ImageWithFaceSelection from "./ImageWithFaceSelection";
+import { usePhotoInfo } from "./PhotoInfo/PhotoInfoContext";
+import PhotoInfoPanel from "./PhotoInfo/PhotoInfoPanel";
 
 import "../../styles/Body.css";
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import Close from "@mui/icons-material/Close";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -10,8 +11,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Box, Grid, IconButton, Stack, Tooltip } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 
-import { FLICKR_IMAGE_PREFIX, SUGGESTIONS_EMAIL } from "../../../consts";
 import { SerializePhotoInfo } from "../../../Util/PhotoInfoHelper";
+import { FLICKR_IMAGE_PREFIX, SUGGESTIONS_EMAIL } from "../../../consts";
 import { useAppContext } from "../../AppContext";
 
 import { usePhotoInfo } from "./PhotoInfoContext";

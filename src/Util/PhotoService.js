@@ -1,11 +1,11 @@
 import axios from "axios";
 
 import {
-  api_key,
   PER_PAGE,
   TAG_ALBUM,
   TAG_EVENT,
   TAG_TEAM,
+  api_key,
   user_id,
 } from "../consts";
 

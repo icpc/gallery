@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
 import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+
 import {
   Autocomplete,
   Box,
-  createFilterOptions,
   Paper,
   TextField,
+  createFilterOptions,
 } from "@mui/material";
 
 import { getPeopleData } from "../../Util/DataLoader";
 import { useAppContext } from "../AppContext";
 
-import { usePhotoInfo } from "./PhotoInfo/PhotoInfoContext";
 import FaceDiv from "./FaceDiv";
+import { usePhotoInfo } from "./PhotoInfo/PhotoInfoContext";
 
 import "../../styles/Body.css";
-import "react-image-crop/dist/ReactCrop.css";
 
 const ImageWithFaceSelection = ({ photo, alt = "", face, setFace }) => {
   const { data } = useAppContext();

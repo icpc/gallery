@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
+
 import { Box, Typography } from "@mui/material";
 
-import "../../consts";
-
 import usePhotoLoader from "../../Util/PhotoLoader";
+import "../../consts";
 import { useAppContext } from "../AppContext";
 
 import MyModal from "./MyModal";

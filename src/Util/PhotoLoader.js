@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useAppContext } from "../components/AppContext";
-import { places, TAG_ALBUM } from "../consts";
+import { TAG_ALBUM, places } from "../consts";
 
 import PhotoService from "./PhotoService";
 import UniqueList from "./UniqueList";

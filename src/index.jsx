@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
+import App from "./App";
 import { AppContextProvider } from "./components/AppContext";
 import { PhotoInfoProvider } from "./components/Body/PhotoInfo/PhotoInfoContext";
-import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

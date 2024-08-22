@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-import "../../styles/theme-variables.css";
 import "../../styles/FaceDiv.css";
+import "../../styles/theme-variables.css";
 
 const Rectangle = styled.fieldset`
   top: ${(props) => props.top * 100 + "%"};

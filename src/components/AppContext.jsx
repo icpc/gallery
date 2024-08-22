@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { DEFAULT_EVENT, LAST_YEAR } from "../consts";
 import { getEventData, getPeopleData, getTeamData } from "../Util/DataLoader";
+import { DEFAULT_EVENT, LAST_YEAR } from "../consts";
 
 /**
  * Data for the entire app.

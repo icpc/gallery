@@ -1,0 +1,15 @@
+tabWidth: 2
+importOrder:
+  # Packages `react` related packages come first.
+  - "^react"
+  - "^@?\\w"
+  # Relative imports one directory up, excluding styles
+  - "^(\\.\\./)(?!.*\\.css).*"
+  # Relative imports in the same directory, excluding styles
+  - "^(\\.\\/)(?!.*\\.css).*"
+  # Style imports.
+  - "^.*(.css)$"
+importOrderSeparation: true
+importOrderSortSpecifiers: true
+plugins:
+  - "@trivago/prettier-plugin-sort-imports"

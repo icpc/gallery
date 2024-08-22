@@ -28,12 +28,6 @@
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "format": "prettier . --write"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -47,13 +41,14 @@
     ]
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-styled-components": "^2.0.7",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "prettier": "^3.3.3",
     "vite": "^5.0.11"
   }
 }
