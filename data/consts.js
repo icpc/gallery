@@ -1,4 +1,5 @@
 export const places = [
+  ["2024", "Astana, Kazakhstan", "World Finals"],
   ["2023", "Luxor, Egypt, 47th", "World Finals"],
   ["2022", "Luxor, Egypt, 46th", "World Finals"],
   ["2021", "Dhaka, Bangladesh", "World Finals"],
@@ -43,5 +44,5 @@ export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
-export const LAST_YEAR = "2023";
+export const LAST_YEAR = "2024";
 export const DEFAULT_EVENT = "Photo Tour";
