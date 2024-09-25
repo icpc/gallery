@@ -1,6 +1,8 @@
 export const places = [
+  ["2024", "LAC", "Guadalajara, Mexico"],
   ["RC 2023-2024", "Regional Contests", ""],
-  ["2023", "", ""],
+  ["2023", "LAC", "Chapeco, Brazil"],
+  ["2022", "LAC", "Campo Grande, Brazil"],
 ];
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";
