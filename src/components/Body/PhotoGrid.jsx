@@ -8,6 +8,7 @@ export default function PhotoGrid({ photos, handleClick }) {
               className="preview"
               src={photo?.url_preview}
               alt={photo.url_preview}
+              loading="lazy" 
               onClick={() => handleClick(photo.id)}
             />
           </figure>
