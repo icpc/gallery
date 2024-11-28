@@ -1,4 +1,5 @@
 export const places = [
+  ["RC 2024-2025", "Regional Contests", ""],
   ["2024", "EUC, Prague", ""],
   ["RC 2023-2024", "Regional Contests", ""],
 ];
