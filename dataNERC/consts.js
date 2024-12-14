@@ -1,4 +1,5 @@
 export const places = [
+  ["2024", "SPb, Novosibirsk, Astana, Tbilisi", ""],
   ["RC 2024-2025", "Regional Contests", ""],
   ["2023", "SPb, Novosibirsk, Astana, Kutaisi", ""],
   ["RC 2023-2024", "Regional Contests", ""],
@@ -39,5 +40,5 @@ export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
-export const LAST_YEAR = "2023";
+export const LAST_YEAR = "2024";
 export const DEFAULT_EVENT = "Photo Tour";
