@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { ParsePhotoInfo } from "../../../Util/PhotoInfoHelper";
-import PhotoService from "../../../Util/PhotoService";
+import { getPhotoInfo } from "../../../Util/PhotoService";
 import { useAppContext } from "../../AppContext";
 
 const PhotoInfoContext = createContext(null);
@@ -18,7 +18,7 @@ const PhotoInfoProvider = ({ children }) => {
     if (fullscreenPhotoId === null) {
       return;
     }
-    PhotoService.getPhotoInfo(fullscreenPhotoId).then((response) => {
+    getPhotoInfo(fullscreenPhotoId).then((response) => {
       const tags = response.data?.photo?.tags?.tag?.map((tag) => tag.raw);
       const description = response.data?.photo?.description._content;
       const newPhotoInfo = ParsePhotoInfo(tags, description);

@@ -3,7 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useAppContext } from "../components/AppContext";
 import { TAG_ALBUM, places } from "../consts";
 
-import PhotoService from "./PhotoService";
+import {
+  getAllWithEvent,
+  getAllWithPerson,
+  getAllWithTeam,
+  getAllWithText,
+} from "./PhotoService";
 import UniqueList from "./UniqueList";
 
 /**
@@ -121,32 +126,18 @@ const usePhotoLoader = () => {
     try {
       let response;
       if (internalEvent) {
-        response = await PhotoService.getAllWithEvent(
+        response = await getAllWithEvent(
           data.year,
-          encodeURIComponent(internalEvent),
+          internalEvent,
           page,
           config,
         );
       } else if (data.team) {
-        response = await PhotoService.getAllWithTeam(
-          data.year,
-          encodeURIComponent(data.team),
-          page,
-          config,
-        );
+        response = await getAllWithTeam(data.year, data.team, page, config);
       } else if (data.person) {
-        response = await PhotoService.getAllWithPerson(
-          data.year,
-          encodeURIComponent(data.person),
-          page,
-          config,
-        );
+        response = await getAllWithPerson(data.year, data.person, page, config);
       } else if (data.text) {
-        response = await PhotoService.getAllWithText(
-          encodeURIComponent(data.text),
-          page,
-          config,
-        );
+        response = await getAllWithText(data.text, page, config);
       }
 
       if (response) {
