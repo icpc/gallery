@@ -5,6 +5,7 @@
   "dependencies": {
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.0",
+    "@types/react": "^18.3.18",
     "axios": "^1.6.5",
     "lightbox2": "^2.11.3",
     "notistack": "^3.0.1",
@@ -19,6 +20,8 @@
     "react-select-search": "^3.0.10",
     "react-transition-group": "^4.4.2",
     "styled-components": "^6.1.8",
+    "ts-migrate": "^0.1.35",
+    "typescript": "^5.7.2",
     "vite-raw-plugin": "^1.0.2"
   },
   "scripts": {
