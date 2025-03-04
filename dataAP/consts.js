@@ -22,5 +22,5 @@ export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
-export const LAST_YEAR = "2024";
+export const LAST_YEAR = "2025";
 export const DEFAULT_EVENT = "Photo Tour";
