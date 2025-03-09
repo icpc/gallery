@@ -1,6 +1,7 @@
 export const places = [
+  ["2025", "EUC, Portu, Portugal", ""],
   ["RC 2024-2025", "Regional Contests", ""],
-  ["2024", "EUC, Prague", ""],
+  ["2024", "EUC, Prague, Czechia", ""],
   ["RC 2023-2024", "Regional Contests", ""],
 ];
 
@@ -22,5 +23,5 @@ export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
 export const PER_PAGE = 25;
-export const LAST_YEAR = "2024";
+export const LAST_YEAR = "2025";
 export const DEFAULT_EVENT = "Photo Tour";
