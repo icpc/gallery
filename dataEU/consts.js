@@ -3,6 +3,8 @@ export const places = [
   ["RC 2024-2025", "Regional Contests", ""],
   ["2024", "EUC, Prague, Czechia", ""],
   ["RC 2023-2024", "Regional Contests", ""],
+  ["RC 2022-2023", "Regional Contests", ""],
+  ["RC 2021-2022", "Regional Contests", ""]
 ];
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";
