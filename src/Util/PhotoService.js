@@ -26,7 +26,7 @@ function buildSearchUrl(tags = [], page = 1, text = "") {
     tag_mode: "all",
     page,
     sort: "date-taken-desc",
-    per_page: 25,
+    per_page: 100,
     extras,
     format: "json",
     nojsoncallback: "?",
