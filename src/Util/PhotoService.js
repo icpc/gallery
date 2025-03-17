@@ -1,7 +1,6 @@
 import axios from "axios";
 
 import {
-  PER_PAGE,
   TAG_ALBUM,
   TAG_EVENT,
   TAG_TEAM,
@@ -27,7 +26,7 @@ function buildSearchUrl(tags = [], page = 1, text = "") {
     tag_mode: "all",
     page,
     sort: "date-taken-desc",
-    per_page: PER_PAGE,
+    per_page: 25,
     extras,
     format: "json",
     nojsoncallback: "?",

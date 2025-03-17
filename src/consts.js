@@ -32,7 +32,6 @@ export const TAG_PERSON = consts.TAG_PERSON;
 export const TAG_PHOTOGRAPHER = consts.TAG_PHOTOGRAPHER;
 export const SVG_WIDTH = consts.SVG_WIDTH;
 export const SVG_HEIGHT = consts.SVG_HEIGHT;
-export const PER_PAGE = consts.PER_PAGE;
 export const LAST_YEAR = consts.LAST_YEAR;
 export const DEFAULT_EVENT = consts.DEFAULT_EVENT;
 export const FLICKR_IMAGE_PREFIX = consts.FLICKR_IMAGE_PREFIX;
