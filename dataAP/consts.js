@@ -1,6 +1,6 @@
 export const places = [
-  ["2025", "Asia Pacific Championship", "Singapore"],
-  ["2024", "Asia Pacific Championship", "Hanoi, Vietnam"],
+  ["2025", "Asia Pacific Championship", "Singapore", 8734],
+  ["2024", "Asia Pacific Championship", "Hanoi, Vietnam", 8633],
   ["RC 2023-2024", "Regional Contests", ""],
 ];
 

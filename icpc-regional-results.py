@@ -26,7 +26,8 @@ def calculate_uni_teams(contest_id):
         print ("", file=f_uni)
         for uni in sorted(universities):
             print (uni, file=f_uni)
-
+        if len (universities) == len (teams):
+            print ("UNIQUE", file=f_uni)
 
 if __name__ == "__main__":
   
