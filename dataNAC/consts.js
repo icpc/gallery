@@ -1,4 +1,5 @@
 export const places = [
+  ["2025", "Orlando, FL", "North America Championship", 0000],
   ["RC 2024-2025", "Regional Contests", ""],
   ["2024", "Orlando, FL", "North America Championship", 7447],
   ["RC 2023-2024", "Regional Contests", ""],
@@ -37,5 +38,5 @@ export const TAG_PHOTOGRAPHER = "photographer";
 export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
-export const LAST_YEAR = "2024";
+export const LAST_YEAR = "2025";
 export const DEFAULT_EVENT = "Photo Tour";
