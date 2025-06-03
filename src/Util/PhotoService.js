@@ -1,12 +1,6 @@
 import axios from "axios";
 
-import {
-  TAG_ALBUM,
-  TAG_EVENT,
-  TAG_TEAM,
-  api_key,
-  user_id,
-} from "../consts";
+import { TAG_ALBUM, TAG_EVENT, TAG_TEAM, api_key, user_id } from "../consts";
 
 const extras =
   "tags,machine_tags,url_m,url_c,url_l,url_o,description,date_upload,date_taken";
