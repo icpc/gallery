@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import { TAG_ALBUM, TAG_EVENT, TAG_TEAM, api_key, user_id } from "../consts";
 
 const extras =
@@ -51,9 +49,21 @@ function buildPhotoInfoUrl(id) {
   return buildQuery(params);
 }
 
+// Refactored fetchData to use fetch instead of axios
 async function fetchData(url, config = {}) {
   try {
-    return await axios.get(url, config);
+    const fetchConfig = {};
+    if (config.signal) {
+      fetchConfig.signal = config.signal;
+    }
+    const response = await fetch(url, fetchConfig);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    // Flickr returns JSONP if nojsoncallback is not set properly, but we use '?', so parse as JSON
+    const data = await response.json();
+    // Mimic axios response structure for compatibility
+    return { data };
   } catch (e) {
     console.log(e);
   }
