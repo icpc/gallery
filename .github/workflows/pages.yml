@@ -50,7 +50,7 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Build
-        run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} ./build.sh
+        run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} MODE=staging ./build.sh
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
