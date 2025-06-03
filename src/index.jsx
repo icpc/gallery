@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import LogRocket from "logrocket";
+import setupLogRocketReact from "logrocket-react";
 
 import App from "./App";
 import { AppContextProvider } from "./components/AppContext";
@@ -20,6 +21,7 @@ function logRocketId() {
 }
 
 LogRocket.init(logRocketId());
+setupLogRocketReact(LogRocket);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
