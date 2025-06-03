@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useAppContext } from "../components/AppContext";
 import { TAG_ALBUM, places } from "../consts";
@@ -31,17 +31,30 @@ const usePhotoLoader = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [internalEvent, setInternalEvent] = useState(undefined);
   const [fetching, setFetching] = useState(false);
-  const [axiosCancelController, setAxiosCancelController] = useState(
-    new AbortController(),
-  );
+  const abortControllerRef = useRef();
+
+  // Add a ref to track if the component is mounted
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
-    axiosCancelController.abort();
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
     setPhotosByEvent(new Map());
     setPage(1);
     setInternalEvent(data.event);
     setTotalPages(1);
-    setAxiosCancelController(new AbortController());
   }, [data.year, data.event, data.text, data.team, data.person]);
 
   function appendPhotos(photosByEvent, event, photos) {
@@ -119,8 +132,11 @@ const usePhotoLoader = () => {
       return;
     }
 
+    // Always use a fresh controller for each request
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
     const config = {
-      signal: axiosCancelController.signal,
+      signal: controller.signal,
     };
 
     try {
@@ -140,7 +156,7 @@ const usePhotoLoader = () => {
         response = await getAllWithText(data.text, page, config);
       }
 
-      if (response) {
+      if (response && isMountedRef.current) {
         const newPhotosByEvent = appendPhotos(
           photosByEvent,
           internalEvent,
@@ -168,11 +184,10 @@ const usePhotoLoader = () => {
         );
         setTotalPages(response.data.photos.pages);
         setPage(page + 1);
-
         setPhotosByEvent(newPhotosByEvent);
       }
     } finally {
-      setFetching(false);
+      if (isMountedRef.current) setFetching(false);
     }
   };
 
