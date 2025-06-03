@@ -2,9 +2,24 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
+import LogRocket from "logrocket";
+
 import App from "./App";
 import { AppContextProvider } from "./components/AppContext";
 import { PhotoInfoProvider } from "./components/Body/PhotoInfo/PhotoInfoContext";
+
+function logRocketId() {
+  const env = import.meta.env.MODE || "development";
+  if (env === "production") {
+    return "0y4ijo/icpc-gallery-prod";
+  } else if (env === "staging") {
+    return "0y4ijo/icpc-gallery-staging";
+  } else {
+    return "0y4ijo/icpc-gallery-dev";
+  }
+}
+
+LogRocket.init(logRocketId());
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
