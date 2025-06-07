@@ -1,20 +1,29 @@
+import { FC, ReactNode } from "react";
+
 import { Autocomplete, TextField } from "@mui/material";
 
 import { places } from "../../../consts";
+import { Person } from "../../../types";
 import { useAppContext } from "../../AppContext";
 
 import { usePhotoInfo } from "./PhotoInfoContext";
 
-const ComaSeparated = (list) => {
-  return list.map((item, index) => [index > 0 && ", ", item]);
+const ComaSeparated = (
+  list: (ReactNode | string)[],
+): (ReactNode | string | boolean)[] => {
+  return list.map((item, index) => [index > 0 && ", ", item]).flat();
 };
 
 // TODO: Unify
 
-const PhotographerInfo = () => {
+const PhotographerInfo: FC = () => {
   const { photoInfo } = usePhotoInfo();
 
-  if (!photoInfo || photoInfo.photographer.length === 0) {
+  if (
+    !photoInfo ||
+    !photoInfo.photographer ||
+    photoInfo.photographer.length === 0
+  ) {
     return null;
   }
 
@@ -25,7 +34,7 @@ const PhotographerInfo = () => {
   return <div>Photographer: {ComaSeparated(photographer)}</div>;
 };
 
-const PhotographerEdit = () => {
+const PhotographerEdit: FC = () => {
   const { photoInfo, setPhotographer } = usePhotoInfo();
 
   if (!photoInfo) {
@@ -48,14 +57,14 @@ const PhotographerEdit = () => {
   );
 };
 
-const AlbumInfo = () => {
+const AlbumInfo: FC = () => {
   const { photoInfo } = usePhotoInfo();
 
   if (!photoInfo || photoInfo.album.length === 0) {
     return null;
   }
 
-  const formatLink = (album) => `?album=${album}`.replaceAll(" ", "+");
+  const formatLink = (album: string) => `?album=${album}`.replaceAll(" ", "+");
 
   const albumLinks = photoInfo.album.map((album) => (
     <a key={album} href={formatLink(album)}>
@@ -66,7 +75,7 @@ const AlbumInfo = () => {
   return <div>Album: {ComaSeparated(albumLinks)}</div>;
 };
 
-const AlbumEdit = () => {
+const AlbumEdit: FC = () => {
   const { photoInfo, setAlbum } = usePhotoInfo();
 
   if (!photoInfo) {
@@ -89,14 +98,14 @@ const AlbumEdit = () => {
   );
 };
 
-const EventInfo = () => {
+const EventInfo: FC = () => {
   const { photoInfo } = usePhotoInfo();
 
   if (!photoInfo || photoInfo.event.length === 0) {
     return null;
   }
 
-  const formatLink = (event) =>
+  const formatLink = (event: string) =>
     `?album=${photoInfo.album[0]}&event=${event}`.replaceAll(" ", "+");
 
   const eventLinks = photoInfo.event.map((event) => (
@@ -108,8 +117,8 @@ const EventInfo = () => {
   return <div>Event: {ComaSeparated(eventLinks)}</div>;
 };
 
-const EventEdit = () => {
-  const { photoInfo, setEvent } = usePhotoInfo();
+const EventEdit: FC = () => {
+  const { photoInfo, setEvents } = usePhotoInfo();
   const { events } = useAppContext();
 
   if (!photoInfo) {
@@ -121,9 +130,9 @@ const EventEdit = () => {
       multiple
       freeSolo
       options={events}
-      value={photoInfo.event}
+      value={photoInfo.event || []}
       onChange={(event, newValue) => {
-        setEvent(newValue);
+        setEvents(newValue);
       }}
       renderInput={(params) => (
         <TextField {...params} label="Event" variant="filled" />
@@ -132,14 +141,14 @@ const EventEdit = () => {
   );
 };
 
-const TeamInfo = () => {
+const TeamInfo: FC = () => {
   const { photoInfo } = usePhotoInfo();
 
   if (!photoInfo || photoInfo.team.length === 0) {
     return null;
   }
 
-  const formatLink = (team) =>
+  const formatLink = (team: string) =>
     `?album=${photoInfo.album[0]}&team=${team}`.replaceAll(" ", "+");
 
   const teamLinks = photoInfo.team.map((team) => (
@@ -151,7 +160,7 @@ const TeamInfo = () => {
   return <div>Team: {ComaSeparated(teamLinks)}</div>;
 };
 
-const TeamEdit = () => {
+const TeamEdit: FC = () => {
   const { photoInfo, setTeam } = usePhotoInfo();
   const { teams } = useAppContext();
 
@@ -164,7 +173,7 @@ const TeamEdit = () => {
       multiple
       freeSolo
       options={teams}
-      value={photoInfo.team}
+      value={photoInfo.team || []}
       onChange={(event, newValue) => {
         setTeam(newValue);
       }}
@@ -175,23 +184,32 @@ const TeamEdit = () => {
   );
 };
 
-const PersonInfo = ({ setFace }) => {
+interface PersonInfoProps {
+  setFace: (face: Person | null) => void;
+}
+
+const PersonInfo: FC<PersonInfoProps> = ({ setFace }) => {
   const { photoInfo } = usePhotoInfo();
 
-  if (!photoInfo || photoInfo.person.length === 0) {
+  if (
+    !photoInfo ||
+    !photoInfo.person ||
+    photoInfo.person.length === 0 ||
+    photoInfo.album.length === 0
+  ) {
     return null;
   }
 
   const sortedPersons = photoInfo.person.sort(
-    (a, b) => a.position.left - b.position.left,
+    (a, b) => (a.position?.left ?? 0) - (b.position?.left ?? 0),
   );
 
-  const formatLink = (person) =>
+  const formatLink = (person: Person) =>
     `?album=${photoInfo.album[0]}&person=${person.name}`.replaceAll(" ", "+");
 
   const personLinks = sortedPersons.map((person) => (
     <a
-      key={person}
+      key={person.name}
       href={formatLink(person)}
       onMouseLeave={() => setFace(null)}
       onMouseEnter={() => setFace(person)}
@@ -203,7 +221,7 @@ const PersonInfo = ({ setFace }) => {
   return <div>Person: {ComaSeparated(personLinks)}</div>;
 };
 
-const PersonEdit = () => {
+const PersonEdit: FC = () => {
   const { photoInfo, setPerson } = usePhotoInfo();
 
   if (!photoInfo) {

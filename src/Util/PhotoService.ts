@@ -1,17 +1,22 @@
 import { TAG_ALBUM, TAG_EVENT, TAG_TEAM, api_key, user_id } from "../consts";
+import { FlickrPhotoInfoResponse, FlickrPhotosResponse } from "../types";
 
 const extras =
   "tags,machine_tags,url_m,url_c,url_l,url_o,description,date_upload,date_taken";
 
-function buildQuery(params) {
+function buildQuery(params: Record<string, string | number>): string {
   const queryString = Object.keys(params)
     .map((key) => `${key}=${params[key]}`)
     .join("&");
   return `https://api.flickr.com/services/rest?${queryString}`;
 }
 
-function buildSearchUrl(tags = [], page = 1, text = "") {
-  const params = {
+function buildSearchUrl(
+  tags: [string, string][] = [],
+  page = 1,
+  text = "",
+): string {
+  const params: Record<string, string | number> = {
     method: "flickr.photos.search",
     api_key,
     user_id,
@@ -37,7 +42,7 @@ function buildSearchUrl(tags = [], page = 1, text = "") {
   return buildQuery(params);
 }
 
-function buildPhotoInfoUrl(id) {
+function buildPhotoInfoUrl(id: string) {
   const params = {
     method: "flickr.photos.getInfo",
     api_key,
@@ -50,10 +55,13 @@ function buildPhotoInfoUrl(id) {
 }
 
 // Refactored fetchData to use fetch instead of axios
-async function fetchData(url, config = {}) {
+async function fetchData<T>(
+  url: string,
+  config: RequestInit = {},
+): Promise<{ data: T } | undefined> {
   try {
-    const fetchConfig = {};
-    if (config.signal) {
+    const fetchConfig: RequestInit = { ...config };
+    if (config?.signal) {
       fetchConfig.signal = config.signal;
     }
     const response = await fetch(url, fetchConfig);
@@ -70,28 +78,33 @@ async function fetchData(url, config = {}) {
 }
 
 export function getAllWithEvent(
-  year,
+  year: string | null,
   event = "Photo%20Tour",
   page = 1,
-  config = {},
+  config: RequestInit = {},
 ) {
   return fetchData(
     buildSearchUrl(
       [
-        [TAG_ALBUM, year],
+        [TAG_ALBUM, year ?? ""],
         [TAG_EVENT, event],
       ],
       page,
     ),
     config,
-  );
+  ) as Promise<{ data: FlickrPhotosResponse } | undefined>;
 }
 
-export function getAllWithTeam(year, team, page = 1, config = {}) {
-  return fetchData(
+export function getAllWithTeam(
+  year: string | null,
+  team: string,
+  page = 1,
+  config: RequestInit = {},
+) {
+  return fetchData<FlickrPhotosResponse>(
     buildSearchUrl(
       [
-        [TAG_ALBUM, year],
+        [TAG_ALBUM, year ?? ""],
         [TAG_TEAM, team],
       ],
       page,
@@ -100,17 +113,29 @@ export function getAllWithTeam(year, team, page = 1, config = {}) {
   );
 }
 
-export function getAllWithPerson(year, person, page = 1, config = {}) {
-  return fetchData(buildSearchUrl([[TAG_ALBUM, year]], page, person), config);
+export function getAllWithPerson(
+  year: string | null,
+  person: string,
+  page = 1,
+  config: RequestInit = {},
+) {
+  return fetchData<FlickrPhotosResponse>(
+    buildSearchUrl([[TAG_ALBUM, year ?? ""]], page, person),
+    config,
+  );
 }
 
-export function getAllWithText(text, page = 1, config = {}) {
-  return fetchData(
+export function getAllWithText(
+  text: string,
+  page = 1,
+  config: RequestInit = {},
+) {
+  return fetchData<FlickrPhotosResponse>(
     buildSearchUrl([], page, `${text}%20and%20${TAG_ALBUM}$`),
     config,
   );
 }
 
-export function getPhotoInfo(id, config = {}) {
-  return fetchData(buildPhotoInfoUrl(id), config);
+export function getPhotoInfo(id: string, config: RequestInit = {}) {
+  return fetchData<FlickrPhotoInfoResponse>(buildPhotoInfoUrl(id), config);
 }

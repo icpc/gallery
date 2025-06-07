@@ -1,30 +1,23 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  FC,
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useSearchParams } from "react-router-dom";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { getEventData, getPeopleData, getTeamData } from "../Util/DataLoader";
 import { DEFAULT_EVENT, LAST_YEAR } from "../consts";
-
-/**
- * Data for the entire app.
- * Exactly one of event, text, person, team should be non-null at the same time.
- * If query is not null, team should be null.
- * @typedef {Object} DefaultContext
- * @property {string|null} year
- * @property {string|null} event
- * @property {string|null} text
- * @property {string|null} person
- * @property {string|null} team
- * @property {string|null} fullscreenPhotoId
- * @property {boolean} slideShow
- */
+import { AppContextData, AppContextType } from "../types";
 
 /**
  * The default context object for AppContext.
- * @type {DefaultContext}
  */
-const defaultContext = {
+const defaultContext: AppContextData = {
   year: LAST_YEAR,
   event: null,
   text: null,
@@ -34,29 +27,31 @@ const defaultContext = {
   slideShow: false,
 };
 
-const AppContext = createContext(null);
+const AppContext = createContext<AppContextType | null>(null);
 
-function parseSearchParams(searchParams) {
-  let searchParamsData = {};
+function parseSearchParams(
+  searchParams: URLSearchParams,
+): Partial<AppContextData> {
+  const searchParamsData: Partial<AppContextData> = {};
   if (searchParams.has("photo")) {
     searchParamsData.fullscreenPhotoId = searchParams.get("photo");
   }
   if (searchParams.has("slideshow")) {
-    searchParamsData.slideShow = searchParams.get("slideshow");
+    searchParamsData.slideShow = searchParams.get("slideshow") === "true";
   }
   if (searchParams.has("query")) {
-    searchParamsData.text = decodeURIComponent(searchParams.get("query"));
+    searchParamsData.text = decodeURIComponent(searchParams.get("query")!);
     searchParamsData.year = null;
   } else {
     if (searchParams.has("album")) {
-      searchParamsData.year = decodeURIComponent(searchParams.get("album"));
+      searchParamsData.year = decodeURIComponent(searchParams.get("album")!);
     }
     if (searchParams.has("event")) {
-      searchParamsData.event = decodeURIComponent(searchParams.get("event"));
+      searchParamsData.event = decodeURIComponent(searchParams.get("event")!);
     } else if (searchParams.has("team")) {
-      searchParamsData.team = decodeURIComponent(searchParams.get("team"));
+      searchParamsData.team = decodeURIComponent(searchParams.get("team")!);
     } else if (searchParams.has("person")) {
-      searchParamsData.person = decodeURIComponent(searchParams.get("person"));
+      searchParamsData.person = decodeURIComponent(searchParams.get("person")!);
     } else {
       searchParamsData.event = DEFAULT_EVENT;
     }
@@ -64,16 +59,10 @@ function parseSearchParams(searchParams) {
   return searchParamsData;
 }
 
-function serializeSearchParams({
-  year,
-  event,
-  text,
-  person,
-  team,
-  fullscreenPhotoId,
-  slideShow,
-}) {
-  let searchParams = {};
+function serializeSearchParams(data: AppContextData): Record<string, string> {
+  const { year, event, text, person, team, fullscreenPhotoId, slideShow } =
+    data;
+  const searchParams: Record<string, string> = {};
   if (year != null) {
     searchParams.album = year;
   }
@@ -93,28 +82,26 @@ function serializeSearchParams({
     searchParams.photo = fullscreenPhotoId;
   }
   if (slideShow) {
-    searchParams.slideshow = true;
+    searchParams.slideshow = "true";
   }
   return searchParams;
 }
 
-function attachYearIfNull(data) {
-  if (!data.year) {
-    data.year = LAST_YEAR;
-  }
-  return data;
+function attachYearIfNull(data: AppContextData): AppContextData {
+  return {
+    ...data,
+    year: data.year || LAST_YEAR,
+  };
 }
 
-const AppContextProvider = ({ children }) => {
+interface Props {
+  children: ReactNode;
+}
+
+const AppContextProvider: FC<Props> = ({ children }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  /**
-   * The state object and its setter function for AppContext.
-   * @typedef {Object} AppState
-   * @property {DefaultContext} data.
-   * @property {function} setData - Setter function for the data object. Try not to use this directly.
-   */
-  const [data, setData] = useState({
+  const [data, setData] = useState<AppContextData>({
     ...defaultContext,
     ...parseSearchParams(searchParams),
   });
@@ -142,7 +129,7 @@ const AppContextProvider = ({ children }) => {
    * Sets the year.
    * This function removes all other data from the context.
    */
-  const setYear = (newYear) => {
+  const setYear = (newYear: string) => {
     setData({
       ...defaultContext,
       year: newYear,
@@ -150,7 +137,7 @@ const AppContextProvider = ({ children }) => {
     });
   };
 
-  const setText = (newText) => {
+  const setText = (newText: string) => {
     setData((prevState) => {
       return {
         ...prevState,
@@ -163,7 +150,7 @@ const AppContextProvider = ({ children }) => {
     });
   };
 
-  const setEvent = (newEvent) => {
+  const setEvent = (newEvent: string) => {
     setData((prevState) => {
       return attachYearIfNull({
         ...prevState,
@@ -175,7 +162,7 @@ const AppContextProvider = ({ children }) => {
     });
   };
 
-  const setPerson = (newPerson) => {
+  const setPerson = (newPerson: string) => {
     setData((prevState) => {
       return attachYearIfNull({
         ...prevState,
@@ -187,7 +174,7 @@ const AppContextProvider = ({ children }) => {
     });
   };
 
-  const setTeam = (newTeam) => {
+  const setTeam = (newTeam: string) => {
     setData((prevState) => {
       return attachYearIfNull({
         ...prevState,
@@ -199,7 +186,7 @@ const AppContextProvider = ({ children }) => {
     });
   };
 
-  const setFullscreenPhotoId = (newFullscreenPhotoId) => {
+  const setFullscreenPhotoId = (newFullscreenPhotoId: string | null) => {
     setData((prevState) => {
       return {
         ...prevState,
@@ -208,7 +195,7 @@ const AppContextProvider = ({ children }) => {
     });
   };
 
-  const setIsSlideShow = (newIsSlideShow) => {
+  const setIsSlideShow = (newIsSlideShow: boolean) => {
     setData((prevState) => {
       return {
         ...prevState,
@@ -217,9 +204,9 @@ const AppContextProvider = ({ children }) => {
     });
   };
 
-  const [events, setEvents] = useState([]);
-  const [people, setPeople] = useState([]);
-  const [teams, setTeams] = useState([]);
+  const [events, setEvents] = useState<string[]>([]);
+  const [people, setPeople] = useState<string[]>([]);
+  const [teams, setTeams] = useState<string[]>([]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -273,29 +260,7 @@ const AppContextProvider = ({ children }) => {
   );
 };
 
-/**
- * The provider component for the AppContext object.
- * @function AppContextProvider
- * @returns {{
- *  data: DefaultContext,
- *  setYear: function,
- *  setEvent: function,
- *  setText: function,
- *  setPerson: function,
- *  setTeam: function,
- *  setFullscreenPhotoId: function,
- *  isSlideShow: boolean,
- *  setIsSlideShow: function,
- *  isOpenMenu: boolean,
- *  setIsOpenMenu: function,
- *  desktop: boolean,
- *  mobile: boolean,
- *  teams: Array,
- *  people: Array,
- *  events: Array,
- * }}.
- */
-const useAppContext = () => {
+const useAppContext = (): AppContextType => {
   const context = useContext(AppContext);
   if (context === undefined || context === null) {
     throw new Error("useAppContext must be called within AppContextProvider");

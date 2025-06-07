@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 
 import SearchIcon from "@mui/icons-material/Search";
 import { IconButton, Paper, TextField } from "@mui/material";
 
 import { useAppContext } from "../AppContext";
 
-const Search = () => {
+const Search: FC = () => {
   const { setText, setIsOpenMenu, mobile } = useAppContext();
 
   const [inputText, setInputText] = useState("");
-  const set = (e) => {
+  const set = (e: FormEvent) => {
     e.preventDefault();
     if (inputText !== "") {
       setText(inputText);
@@ -27,7 +27,7 @@ const Search = () => {
         <TextField
           fullWidth
           value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setInputText(e.target.value)}
           placeholder="Global search..."
           InputProps={{
             endAdornment: (

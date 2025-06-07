@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useAppContext } from "../components/AppContext";
 import { TAG_ALBUM, places } from "../consts";
+import { FlickrPhoto, FlickrPhotosResponse, Photo } from "../types";
 
 import {
   getAllWithEvent,
@@ -20,57 +21,68 @@ import UniqueList from "./UniqueList";
  * - photosList: An array of all photo objects.
  */
 const usePhotoLoader = () => {
-  const { data, events } = useAppContext();
+  const { data, events = [] } = useAppContext();
 
   /**
    * State hook that stores a Map object containing photo objects grouped by event.
    * @type {[Map, function]} - A tuple containing the current state value and a function to update it.
    */
-  const [photosByEvent, setPhotosByEvent] = useState(new Map());
+  const [photosByEvent, setPhotosByEvent] = useState<
+    Map<string | null, Photo[]>
+  >(new Map());
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [internalEvent, setInternalEvent] = useState(undefined);
+  const [internalEvent, setInternalEvent] = useState<string | null>(null);
   const [fetching, setFetching] = useState(false);
-  const abortControllerRef = useRef();
+  const abortControllerRef = useRef<AbortController>();
 
   // Add a ref to track if the component is mounted
   const isMountedRef = useRef(true);
 
   useEffect(() => {
     isMountedRef.current = true;
+    const currentAbortController = abortControllerRef.current;
     return () => {
+      // eslint-disable-line
       isMountedRef.current = false;
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
+      if (currentAbortController) {
+        currentAbortController.abort();
       }
     };
   }, []);
 
   useEffect(() => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+    const currentAbortController = abortControllerRef.current;
+    if (currentAbortController) {
+      currentAbortController.abort();
     }
-    abortControllerRef.current = new AbortController();
+    const newController = new AbortController();
+    abortControllerRef.current = newController;
+
     setPhotosByEvent(new Map());
     setPage(1);
     setInternalEvent(data.event);
     setTotalPages(1);
   }, [data.year, data.event, data.text, data.team, data.person]);
 
-  function appendPhotos(photosByEvent, event, photos) {
-    const appendedEventPhotos = [
-      ...(photosByEvent.get(event) || []),
-      ...photos,
-    ];
+  function appendPhotos(
+    photosByEvent: Map<string | null, Photo[]>,
+    event: string | null | undefined,
+    photos: Photo[],
+  ): Map<string | null, Photo[]> {
+    const key = event ?? null;
+    const appendedEventPhotos = [...(photosByEvent.get(key) || []), ...photos];
     return new Map(
       photosByEvent.set(
-        event,
+        key,
         UniqueList(appendedEventPhotos, (photo) => photo.id),
       ),
     );
   }
 
-  function getNextEvent(currentEvent) {
+  function getNextEvent(
+    currentEvent: string | null | undefined,
+  ): string | null {
     if (currentEvent == null || events === undefined) return null;
     const index = events.findIndex((event) => event === currentEvent);
     if (index === -1 || index + 1 < events.length) {
@@ -79,7 +91,7 @@ const usePhotoLoader = () => {
     return null;
   }
 
-  function albumFromTags(tags) {
+  function albumFromTags(tags: string): string {
     const albumTag = TAG_ALBUM.toLowerCase();
     const tag = tags.split(" ").find((tag) => tag.startsWith(albumTag));
     if (tag === undefined) {
@@ -99,8 +111,8 @@ const usePhotoLoader = () => {
    * Returns a flattened array of all photos from all events.
    * @returns {Array} - An array of photo objects.
    */
-  const photosList = useMemo(
-    () => [].concat(...Array.from(photosByEvent.values())),
+  const photosList: Photo[] = useMemo(
+    () => ([] as Photo[]).concat(...Array.from(photosByEvent.values())),
     [photosByEvent],
   );
 
@@ -108,7 +120,7 @@ const usePhotoLoader = () => {
    * Returns a boolean indicating whether there are more photos to load.
    * @returns {boolean} - A boolean indicating whether there are more photos to load.
    */
-  function hasMorePhotos() {
+  function hasMorePhotos(): boolean {
     return page <= totalPages || getNextEvent(internalEvent) !== null;
   }
 
@@ -116,7 +128,7 @@ const usePhotoLoader = () => {
    * Loads more photos.
    * Only one loadMorePhotos call can be active at a time.
    */
-  const loadMorePhotos = async () => {
+  const loadMorePhotos = async (): Promise<void> => {
     if (fetching) {
       return;
     }
@@ -135,7 +147,7 @@ const usePhotoLoader = () => {
     // Always use a fresh controller for each request
     const controller = new AbortController();
     abortControllerRef.current = controller;
-    const config = {
+    const config: RequestInit = {
       signal: controller.signal,
     };
 
@@ -157,30 +169,31 @@ const usePhotoLoader = () => {
       }
 
       if (response && isMountedRef.current) {
+        const newPhotos: Photo[] = response.data.photos.photo.map(
+          ({
+            url_m,
+            url_o,
+            url_l,
+            id,
+            width_o = 0,
+            width_l = 0,
+            height_o = 0,
+            height_l = 0,
+            tags,
+          }: FlickrPhoto) => ({
+            url_preview: url_m ?? url_o ?? "",
+            url: url_l ?? url_o ?? "",
+            width: width_l ?? width_o,
+            height: height_l ?? height_o,
+            id,
+            origin: url_o ?? "",
+            year: albumFromTags(tags),
+          }),
+        );
         const newPhotosByEvent = appendPhotos(
           photosByEvent,
           internalEvent,
-          response.data.photos.photo.map(
-            ({
-              url_m,
-              url_o,
-              url_l,
-              id,
-              width_o,
-              width_l,
-              height_o,
-              height_l,
-              tags,
-            }) => ({
-              url_preview: url_m ?? url_o,
-              url: url_l ?? url_o,
-              width: width_l ?? width_o,
-              height: height_l ?? height_o,
-              id,
-              origin: url_o,
-              year: albumFromTags(tags),
-            }),
-          ),
+          newPhotos,
         );
         setTotalPages(response.data.photos.pages);
         setPage(page + 1);

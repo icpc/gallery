@@ -1,9 +1,10 @@
+import { FC } from "react";
 import { Box, Link } from "@mui/material";
 
 import { LAST_YEAR } from "../consts";
 import logo from "../images/white.svg";
 
-const MobileLogo = () => {
+const MobileLogo: FC = () => {
   return (
     <Link href={`?album=${LAST_YEAR}`}>
       <Box component="img" src={logo} alt="go home page" width="200px" />
@@ -11,7 +12,7 @@ const MobileLogo = () => {
   );
 };
 
-const DesktopLogo = () => {
+const DesktopLogo: FC = () => {
   return (
     <Link
       href={`?album=${LAST_YEAR}`}

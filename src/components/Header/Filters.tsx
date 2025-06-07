@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 import { Stack } from "@mui/material";
 
 import { places } from "../../consts";
@@ -5,12 +7,13 @@ import calendarIcon from "../../images/calender.svg";
 import eventIcon from "../../images/event.svg";
 import personIcon from "../../images/person.svg";
 import teamIcon from "../../images/team.svg";
+import { Place } from "../../types";
 import { useAppContext } from "../AppContext";
 
 import Search from "./Search";
 import Selector from "./Selector";
 
-const Filters = () => {
+const Filters: FC = () => {
   const {
     data,
     setYear,
@@ -24,23 +27,23 @@ const Filters = () => {
     teams,
   } = useAppContext();
 
-  function formatOptions(a) {
+  function formatOptions(a: string[]) {
     return a.map((x) => {
       return { data: x, label: x };
     });
   }
 
-  function formatYearOption(a) {
+  function formatYearOption(a: Place[]) {
     return a.map(({ year, place }) => {
       return { data: year, label: year + " " + place };
     });
   }
 
-  function selectItem(item, func) {
+  function selectItem(item: string | "clear", func: (val: string) => void) {
     if (item === "clear") {
-      setYear(data.year);
+      setYear(data.year as string);
     } else {
-      func(item.data);
+      func(item);
     }
   }
 
@@ -51,9 +54,8 @@ const Filters = () => {
           options={formatYearOption(places)}
           leftIcon={calendarIcon}
           name={"Select year"}
-          onChange={(selectedItem) => {
-            const year = selectedItem.data;
-            setYear(year);
+          onChange={(selectedYear) => {
+            if (selectedYear !== "clear") setYear(selectedYear as string);
           }}
           value={data.year}
           disableClearable
@@ -86,7 +88,7 @@ const Filters = () => {
         }}
         value={data.person}
       />
-      <Search setIsOpenMenu={setIsOpenMenu} />
+      <Search />
     </Stack>
   );
 };

@@ -15,7 +15,7 @@ import theme from "./theme";
 
 import "./styles/App.css";
 
-function App() {
+function App(): JSX.Element {
   const { desktop } = useAppContext();
 
   return (

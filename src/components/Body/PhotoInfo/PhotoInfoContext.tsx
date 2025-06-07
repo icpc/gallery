@@ -1,52 +1,81 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  FC,
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { ParsePhotoInfo } from "../../../Util/PhotoInfoHelper";
 import { getPhotoInfo } from "../../../Util/PhotoService";
+import { Person, PhotoInfo, PhotoInfoContextType } from "../../../types";
 import { useAppContext } from "../../AppContext";
 
-const PhotoInfoContext = createContext(null);
+const PhotoInfoContext = createContext<PhotoInfoContextType | null>(null);
 
-const PhotoInfoProvider = ({ children }) => {
+interface Props {
+  children: ReactNode;
+}
+
+const PhotoInfoProvider: FC<Props> = ({ children }) => {
   const { data } = useAppContext();
 
-  const [photoInfo, setPhotoInfo] = useState(null);
+  const [photoInfo, setPhotoInfo] = useState<PhotoInfo | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [face, setFace] = useState(null);
+  const [face, setFace] = useState<Person | null>(null);
 
   useEffect(() => {
     const fullscreenPhotoId = data.fullscreenPhotoId;
     if (fullscreenPhotoId === null) {
       return;
     }
-    getPhotoInfo(fullscreenPhotoId).then((response) => {
-      const tags = response.data?.photo?.tags?.tag?.map((tag) => tag.raw);
-      const description = response.data?.photo?.description._content;
-      const newPhotoInfo = ParsePhotoInfo(tags, description);
-      setPhotoInfo(newPhotoInfo);
-    });
+    getPhotoInfo(fullscreenPhotoId)
+      .then((response) => {
+        if (!response) {
+          return;
+        }
+        const tags = response.data?.photo?.tags?.tag?.map((tag) => tag.raw);
+        const description = response.data?.photo?.description?._content;
+        const newPhotoInfo = ParsePhotoInfo(tags, description);
+        setPhotoInfo(newPhotoInfo);
+      })
+      .catch((err) => {
+        console.error("Failed to get photo info", err);
+      });
   }, [data.fullscreenPhotoId]);
 
-  function setEvents(newEvents) {
-    setPhotoInfo({ ...photoInfo, events: newEvents });
+  function setEvents(newEvents: string[]) {
+    if (!photoInfo) return;
+    setPhotoInfo({ ...photoInfo, event: newEvents });
   }
 
-  function setPerson(newPerson) {
+  function setPerson(newPerson: Person[]) {
+    if (!photoInfo) return;
     setPhotoInfo({ ...photoInfo, person: newPerson });
   }
 
-  function appendPerson(newPerson) {
-    setPerson([...photoInfo.person, newPerson]);
+  function setPersonNames(newPersonNames: string[]) {
+    const newPersons: Person[] = newPersonNames.map((name) => ({ name }));
+    setPhotoInfo({ ...photoInfo, person: newPersons } as PhotoInfo);
   }
 
-  function setAlbum(newAlbum) {
+  function appendPerson(newPerson: Person) {
+    setPerson([...(photoInfo?.person || []), newPerson]);
+  }
+
+  function setAlbum(newAlbum: string[]) {
+    if (!photoInfo) return;
     setPhotoInfo({ ...photoInfo, album: newAlbum });
   }
 
-  function setPhotographer(newPhotographer) {
+  function setPhotographer(newPhotographer: string[]) {
+    if (!photoInfo) return;
     setPhotoInfo({ ...photoInfo, photographer: newPhotographer });
   }
 
-  function setTeam(newTeam) {
+  function setTeam(newTeam: string[]) {
+    if (!photoInfo) return;
     setPhotoInfo({ ...photoInfo, team: newTeam });
   }
 
@@ -60,7 +89,7 @@ const PhotoInfoProvider = ({ children }) => {
         face,
         setFace,
         setEvents,
-        setPerson,
+        setPerson: setPersonNames,
         setAlbum,
         setTeam,
         setPhotographer,
@@ -72,7 +101,7 @@ const PhotoInfoProvider = ({ children }) => {
   );
 };
 
-const usePhotoInfo = () => {
+const usePhotoInfo = (): PhotoInfoContextType => {
   const context = useContext(PhotoInfoContext);
   if (context === undefined || context === null) {
     throw new Error("usePhotoInfo must be called within PhotoInfoProvider");

@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Autocomplete,
@@ -16,31 +18,42 @@ const TextFieldWithIcon = styled(TextField)(() => ({
   },
 }));
 
-const filterOptions = createFilterOptions({ limit: 200 });
+interface Option {
+  data: string;
+  label: string;
+}
 
-const Selector = ({
+interface Props {
+  leftIcon: string;
+  onChange: (newValue: string | "clear") => void;
+  name: string;
+  value: string | null;
+  options: Option[];
+  disableClearable?: boolean;
+}
+
+const Selector: FC<Props> = ({
   leftIcon,
   onChange,
   name,
   value,
   options,
-  disableClearable = false,
+  disableClearable,
 }) => {
+  const selectedValue = options.find((opt) => opt.data === value) ?? null;
   return (
     <Paper>
-      <Autocomplete
-        filterOptions={filterOptions}
+      <Autocomplete<Option, undefined, boolean>
         fullWidth
         disablePortal
-        value={value}
+        filterOptions={createFilterOptions({ limit: 200 })}
+        value={selectedValue}
         options={options}
-        isOptionEqualToValue={(option, value) => option.data === value}
-        onChange={(event, newValue, reason) => {
-          if (reason === "selectOption") {
-            onChange(newValue);
-          } else {
-            onChange("clear");
-          }
+        isOptionEqualToValue={(option: Option, val: Option) =>
+          option.data === val.data
+        }
+        onChange={(_, newValue) => {
+          onChange(newValue ? newValue.data : "clear");
         }}
         renderInput={(params) => (
           <TextFieldWithIcon

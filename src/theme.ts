@@ -1,11 +1,12 @@
-import { createTheme } from "@mui/material/styles";
+import { Theme, createTheme } from "@mui/material/styles";
 
-const theme = createTheme({
+const theme: Theme = createTheme({
   palette: {
     mode: "dark",
     background: {
       default: "#1A1A1A",
       paper: "#2E2E2E",
+      // @ts-ignore
       transparent: "rgb(27, 27, 27)",
     },
     text: {

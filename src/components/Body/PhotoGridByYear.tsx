@@ -1,12 +1,18 @@
-import { useMemo } from "react";
+import { FC, useMemo } from "react";
 
 import { places } from "../../consts";
+import { Photo } from "../../types";
 
 import PhotoGrid from "./PhotoGrid";
 
-const PhotoGridByYear = ({ photos, handleClick }) => {
-  const photosByYear = useMemo(() => {
-    const photosByYear = {};
+interface Props {
+  photos: Photo[];
+  handleClick: (id: string) => void;
+}
+
+const PhotoGridByYear: FC<Props> = ({ photos, handleClick }) => {
+  const photosByYear: Record<string, Photo[]> = useMemo(() => {
+    const photosByYear: Record<string, Photo[]> = {};
     photos.forEach((photo) => {
       if (!photosByYear[photo.year]) {
         photosByYear[photo.year] = [];
@@ -20,10 +26,10 @@ const PhotoGridByYear = ({ photos, handleClick }) => {
     return <PhotoGrid photos={photos} handleClick={handleClick} />;
   }
 
-  const compareYears = (a, b) => {
+  const compareYears = (a: [string, Photo[]], b: [string, Photo[]]) => {
     const yearA = a[0];
     const yearB = b[0];
-    const yearIndex = (targetYear) =>
+    const yearIndex = (targetYear: string) =>
       places.findIndex(({ year }) => year === targetYear);
     const indexDiff = yearIndex(yearB) - yearIndex(yearA);
     if (indexDiff !== 0) {
