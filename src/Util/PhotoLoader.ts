@@ -38,7 +38,6 @@ const usePhotoLoader = () => {
     isMountedRef.current = true;
     const currentAbortController = abortControllerRef.current;
     return () => {
-      // eslint-disable-line
       isMountedRef.current = false;
       if (currentAbortController) {
         currentAbortController.abort();
@@ -104,17 +103,12 @@ const usePhotoLoader = () => {
 
   /**
    * Returns a flattened array of all photos from all events.
-   * @returns {Array} - An array of photo objects.
    */
   const photosList: Photo[] = useMemo(
     () => ([] as Photo[]).concat(...Array.from(photosByEvent.values())),
     [photosByEvent],
   );
 
-  /**
-   * Returns a boolean indicating whether there are more photos to load.
-   * @returns {boolean} - A boolean indicating whether there are more photos to load.
-   */
   function hasMorePhotos(): boolean {
     return page <= totalPages || getNextEvent(internalEvent) !== null;
   }
