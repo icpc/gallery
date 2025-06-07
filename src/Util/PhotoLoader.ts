@@ -14,11 +14,6 @@ import UniqueList from "./UniqueList";
 
 /**
  * Custom hook that loads photos based on the current app context.
- * @returns {Object} - An object containing the following properties:
- * - hasMorePhotos: A function that returns a boolean indicating whether there are more photos to load.
- * - loadMorePhotos: A function that loads more photos.
- * - photosByEvent: A Map object containing photo objects grouped by event.
- * - photosList: An array of all photo objects.
  */
 const usePhotoLoader = () => {
   const { data, events = [] } = useAppContext();
