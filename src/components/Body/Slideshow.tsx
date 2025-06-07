@@ -1,11 +1,17 @@
-import React from "react";
+import { FC, useEffect } from "react";
 
+import { Photo } from "../../types";
 import Control from "./Control";
 
 import "../../styles/Body.css";
 
-const Slideshow = ({ photo, handleRotationRight }) => {
-  React.useEffect(() => {
+interface Props {
+  photo: Photo;
+  handleRotationRight: () => void;
+}
+
+const Slideshow: FC<Props> = ({ photo, handleRotationRight }) => {
+  useEffect(() => {
     const interval = setInterval(() => {
       handleRotationRight();
     }, 3000);

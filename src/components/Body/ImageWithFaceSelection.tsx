@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import ReactCrop from "react-image-crop";
+import { FC, useEffect, useState } from "react";
+import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
 import {
@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 
 import { getPeopleData } from "../../Util/DataLoader";
+import { Person, Photo } from "../../types";
 import { useAppContext } from "../AppContext";
 
 import FaceDiv from "./FaceDiv";
@@ -18,12 +19,24 @@ import { usePhotoInfo } from "./PhotoInfo/PhotoInfoContext";
 
 import "../../styles/Body.css";
 
-const ImageWithFaceSelection = ({ photo, alt = "", face, setFace }) => {
+interface Props {
+  photo: Photo;
+  alt?: string;
+  face: Person | null;
+  setFace: (face: Person | null) => void;
+}
+
+const ImageWithFaceSelection: FC<Props> = ({
+  photo,
+  alt = "",
+  face,
+  setFace,
+}) => {
   const { data } = useAppContext();
   const { photoInfo, editMode, appendPerson } = usePhotoInfo();
-  const [crop, setCrop] = useState();
+  const [crop, setCrop] = useState<Crop>();
 
-  const [people, setPeople] = useState([]);
+  const [people, setPeople] = useState<string[]>([]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -38,7 +51,7 @@ const ImageWithFaceSelection = ({ photo, alt = "", face, setFace }) => {
     };
   }, [data.year]);
 
-  function calculateImageSize(naturalWidth, naturalHeight) {
+  function calculateImageSize(naturalWidth: number, naturalHeight: number) {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     const ratio = Math.min(
@@ -53,9 +66,9 @@ const ImageWithFaceSelection = ({ photo, alt = "", face, setFace }) => {
 
   const { width, height } = calculateImageSize(photo.width, photo.height);
 
-  function createPerson(name, crop) {
+  function createPerson(name: string, crop: Crop) {
     if (name) {
-      const person = {
+      const person: Person = {
         name: name,
         position: {
           top: crop.y / height,
@@ -65,22 +78,24 @@ const ImageWithFaceSelection = ({ photo, alt = "", face, setFace }) => {
         },
       };
       appendPerson(person);
-      setCrop(null);
+      setCrop(undefined);
     }
   }
 
-  const filterOptions = createFilterOptions({ limit: 200 });
-
   return (
     <Box width={width} height={height}>
-      <ReactCrop crop={crop} onChange={(c) => setCrop(c)} disabled={!editMode}>
+      <ReactCrop
+        crop={crop}
+        onChange={(c: Crop) => setCrop(c)}
+        disabled={!editMode}
+      >
         <img width={width} height={height} src={photo.url} alt={alt} />
         {photoInfo?.person?.map((person) => (
           <FaceDiv
             person={person}
             setFace={setFace}
             hidden={!editMode && face?.name !== person.name}
-            key={person.name + person.position.top}
+            key={person.name + person.position?.top}
           />
         ))}
       </ReactCrop>
@@ -94,14 +109,14 @@ const ImageWithFaceSelection = ({ photo, alt = "", face, setFace }) => {
           }}
           elevation={3}
         >
-          <Autocomplete
-            filterOptions={filterOptions}
+          <Autocomplete<string, false, false, true>
+            filterOptions={createFilterOptions({ limit: 200 })}
             options={people}
             freeSolo
             renderInput={(params) => (
               <TextField {...params} placeholder="Enter a name" />
             )}
-            onChange={(event, newValue) => createPerson(newValue, crop)}
+            onChange={(_, newValue) => createPerson(newValue ?? "", crop)}
           />
         </Paper>
       )}

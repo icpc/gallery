@@ -1,4 +1,12 @@
-export default function PhotoGrid({ photos, handleClick }) {
+import { FC } from "react";
+import { Photo } from "../../types";
+
+interface Props {
+  photos: Photo[];
+  handleClick: (id: string) => void;
+}
+
+const PhotoGrid: FC<Props> = ({ photos, handleClick }) => {
   return (
     <div className="masonry">
       {photos.map((photo) => {
@@ -17,3 +25,5 @@ export default function PhotoGrid({ photos, handleClick }) {
     </div>
   );
 }
+
+export default PhotoGrid;

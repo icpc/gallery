@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 
 import Close from "@mui/icons-material/Close";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -13,6 +13,7 @@ import { enqueueSnackbar } from "notistack";
 
 import { SerializePhotoInfo } from "../../../Util/PhotoInfoHelper";
 import { FLICKR_IMAGE_PREFIX, SUGGESTIONS_EMAIL } from "../../../consts";
+import { Person, Photo } from "../../../types";
 import { useAppContext } from "../../AppContext";
 
 import { usePhotoInfo } from "./PhotoInfoContext";
@@ -31,7 +32,12 @@ import {
 
 import "../../../styles/PhotoInfo.css";
 
-const PhotoInfoPanel = ({ setFace, photo }) => {
+interface Props {
+  setFace: (face: Person | null) => void;
+  photo: Photo;
+}
+
+const PhotoInfoPanel: FC<Props> = ({ setFace, photo }) => {
   const { desktop } = useAppContext();
   const { editMode, setEditMode, photoInfo } = usePhotoInfo();
 
@@ -102,7 +108,6 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
               <IconButton
                 href={gmailLink}
                 target="_blank"
-                variant="contained"
                 onClick={() => setEditMode(false)}
               >
                 <EmailIcon fontSize="large" color="error" />
@@ -112,7 +117,6 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
               <IconButton
                 href={mailtoLink}
                 target="_blank"
-                variant="contained"
                 onClick={() => setEditMode(false)}
               >
                 <EmailIcon fontSize="large" />
@@ -120,7 +124,7 @@ const PhotoInfoPanel = ({ setFace, photo }) => {
             </Tooltip>
 
             <Tooltip title="Copy tags to clipboard">
-              <IconButton variant="contained" onClick={() => copyToClipboard()}>
+              <IconButton onClick={() => copyToClipboard()}>
                 <ContentCopyIcon fontSize="large" />
               </IconButton>
             </Tooltip>

@@ -2,7 +2,7 @@ import { getRawEventData, getRawPeopleData, getRawTeamData } from "../consts";
 
 import UniqueList from "./UniqueList";
 
-async function getEventData(year) {
+async function getEventData(year: string | null): Promise<string[]> {
   if (!year) {
     return [];
   }
@@ -15,7 +15,7 @@ async function getEventData(year) {
   );
 }
 
-async function getTeamData(year) {
+async function getTeamData(year: string | null): Promise<string[]> {
   if (!year) {
     return [];
   }
@@ -28,7 +28,7 @@ async function getTeamData(year) {
   );
 }
 
-async function getPeopleData(year) {
+async function getPeopleData(year: string | null): Promise<string[]> {
   if (!year) {
     return [];
   }

@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Collapse, IconButton, Stack } from "@mui/material";
@@ -8,7 +10,7 @@ import { MobileLogo } from "../Logo";
 import Filters from "./Filters";
 import MobileYearWrappper from "./MobileYearWrapper";
 
-const Header = () => {
+const Header: FC = () => {
   const { isOpenMenu, setIsOpenMenu, mobile } = useAppContext();
 
   const toggleMenu = () => {
@@ -33,7 +35,7 @@ const Header = () => {
           </IconButton>
         </Stack>
       )}
-      <Collapse in={isOpenMenu} width="1">
+      <Collapse in={isOpenMenu} sx={{ width: "1" }}>
         <Filters />
       </Collapse>
       {mobile && <MobileYearWrappper />}

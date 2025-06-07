@@ -1,22 +1,24 @@
+import { Place } from "./types";
+
 const dataFolder = import.meta.env.VITE_DATA_FOLDER;
 console.log(import.meta.env);
 
 const consts = await import(`../${dataFolder}/consts.js`);
-export const getRawEventData = async (year) => {
-  return (await import(`../${dataFolder}/${year}.event`)).default;
+export const getRawEventData = async (year: string | null): Promise<string> => {
+  return (await import(`../${dataFolder}/${year}.event?raw`)).default;
 };
 
-export const getRawTeamData = async (year) => {
-  return (await import(`../${dataFolder}/${year}.team`)).default;
+export const getRawTeamData = async (year: string | null): Promise<string> => {
+  return (await import(`../${dataFolder}/${year}.team?raw`)).default;
 };
 
-export const getRawPeopleData = async (year) => {
-  return (await import(`../${dataFolder}/${year}.people`)).default;
+export const getRawPeopleData = async (year: string | null): Promise<string> => {
+  return (await import(`../${dataFolder}/${year}.people?raw`)).default;
 };
 
 console.log(`Using ${dataFolder} folder for consts.js`);
 console.log(`Loaded \n${JSON.stringify(consts, undefined, 4)}`);
-export const places = consts.places.map(([year, place, contestName]) => ({
+export const places: Place[] = consts.places.map(([year, place, contestName]: [string, string, string]) => ({
   year: year,
   place: place,
   contestName: contestName,

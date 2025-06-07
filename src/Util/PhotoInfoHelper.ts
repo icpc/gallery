@@ -5,14 +5,15 @@ import {
   TAG_PHOTOGRAPHER,
   TAG_TEAM,
 } from "../consts";
+import { Person, PhotoInfo, Position } from "../types";
 
 import UniqueList from "./UniqueList";
 
 const MAX_INT = 65535;
 
-const convertRel = (text) => convertNum(text) / MAX_INT;
+const convertRel = (text: string): number => convertNum(text) / MAX_INT;
 
-function getPosition(encodedPosition) {
+function getPosition(encodedPosition: string): Position {
   return {
     left: convertRel(encodedPosition.substr(0, 4)),
     top: convertRel(encodedPosition.substr(4, 4)),
@@ -21,7 +22,7 @@ function getPosition(encodedPosition) {
   };
 }
 
-function serizalizePosition(position) {
+function serizalizePosition(position: Position): string {
   return (
     Math.round(position.left * MAX_INT)
       .toString(16)
@@ -38,7 +39,7 @@ function serizalizePosition(position) {
   );
 }
 
-function parsePerson(personTag) {
+function parsePerson(personTag: string): Person | null {
   const openBracket = personTag.indexOf("(");
   if (openBracket === -1) {
     return null;
@@ -58,22 +59,30 @@ function parsePerson(personTag) {
   };
 }
 
-function serizalizePerson(person) {
-  return person.name + "(" + serizalizePosition(person.position) + ")";
+function serizalizePerson(person: Person): string {
+  if (person.position) {
+    return person.name + "(" + serizalizePosition(person.position) + ")";
+  }
+  return person.name;
 }
 
-const convertNum = (text) => parseInt("0x" + text);
+const convertNum = (text: string): number => parseInt("0x" + text);
 
-function ParsePhotoInfo(tags, description) {
-  let photoInfo = {
+function ParsePhotoInfo(
+  tags: string[] | undefined,
+  description: string | undefined,
+): PhotoInfo {
+  const photoInfo: PhotoInfo = {
     event: [],
     team: [],
     person: [],
     album: [],
     photographer: [],
   };
-  photoInfo.photographer.push(description?.replaceAll("Photographer: ", ""));
-  if (tags === null || tags === undefined) {
+  if (description) {
+    photoInfo.photographer.push(description.replaceAll("Photographer: ", ""));
+  }
+  if (!tags) {
     return photoInfo;
   }
   for (const tag of tags) {
@@ -115,11 +124,11 @@ function ParsePhotoInfo(tags, description) {
   return photoInfo;
 }
 
-function SerializePhotoInfo(photoInfo) {
+function SerializePhotoInfo(photoInfo: PhotoInfo | null): string[] {
   if (!photoInfo) {
     return [];
   }
-  let tags = [];
+  const tags: string[] = [];
   for (const event of photoInfo.event) {
     tags.push(TAG_EVENT + "$" + event);
   }

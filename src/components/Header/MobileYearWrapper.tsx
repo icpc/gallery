@@ -1,9 +1,10 @@
+import { FC } from "react";
 import { Box, Typography } from "@mui/material";
 
 import { places } from "../../consts";
 import { useAppContext } from "../AppContext";
 
-const MobileYearWrapper = () => {
+const MobileYearWrapper: FC = () => {
   const { data, setIsOpenMenu } = useAppContext();
 
   const toggleMenu = () => {

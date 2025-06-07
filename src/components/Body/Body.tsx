@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 
 import { Box, Typography } from "@mui/material";
 
 import usePhotoLoader from "../../Util/PhotoLoader";
 import "../../consts";
+import { Photo } from "../../types";
 import { useAppContext } from "../AppContext";
 
 import MyModal from "./MyModal";
@@ -12,20 +13,20 @@ import PhotoGridByYear from "./PhotoGridByYear";
 
 import "../../styles/Body.css";
 
-const Body = () => {
+const Body: FC = () => {
   const { data, setFullscreenPhotoId, setIsSlideShow, desktop } =
     useAppContext();
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { hasMorePhotos, loadMorePhotos, photosByEvent, photosList } =
     usePhotoLoader();
 
-  const [fullscreenPhoto, setFullscreenPhoto] = useState(null);
-  const [fullscreenIndex, setFullscreenIndex] = useState(null);
-  const [rightArrow, setRightArrow] = useState(null);
-  const [leftArrow, setLeftArrow] = useState(null);
+  const [fullscreenPhoto, setFullscreenPhoto] = useState<Photo | null>(null);
+  const [fullscreenIndex, setFullscreenIndex] = useState<number | null>(null);
+  const [rightArrow, setRightArrow] = useState<boolean>(false);
+  const [leftArrow, setLeftArrow] = useState<boolean>(false);
 
-  const handleClick = (id) => {
+  const handleClick = (id: string) => {
     setFullscreenPhotoId(id);
   };
 
@@ -64,20 +65,26 @@ const Body = () => {
   }, [data.fullscreenPhotoId]);
 
   const handleRotationRight = () => {
+    if (fullscreenIndex === null) return;
     let newIndex = fullscreenIndex + 1;
-    if (newIndex >= photosList.length) {
+    if (newIndex >= photosList.length && photosList.length > 0) {
       newIndex = 0;
     }
     handleClick(photosList[newIndex].id);
   };
 
   const handleRotationLeft = () => {
-    handleClick(photosList[fullscreenIndex - 1].id);
+    if (fullscreenIndex === null) return;
+    let newIndex = fullscreenIndex - 1;
+    if (newIndex < 0 && photosList.length > 0) {
+      newIndex = photosList.length - 1;
+    }
+    handleClick(photosList[newIndex].id);
   };
 
   useEffect(() => {
     const target = document.getElementsByTagName("body")[0];
-    const listener = (e) => {
+    const listener = (e: KeyboardEvent) => {
       if (fullscreenPhoto) {
         switch (e.key) {
           case "ArrowLeft":
@@ -98,11 +105,18 @@ const Body = () => {
         }
       }
     };
-    target.onkeydown = listener;
+    target.addEventListener("keydown", listener);
     return () => {
-      target.removeEventListener("onkeydown", listener);
+      target.removeEventListener("keydown", listener);
     };
-  }, [fullscreenPhoto]);
+  }, [
+    fullscreenPhoto,
+    rightArrow,
+    leftArrow,
+    handleRotationRight,
+    handleRotationLeft,
+    setFullscreenPhotoId,
+  ]);
 
   return (
     <div className="body" ref={scrollRef}>
