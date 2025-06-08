@@ -14,10 +14,10 @@ const PhotoGrid: FC<Props> = ({ photos, handleClick }) => {
         return (
           <figure key={photo.id} className="masonry-brick">
             <img
+              loading="lazy"
               className="preview"
               src={photo?.url_preview}
               alt={photo.url_preview}
-              loading="lazy"
               onClick={() => handleClick(photo.id)}
             />
           </figure>

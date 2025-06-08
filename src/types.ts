@@ -4,6 +4,7 @@ export interface Place {
   year: string;
   place: string;
   contestName: string;
+  photoset_id: string;
 }
 
 export interface Position {
@@ -33,7 +34,9 @@ export interface Photo {
   height: number;
   id: string;
   origin: string;
+  event: string;
   year: string;
+  tags: string[];
 }
 
 export interface FlickrPhoto {
@@ -58,6 +61,18 @@ export interface FlickrPhotos {
 
 export interface FlickrPhotosResponse {
   photos: FlickrPhotos;
+  stat: string;
+}
+
+export interface FlickrPhotosetResponse {
+  photoset: {
+    id: string;
+    page: number;
+    pages: number;
+    perpage: number;
+    total: number;
+    photo: FlickrPhoto[];
+  };
   stat: string;
 }
 

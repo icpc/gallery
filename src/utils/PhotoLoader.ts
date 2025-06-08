@@ -1,202 +1,121 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useAppContext } from "../components/AppContext";
-import { TAG_ALBUM, places } from "../consts";
+import { TAG_ALBUM, TAG_EVENT, TAG_PERSON, TAG_TEAM, places } from "../consts";
 import { FlickrPhoto, Photo } from "../types";
 
-import {
-  getAllWithEvent,
-  getAllWithPerson,
-  getAllWithTeam,
-  getAllWithText,
-} from "./PhotoService";
-import UniqueList from "./UniqueList";
+import { getAllPhotosFromPhotoset, getAllWithText } from "./PhotoService";
+import { convertRawFlickrTag } from "./convertRawFlickrTag";
 
 /**
  * Custom hook that loads photos based on the current app context.
  */
 const usePhotoLoader = () => {
-  const { data, events = [] } = useAppContext();
+  const { data, events } = useAppContext();
+  const [organizedPhotos, setOrganizedPhotos] = useState<
+    { key: string; photos: Photo[] }[]
+  >([]);
 
-  /**
-   * State hook that stores a Map object containing photo objects grouped by event.
-   * @type {[Map, function]} - A tuple containing the current state value and a function to update it.
-   */
-  const [photosByEvent, setPhotosByEvent] = useState<
-    Map<string | null, Photo[]>
-  >(new Map());
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [internalEvent, setInternalEvent] = useState<string | null>(null);
-  const [fetching, setFetching] = useState(false);
-  const abortControllerRef = useRef<AbortController>();
+  const formatTag = (prefix: string, tag: string) =>
+    convertRawFlickrTag(`${prefix}$${tag}`);
 
-  // Add a ref to track if the component is mounted
-  const isMountedRef = useRef(true);
-
-  useEffect(() => {
-    isMountedRef.current = true;
-    const currentAbortController = abortControllerRef.current;
-    return () => {
-      isMountedRef.current = false;
-      if (currentAbortController) {
-        currentAbortController.abort();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const currentAbortController = abortControllerRef.current;
-    if (currentAbortController) {
-      currentAbortController.abort();
-    }
-    const newController = new AbortController();
-    abortControllerRef.current = newController;
-
-    setPhotosByEvent(new Map());
-    setPage(1);
-    setInternalEvent(data.event);
-    setTotalPages(1);
-  }, [data.year, data.event, data.text, data.team, data.person]);
-
-  function appendPhotos(
-    photosByEvent: Map<string | null, Photo[]>,
-    event: string | null | undefined,
-    photos: Photo[],
-  ): Map<string | null, Photo[]> {
-    const key = event ?? null;
-    const appendedEventPhotos = [...(photosByEvent.get(key) || []), ...photos];
-    return new Map(
-      photosByEvent.set(
-        key,
-        UniqueList(appendedEventPhotos, (photo) => photo.id),
-      ),
-    );
-  }
-
-  function getNextEvent(
-    currentEvent: string | null | undefined,
-  ): string | null {
-    if (currentEvent == null || events === undefined) return null;
-    const index = events.findIndex((event) => event === currentEvent);
-    if (index === -1 || index + 1 < events.length) {
-      return events[index + 1];
-    }
-    return null;
-  }
-
-  function albumFromTags(tags: string): string {
-    const albumTag = TAG_ALBUM.toLowerCase();
-    const tag = tags.split(" ").find((tag) => tag.startsWith(albumTag));
-    if (tag === undefined) {
-      return "Unknown";
-    }
-    const targetTag = tag.replaceAll(albumTag, "");
-    const found_tag = places
-      .map(({ year }) => year)
-      .find((year) => year.toLowerCase().replace(/[-_\s]/g, "") === targetTag);
-    if (found_tag === undefined) {
-      return "Unknown";
-    }
-    return found_tag;
-  }
-
-  /**
-   * Returns a flattened array of all photos from all events.
-   */
-  const photosList: Photo[] = useMemo(
-    () => ([] as Photo[]).concat(...Array.from(photosByEvent.values())),
-    [photosByEvent],
+  const matchesFilters = useCallback(
+    (photo: Photo) => {
+      const tags = photo.tags;
+      const hasTag = (prefix: string, tag: string | null) => {
+        if (!tag) return true;
+        return tags.some((t) => t === formatTag(prefix, tag));
+      };
+      // Process by events or something
+      return hasTag(TAG_TEAM, data.team) && hasTag(TAG_PERSON, data.person);
+    },
+    [data.person, data.team],
   );
 
-  function hasMorePhotos(): boolean {
-    return page <= totalPages || getNextEvent(internalEvent) !== null;
-  }
+  const albumFromTags = (tags: string[]) =>
+    places
+      .map(({ year }) => year)
+      .find((year) => tags.some((tag) => tag === formatTag(TAG_ALBUM, year))) ??
+    "Unknown";
 
-  /**
-   * Loads more photos.
-   * Only one loadMorePhotos call can be active at a time.
-   */
-  const loadMorePhotos = async (): Promise<void> => {
-    if (fetching) {
+  const eventFromTags = (tags: string[]) =>
+    events.find((event) =>
+      tags.some((t) => t === formatTag(TAG_EVENT, event)),
+    ) ?? "Unknown";
+
+  const processPhotos = (photos: FlickrPhoto[]): Photo[] =>
+    photos.map(
+      ({
+        url_m,
+        url_o,
+        url_l,
+        id,
+        width_o = 0,
+        width_l = 0,
+        height_o = 0,
+        height_l = 0,
+        tags,
+      }) => ({
+        url_preview: url_m ?? url_o ?? "",
+        url: url_l ?? url_o ?? "",
+        width: width_l ?? width_o,
+        height: height_l ?? height_o,
+        id,
+        origin: url_o ?? "",
+        tags: tags.split(" "),
+        year: albumFromTags(tags.split(" ")),
+        event: eventFromTags(tags.split(" ")),
+      }),
+    );
+
+  useEffect(() => {
+    setOrganizedPhotos([]);
+    if (data.text) {
+      getAllWithText(data.text).then((photos) => {
+        const processed_photos = processPhotos(photos);
+        // If we search by text, we should group by year (decreasing order)
+        const groups: Record<string, Photo[]> = {};
+        processed_photos.forEach((photo) => {
+          groups[photo.year] = groups[photo.year] || [];
+          groups[photo.year].push(photo);
+        });
+        const organized = Object.keys(groups)
+          .sort((a, b) => Number(b) - Number(a))
+          .map((year) => ({ key: year, photos: groups[year] }));
+        setOrganizedPhotos(organized);
+      });
       return;
     }
+    getAllPhotosFromPhotoset(
+      places.find(({ year }) => year === data.year)?.photoset_id ?? "",
+    ).then((photos) => {
+      const processed_photos = processPhotos(photos);
+      const filtered = processed_photos.filter(matchesFilters);
+      // If we search by year, we should group by event
+      // Events should be sorted in the order of the events array, and if not found, should be placed at the end
+      const groups: Record<string, Photo[]> = {};
+      filtered.forEach((photo) => {
+        groups[photo.event] = groups[photo.event] || [];
+        groups[photo.event].push(photo);
+      });
+      const organized = Object.keys(groups)
+        .sort((a, b) => {
+          const indexA = events.indexOf(a);
+          const indexB = events.indexOf(b);
+          return (
+            (indexA === -1 ? Infinity : indexA) -
+            (indexB === -1 ? Infinity : indexB)
+          );
+        })
+        .map((eventKey) => ({
+          key: eventKey,
+          photos: groups[eventKey],
+        }));
+      setOrganizedPhotos(organized);
+    });
+  }, [places, data.text, data.year, events]);
 
-    setFetching(true);
-
-    const nextEvent = getNextEvent(internalEvent);
-    if (page > totalPages && nextEvent !== null) {
-      setPage(1);
-      setTotalPages(1);
-      setInternalEvent(nextEvent);
-      setFetching(false);
-      return;
-    }
-
-    // Always use a fresh controller for each request
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-    const config: RequestInit = {
-      signal: controller.signal,
-    };
-
-    try {
-      let response;
-      if (internalEvent) {
-        response = await getAllWithEvent(
-          data.year,
-          internalEvent,
-          page,
-          config,
-        );
-      } else if (data.team) {
-        response = await getAllWithTeam(data.year, data.team, page, config);
-      } else if (data.person) {
-        response = await getAllWithPerson(data.year, data.person, page, config);
-      } else if (data.text) {
-        response = await getAllWithText(data.text, page, config);
-      } else {
-        setFetching(false);
-        return;
-      }
-
-      if (response && isMountedRef.current) {
-        const newPhotos: Photo[] = response.data.photos.photo.map(
-          ({
-            url_m,
-            url_o,
-            url_l,
-            id,
-            width_o = 0,
-            width_l = 0,
-            height_o = 0,
-            height_l = 0,
-            tags,
-          }: FlickrPhoto) => ({
-            url_preview: url_m ?? url_o ?? "",
-            url: url_l ?? url_o ?? "",
-            width: width_l ?? width_o,
-            height: height_l ?? height_o,
-            id,
-            origin: url_o ?? "",
-            year: albumFromTags(tags),
-          }),
-        );
-        const newPhotosByEvent = appendPhotos(
-          photosByEvent,
-          internalEvent,
-          newPhotos,
-        );
-        setTotalPages(response.data.photos.pages);
-        setPage(page + 1);
-        setPhotosByEvent(newPhotosByEvent);
-      }
-    } finally {
-      if (isMountedRef.current) setFetching(false);
-    }
-  };
-
-  return { hasMorePhotos, loadMorePhotos, photosByEvent, photosList };
+  return { organizedPhotos };
 };
 
 export default usePhotoLoader;
