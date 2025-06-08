@@ -1,10 +1,13 @@
+// @ts-check
+/// <reference path="../src/consts-config.d.ts" />
+
 export const places = [
   ["2025", "EUC, Portu, Portugal", "", 8960],
   ["RC 2024-2025", "Regional Contests", ""],
   ["2024", "EUC, Prague, Czechia", "", 8402],
   ["RC 2023-2024", "Regional Contests", ""],
   ["RC 2022-2023", "Regional Contests", ""],
-  ["RC 2021-2022", "Regional Contests", ""]
+  ["RC 2021-2022", "Regional Contests", ""],
 ];
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";
@@ -26,3 +29,4 @@ export const SVG_HEIGHT = 60;
 
 export const LAST_YEAR = "2025";
 export const DEFAULT_EVENT = "Photo Tour";
+export const MAX_ALBUM_SIZE = 2000;

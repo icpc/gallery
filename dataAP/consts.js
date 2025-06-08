@@ -1,3 +1,6 @@
+// @ts-check
+/// <reference path="../src/consts-config.d.ts" />
+
 export const places = [
   ["2025", "Asia Pacific Championship", "Singapore", 8734],
   ["2024", "Asia Pacific Championship", "Hanoi, Vietnam", 8633],
@@ -23,3 +26,5 @@ export const SVG_HEIGHT = 60;
 
 export const LAST_YEAR = "2025";
 export const DEFAULT_EVENT = "Photo Tour";
+
+export const MAX_ALBUM_SIZE = 2000;
