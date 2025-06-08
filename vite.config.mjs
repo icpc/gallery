@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      "@": resolve(__dirname, "src"),
       "@data": resolve(__dirname, process.env.VITE_DATA_FOLDER || "data"),
     },
   },
