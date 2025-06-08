@@ -19,14 +19,16 @@
     "react-select": "^5.3.2",
     "react-select-search": "^3.0.10",
     "react-transition-group": "^4.4.2",
+    "seedrandom": "^3.0.5",
     "styled-components": "^6.1.8",
-    "vite-raw-plugin": "^1.0.2"
+    "vite-raw-plugin": "^1.0.2",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "scripts": {
     "start": "vite --profile",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint",
     "format": "prettier . --write"
   },
   "browserslist": {
@@ -41,6 +43,7 @@
       "last 1 safari version"
     ]
   },
+  "type": "module",
   "devDependencies": {
     "@eslint/js": "^9.28.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
@@ -51,14 +54,15 @@
     "@types/react-infinite-scroller": "^1.2.5",
     "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-styled-components": "^2.0.7",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-react": "^7.33.2",
-    "prettier": "^3.3.3",
+    "node-fetch": "^3.3.2",
+    "prettier": "3.5.3",
     "ts-migrate": "^0.1.35",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.33.1",
-    "vite": "^5.0.11"
+    "vite": "^5.0.11",
+    "vitest": "^3.2.2"
   }
 }

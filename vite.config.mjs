@@ -1,22 +1,16 @@
 import react from "@vitejs/plugin-react";
-import { resolve } from "path";
 import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      "@": resolve(__dirname, "src"),
-      "@data": resolve(__dirname, process.env.VITE_DATA_FOLDER || "data"),
-    },
-  },
+  plugins: [react(), tsconfigPaths()],
   server: {
     port: 3000,
   },
   build: {
     target: "esnext",
     emptyOutDir: true,
-    outDir: process.env.PUBLIC_URL,
+    outDir: import.meta.env.PUBLIC_URL,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
