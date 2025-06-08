@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.0",
     "lightbox2": "^2.11.3",
