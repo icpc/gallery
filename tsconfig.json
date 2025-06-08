@@ -20,6 +20,12 @@
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
+        "baseUrl": ".",
+        "paths": {
+            "@data/*": [
+                "data/*"
+            ]
+        }
     },
     "include": [
         "src"

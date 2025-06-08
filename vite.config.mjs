@@ -1,14 +1,14 @@
 import react from "@vitejs/plugin-react";
+import { resolve } from "path";
 import { defineConfig } from "vite";
-import dataRawPlugin from "vite-raw-plugin";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    dataRawPlugin({
-      fileRegex: /\.(?:team|event|people)$/,
-    }),
-  ],
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@data": resolve(__dirname, process.env.VITE_DATA_FOLDER || "data"),
+    },
+  },
   server: {
     port: 3000,
   },

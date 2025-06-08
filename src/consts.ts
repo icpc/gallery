@@ -1,32 +1,31 @@
 import { Place } from "./types";
 
-const dataFolder = import.meta.env.VITE_DATA_FOLDER;
-console.log(import.meta.env);
+const consts = await import(`@data/consts.js`);
 
-const consts = await import(`../${dataFolder}/consts.js`);
-export const getRawEventData = async (year: string | null): Promise<string> => {
-  return (await import(`../${dataFolder}/${year}.event?raw`)).default;
-};
-
-export const getRawTeamData = async (year: string | null): Promise<string> => {
-  return (await import(`../${dataFolder}/${year}.team?raw`)).default;
-};
-
-export const getRawPeopleData = async (
+// This should probably use import.meta.glob, but it doesn't work with aliases yet
+const getRawData = async (
   year: string | null,
+  type: "event" | "team" | "people",
 ): Promise<string> => {
-  return (await import(`../${dataFolder}/${year}.people?raw`)).default;
+  if (!year) return "";
+  return (await import(`@data/${year}.${type}?raw`)).default;
 };
 
-console.log(`Using ${dataFolder} folder for consts.js`);
+export const getRawEventData = async (year: string | null): Promise<string> =>
+  getRawData(year, "event");
+
+export const getRawTeamData = async (year: string | null): Promise<string> =>
+  getRawData(year, "team");
+
+export const getRawPeopleData = async (year: string | null): Promise<string> =>
+  getRawData(year, "people");
+
 console.log(`Loaded \n${JSON.stringify(consts, undefined, 4)}`);
-export const places: Place[] = consts.places.map(
-  ([year, place, contestName]: [string, string, string]) => ({
-    year: year,
-    place: place,
-    contestName: contestName,
-  }),
-);
+export const places: Place[] = consts.places.map((arr) => ({
+  year: arr[0] as string,
+  place: arr[1] as string,
+  contestName: arr[2] as string,
+}));
 export const api_key = consts.api_key;
 export const user_id = consts.user_id;
 export const title = consts.title;

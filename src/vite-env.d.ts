@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  VITE_DATA_FOLDER: string;
   mode: string;
 }
 
