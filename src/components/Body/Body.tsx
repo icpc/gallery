@@ -3,9 +3,9 @@ import InfiniteScroll from "react-infinite-scroller";
 
 import { Box, Typography } from "@mui/material";
 
-import usePhotoLoader from "../../Util/PhotoLoader";
 import "../../consts";
 import { Photo } from "../../types";
+import usePhotoLoader from "../../utils/PhotoLoader";
 import { useAppContext } from "../AppContext";
 
 import MyModal from "./MyModal";

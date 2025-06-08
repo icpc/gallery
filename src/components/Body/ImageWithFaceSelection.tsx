@@ -10,8 +10,8 @@ import {
   createFilterOptions,
 } from "@mui/material";
 
-import { getPeopleData } from "../../Util/DataLoader";
 import { Person, Photo } from "../../types";
+import { getPeopleData } from "../../utils/DataLoader";
 import { useAppContext } from "../AppContext";
 
 import FaceDiv from "./FaceDiv";

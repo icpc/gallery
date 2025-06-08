@@ -11,9 +11,9 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Box, Grid, IconButton, Stack, Tooltip } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 
-import { SerializePhotoInfo } from "../../../Util/PhotoInfoHelper";
 import { FLICKR_IMAGE_PREFIX, SUGGESTIONS_EMAIL } from "../../../consts";
 import { Person, Photo } from "../../../types";
+import { SerializePhotoInfo } from "../../../utils/PhotoInfoHelper";
 import { useAppContext } from "../../AppContext";
 
 import { usePhotoInfo } from "./PhotoInfoContext";

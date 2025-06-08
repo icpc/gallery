@@ -7,9 +7,9 @@ import {
   useState,
 } from "react";
 
-import { ParsePhotoInfo } from "../../../Util/PhotoInfoHelper";
-import { getPhotoInfo } from "../../../Util/PhotoService";
 import { Person, PhotoInfo, PhotoInfoContextType } from "../../../types";
+import { ParsePhotoInfo } from "../../../utils/PhotoInfoHelper";
+import { getPhotoInfo } from "../../../utils/PhotoService";
 import { useAppContext } from "../../AppContext";
 
 const PhotoInfoContext = createContext<PhotoInfoContextType | null>(null);
