@@ -1,4 +1,5 @@
 import { FC } from "react";
+
 import { places } from "../consts";
 
 import { useAppContext } from "./AppContext";

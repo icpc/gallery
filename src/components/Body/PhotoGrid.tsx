@@ -1,4 +1,5 @@
 import { FC } from "react";
+
 import { Photo } from "../../types";
 
 interface Props {
@@ -16,7 +17,7 @@ const PhotoGrid: FC<Props> = ({ photos, handleClick }) => {
               className="preview"
               src={photo?.url_preview}
               alt={photo.url_preview}
-              loading="lazy" 
+              loading="lazy"
               onClick={() => handleClick(photo.id)}
             />
           </figure>
@@ -24,6 +25,6 @@ const PhotoGrid: FC<Props> = ({ photos, handleClick }) => {
       })}
     </div>
   );
-}
+};
 
 export default PhotoGrid;

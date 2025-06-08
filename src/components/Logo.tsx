@@ -1,4 +1,5 @@
 import { FC } from "react";
+
 import { Box, Link } from "@mui/material";
 
 import { LAST_YEAR } from "../consts";

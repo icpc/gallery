@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
 
 import { Photo } from "../../types";
+
 import Control from "./Control";
 
 import "../../styles/Body.css";

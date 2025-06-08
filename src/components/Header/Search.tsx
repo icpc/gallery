@@ -27,7 +27,9 @@ const Search: FC = () => {
         <TextField
           fullWidth
           value={inputText}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setInputText(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setInputText(e.target.value)
+          }
           placeholder="Global search..."
           InputProps={{
             endAdornment: (
