@@ -1,5 +1,5 @@
 // @ts-check
-/// <reference path="../src/consts-config.d.ts" />
+/// <reference path="../src/consts.d.ts" />
 
 export const places = [
   ["2024", "Astana, Kazakhstan", "World Finals", 7445],
