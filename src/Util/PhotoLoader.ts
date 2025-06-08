@@ -155,6 +155,9 @@ const usePhotoLoader = () => {
         response = await getAllWithPerson(data.year, data.person, page, config);
       } else if (data.text) {
         response = await getAllWithText(data.text, page, config);
+      } else {
+        setFetching(false);
+        return;
       }
 
       if (response && isMountedRef.current) {
