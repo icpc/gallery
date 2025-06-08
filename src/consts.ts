@@ -25,6 +25,7 @@ export const places: Place[] = consts.places.map((arr) => ({
   year: arr[0] as string,
   place: arr[1] as string,
   contestName: arr[2] as string,
+  photosetId: arr[3] as string,
 }));
 export const api_key = consts.api_key;
 export const user_id = consts.user_id;

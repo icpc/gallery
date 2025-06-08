@@ -4,7 +4,8 @@ export interface Place {
   0: string; // year
   1: string; // place
   2: string; // contestName
-  3?: number; // optional id or code
+  3: string; // photosetId
+  4?: number; // optional id or code
 }
 
 export declare const places: Place[];
