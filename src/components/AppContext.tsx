@@ -10,9 +10,14 @@ import { useSearchParams } from "react-router-dom";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { DEFAULT_EVENT, LAST_YEAR } from "../consts";
+import {
+  DEFAULT_EVENT,
+  LAST_YEAR,
+  getEventData,
+  getPeopleData,
+  getTeamData,
+} from "../consts";
 import { AppContextData, AppContextType } from "../types";
-import { getEventData, getPeopleData, getTeamData } from "../utils/DataLoader";
 
 /**
  * The default context object for AppContext.

@@ -1,24 +1,30 @@
 import { Place } from "./types";
+import UniqueList from "./utils/UniqueList";
 
 const consts = await import(`@data/consts.js`);
 
 // This should probably use import.meta.glob, but it doesn't work with aliases yet
-const getRawData = async (
+const getData = async (
   year: string | null,
   type: "event" | "team" | "people",
-): Promise<string> => {
-  if (!year) return "";
-  return (await import(`@data/${year}.${type}?raw`)).default;
+): Promise<string[]> => {
+  if (!year) return [];
+  const data: string = (await import(`@data/${year}.${type}?raw`)).default;
+  return UniqueList(
+    data
+      .split("\n")
+      .map((i) => i.trim())
+      .filter((i) => i != ""),
+  );
 };
 
-export const getRawEventData = async (year: string | null): Promise<string> =>
-  getRawData(year, "event");
+export const getEventData = async (year: string | null) =>
+  getData(year, "event");
 
-export const getRawTeamData = async (year: string | null): Promise<string> =>
-  getRawData(year, "team");
+export const getTeamData = async (year: string | null) => getData(year, "team");
 
-export const getRawPeopleData = async (year: string | null): Promise<string> =>
-  getRawData(year, "people");
+export const getPeopleData = async (year: string | null) =>
+  getData(year, "people");
 
 console.log(`Loaded \n${JSON.stringify(consts, undefined, 4)}`);
 export const places: Place[] = consts.places.map((arr) => ({
