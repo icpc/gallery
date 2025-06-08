@@ -6,7 +6,7 @@ const theme: Theme = createTheme({
     background: {
       default: "#1A1A1A",
       paper: "#2E2E2E",
-      // @ts-ignore
+      // @ts-expect-error I'm not sure we need this, but oh well
       transparent: "rgb(27, 27, 27)",
     },
     text: {

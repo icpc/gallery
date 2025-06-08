@@ -20,7 +20,6 @@ const Filters: FC = () => {
     setEvent,
     setPerson,
     setTeam,
-    setIsOpenMenu,
     desktop,
     events,
     people,

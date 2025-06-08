@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useAppContext } from "../components/AppContext";
 import { TAG_ALBUM, places } from "../consts";
-import { FlickrPhoto, FlickrPhotosResponse, Photo } from "../types";
+import { FlickrPhoto, Photo } from "../types";
 
 import {
   getAllWithEvent,

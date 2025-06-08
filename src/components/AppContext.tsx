@@ -40,18 +40,26 @@ function parseSearchParams(
     searchParamsData.slideShow = searchParams.get("slideshow") === "true";
   }
   if (searchParams.has("query")) {
-    searchParamsData.text = decodeURIComponent(searchParams.get("query")!);
+    searchParamsData.text = decodeURIComponent(searchParams.get("query") || "");
     searchParamsData.year = null;
   } else {
     if (searchParams.has("album")) {
-      searchParamsData.year = decodeURIComponent(searchParams.get("album")!);
+      searchParamsData.year = decodeURIComponent(
+        searchParams.get("album") || "",
+      );
     }
     if (searchParams.has("event")) {
-      searchParamsData.event = decodeURIComponent(searchParams.get("event")!);
+      searchParamsData.event = decodeURIComponent(
+        searchParams.get("event") || "",
+      );
     } else if (searchParams.has("team")) {
-      searchParamsData.team = decodeURIComponent(searchParams.get("team")!);
+      searchParamsData.team = decodeURIComponent(
+        searchParams.get("team") || "",
+      );
     } else if (searchParams.has("person")) {
-      searchParamsData.person = decodeURIComponent(searchParams.get("person")!);
+      searchParamsData.person = decodeURIComponent(
+        searchParams.get("person") || "",
+      );
     } else {
       searchParamsData.event = DEFAULT_EVENT;
     }
