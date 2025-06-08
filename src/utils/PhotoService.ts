@@ -1,5 +1,10 @@
-import { TAG_ALBUM, TAG_EVENT, TAG_TEAM, api_key, user_id } from "../consts";
-import { FlickrPhotoInfoResponse, FlickrPhotosResponse } from "../types";
+import { MAX_ALBUM_SIZE, TAG_ALBUM, api_key, user_id } from "../consts";
+import {
+  FlickrPhoto,
+  FlickrPhotoInfoResponse,
+  FlickrPhotosResponse,
+  FlickrPhotosetResponse,
+} from "../types";
 
 const extras =
   "tags,machine_tags,url_m,url_c,url_l,url_o,description,date_upload,date_taken";
@@ -9,37 +14,6 @@ function buildQuery(params: Record<string, string | number>): string {
     .map((key) => `${key}=${params[key]}`)
     .join("&");
   return `https://api.flickr.com/services/rest?${queryString}`;
-}
-
-function buildSearchUrl(
-  tags: [string, string][] = [],
-  page = 1,
-  text = "",
-): string {
-  const params: Record<string, string | number> = {
-    method: "flickr.photos.search",
-    api_key,
-    user_id,
-    tag_mode: "all",
-    page,
-    sort: "date-taken-desc",
-    per_page: 100,
-    extras,
-    format: "json",
-    nojsoncallback: "?",
-  };
-  if (tags.length) {
-    params.tags = tags
-      .map(([first, second]) => {
-        const sanitized = second.replace(/[,:]/g, "");
-        return `${first}$${sanitized}`;
-      })
-      .join(",");
-  }
-  if (text) {
-    params.text = text;
-  }
-  return buildQuery(params);
 }
 
 function buildPhotoInfoUrl(id: string) {
@@ -77,63 +51,79 @@ async function fetchData<T>(
   }
 }
 
-export function getAllWithEvent(
-  year: string | null,
-  event = "Photo%20Tour",
-  page = 1,
-  config: RequestInit = {},
-) {
-  return fetchData(
-    buildSearchUrl(
-      [
-        [TAG_ALBUM, year ?? ""],
-        [TAG_EVENT, event],
-      ],
-      page,
-    ),
-    config,
-  ) as Promise<{ data: FlickrPhotosResponse } | undefined>;
-}
-
-export function getAllWithTeam(
-  year: string | null,
-  team: string,
-  page = 1,
-  config: RequestInit = {},
-) {
-  return fetchData<FlickrPhotosResponse>(
-    buildSearchUrl(
-      [
-        [TAG_ALBUM, year ?? ""],
-        [TAG_TEAM, team],
-      ],
-      page,
-    ),
-    config,
-  );
-}
-
-export function getAllWithPerson(
-  year: string | null,
-  person: string,
-  page = 1,
-  config: RequestInit = {},
-) {
-  return fetchData<FlickrPhotosResponse>(
-    buildSearchUrl([[TAG_ALBUM, year ?? ""]], page, person),
-    config,
-  );
-}
-
-export function getAllWithText(
+export async function getAllWithText(
   text: string,
   page = 1,
   config: RequestInit = {},
 ) {
-  return fetchData<FlickrPhotosResponse>(
-    buildSearchUrl([], page, `${text}%20and%20${TAG_ALBUM}$`),
-    config,
-  );
+  const perPage = 500;
+  const params: Record<string, string | number> = {
+    method: "flickr.photos.search",
+    api_key,
+    user_id,
+    page,
+    per_page: perPage,
+    extras,
+    format: "json",
+    nojsoncallback: "?",
+    tag_mode: "all",
+    sort: "date-taken-desc",
+    text: `${text}%20and%20${TAG_ALBUM}$`,
+  };
+  const url = buildQuery(params);
+  const response = await fetchData<FlickrPhotosResponse>(url, config);
+  if (!response) {
+    return [];
+  }
+  return response.data.photos.photo;
+}
+
+// New function: get all photos from a photoset using flickr.photosets.getPhotos, 4 pages, 500 per page
+export async function getAllPhotosFromPhotoset(
+  photoset_id: string,
+  config: RequestInit = {},
+) {
+  const perPage = 500;
+  const totalPages = Math.ceil(MAX_ALBUM_SIZE / perPage);
+  // Prepare all requests in parallel
+  const requests = Array.from({ length: totalPages }, (_, i) => {
+    const page = i + 1;
+    const params: Record<string, string | number> = {
+      method: "flickr.photosets.getPhotos",
+      api_key,
+      user_id,
+      page,
+      per_page: perPage,
+      extras,
+      format: "json",
+      nojsoncallback: "?",
+      photoset_id,
+    };
+    const url = buildQuery(params);
+    return fetchData<FlickrPhotosetResponse>(url, config);
+  });
+  // Await all requests
+  const responses = await Promise.all(requests);
+  // Collect all photos
+  const allPhotos: FlickrPhoto[] = [];
+  for (const response of responses) {
+    if (response?.data?.photoset?.photo) {
+      allPhotos.push(...response.data.photoset.photo);
+    }
+  }
+  // Sort by date-taken-desc (descending)
+  allPhotos.sort((a, b) => {
+    const dateA =
+      "date_taken" in a && a.date_taken
+        ? Date.parse(a.date_taken as string)
+        : 0;
+    const dateB =
+      "date_taken" in b && b.date_taken
+        ? Date.parse(b.date_taken as string)
+        : 0;
+    return dateB - dateA;
+  });
+  return allPhotos;
 }
 
 export function getPhotoInfo(id: string, config: RequestInit = {}) {

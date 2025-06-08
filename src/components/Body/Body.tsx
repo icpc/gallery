@@ -1,5 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
-import InfiniteScroll from "react-infinite-scroller";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 
@@ -9,7 +8,7 @@ import usePhotoLoader from "../../utils/PhotoLoader";
 import { useAppContext } from "../AppContext";
 
 import MyModal from "./MyModal";
-import PhotoGridByYear from "./PhotoGridByYear";
+import PhotoGrid from "./PhotoGrid";
 
 import "../../styles/Body.css";
 
@@ -18,8 +17,12 @@ const Body: FC = () => {
     useAppContext();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { hasMorePhotos, loadMorePhotos, photosByEvent, photosList } =
-    usePhotoLoader();
+  const { organizedPhotos } = usePhotoLoader();
+
+  const photosList = useMemo(
+    () => organizedPhotos.flatMap(({ photos }) => photos),
+    [organizedPhotos],
+  );
 
   const [fullscreenPhoto, setFullscreenPhoto] = useState<Photo | null>(null);
   const [fullscreenIndex, setFullscreenIndex] = useState<number | null>(null);
@@ -35,28 +38,19 @@ const Body: FC = () => {
     if (id != null) {
       const index = photosList.findIndex((photo) => photo.id === id);
 
-      if (index === -1 && hasMorePhotos()) {
-        loadMorePhotos();
-        return;
-      }
-
       const photo = photosList[index];
       setFullscreenIndex(index);
       setFullscreenPhoto(photo);
 
       setLeftArrow(index !== 0);
-      setRightArrow(index + 1 < photosList.length || hasMorePhotos());
-
-      if (photosList.length <= index + 4 && hasMorePhotos()) {
-        loadMorePhotos();
-      }
+      setRightArrow(index + 1 < photosList.length);
     } else {
       setFullscreenIndex(null);
       setFullscreenPhoto(null);
       setLeftArrow(false);
       setRightArrow(false);
     }
-  }, [data.fullscreenPhotoId, photosList, hasMorePhotos, loadMorePhotos]);
+  }, [data.fullscreenPhotoId, photosList]);
 
   useEffect(() => {
     if (data.fullscreenPhotoId === null) {
@@ -121,26 +115,13 @@ const Body: FC = () => {
   return (
     <div className="body" ref={scrollRef}>
       {desktop && data.text && <h1 style={{ width: "100%" }}>{data.text}</h1>}
-      <InfiniteScroll
-        loadMore={loadMorePhotos}
-        hasMore={hasMorePhotos()}
-        initialLoad={true}
-        loader={
-          <Typography variant="h1" key={0}>
-            Loading ...
-          </Typography>
-        }
-        useWindow={false}
-        getScrollParent={() => scrollRef.current}
-      >
-        {Array.from(photosByEvent).map(([event, photos]) => (
-          <Box key={event}>
-            {event && <Typography variant="h1">{event}</Typography>}
-            <PhotoGridByYear photos={photos} handleClick={handleClick} />
-          </Box>
-        ))}
-      </InfiniteScroll>
-      {!hasMorePhotos() && photosList.length === 0 && (
+      {Array.from(organizedPhotos).map(({ key, photos }) => (
+        <Box key={key}>
+          <Typography variant="h1">{key}</Typography>
+          <PhotoGrid photos={photos} handleClick={handleClick} />
+        </Box>
+      ))}
+      {photosList.length === 0 && (
         <Typography variant="h1">No photo</Typography>
       )}
       {fullscreenPhoto != null && (
