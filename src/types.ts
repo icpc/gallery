@@ -5,6 +5,7 @@ export interface Place {
   place: string;
   contest_name: string;
   photoset_id: string;
+  contest_id?: number;
 }
 
 export interface Position {

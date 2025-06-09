@@ -7,12 +7,14 @@ export const places = [
     contest_name: "Asia Pacific Championship",
     place: "Singapore",
     photoset_id: "72177720324208191",
+    contest_id: 8734,
   },
   {
     year: "2024",
     contest_name: "Asia Pacific Championship",
     place: "Hanoi, Vietnam",
     photoset_id: "72177720315796565",
+    contest_id: 8633,
   },
   {
     year: "RC 2023-2024",
