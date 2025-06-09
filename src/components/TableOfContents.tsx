@@ -19,7 +19,7 @@ const TableOfContents: FC = () => {
 
   return (
     <nav aria-label="Table of contents">
-      {places.map(({ year, place, contestName }) => {
+      {places.map(({ year, place, contest_name }) => {
         if (year !== data.year) {
           return (
             <div
@@ -40,7 +40,7 @@ const TableOfContents: FC = () => {
               onClick={() => handleClick(year)}
             >
               <div className="year big-year">
-                {contestName} {year}
+                {contest_name} {year}
               </div>
               <div className="place big-place">{place}</div>
             </div>

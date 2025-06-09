@@ -25,7 +25,7 @@ const MobileYearWrapper: FC = () => {
   return (
     <Box onClick={toggleMenu} mt={1} mb={1}>
       <Typography variant="h4">
-        {place?.contestName} {place?.year}
+        {place?.contest_name} {place?.year}
       </Typography>
       <Typography variant="h5">{place?.place}</Typography>
     </Box>
