@@ -78,14 +78,12 @@ export async function getAllWithText(
   return response.data.photos.photo;
 }
 
-// New function: get all photos from a photoset using flickr.photosets.getPhotos, 4 pages, 500 per page
 export async function getAllPhotosFromPhotoset(
   photoset_id: string,
   config: RequestInit = {},
 ) {
   const perPage = 500;
   const totalPages = Math.ceil(MAX_ALBUM_SIZE / perPage);
-  // Prepare all requests in parallel
   const requests = Array.from({ length: totalPages }, (_, i) => {
     const page = i + 1;
     const params: Record<string, string | number> = {
@@ -102,9 +100,7 @@ export async function getAllPhotosFromPhotoset(
     const url = buildQuery(params);
     return fetchData<FlickrPhotosetResponse>(url, config);
   });
-  // Await all requests
   const responses = await Promise.all(requests);
-  // Collect all photos
   const allPhotos: FlickrPhoto[] = [];
   for (const response of responses) {
     if (response?.data?.photoset?.photo) {

@@ -9,6 +9,7 @@ import {
 import { useSearchParams } from "react-router-dom";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   DEFAULT_EVENT,
@@ -217,35 +218,23 @@ const AppContextProvider: FC<Props> = ({ children }) => {
     });
   };
 
-  const [events, setEvents] = useState<string[]>([]);
-  const [people, setPeople] = useState<string[]>([]);
-  const [teams, setTeams] = useState<string[]>([]);
+  const { data: events = [] } = useQuery({
+    queryKey: ["events", data.year],
+    queryFn: () => getEventData(data.year),
+    enabled: !!data.year,
+  });
 
-  useEffect(() => {
-    let isCancelled = false;
+  const { data: people = [] } = useQuery({
+    queryKey: ["people", data.year],
+    queryFn: () => getPeopleData(data.year),
+    enabled: !!data.year,
+  });
 
-    getEventData(data.year).then((eventsData) => {
-      if (!isCancelled) {
-        setEvents(eventsData);
-      }
-    });
-
-    getPeopleData(data.year).then((peopleData) => {
-      if (!isCancelled) {
-        setPeople(peopleData);
-      }
-    });
-
-    getTeamData(data.year).then((teamData) => {
-      if (!isCancelled) {
-        setTeams(teamData);
-      }
-    });
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [data.year]);
+  const { data: teams = [] } = useQuery({
+    queryKey: ["teams", data.year],
+    queryFn: () => getTeamData(data.year),
+    enabled: !!data.year,
+  });
 
   return (
     <AppContext.Provider

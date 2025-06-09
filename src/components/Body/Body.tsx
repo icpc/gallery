@@ -17,11 +17,11 @@ const Body: FC = () => {
     useAppContext();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { organizedPhotos } = usePhotoLoader();
+  const { isLoading, isError, error, data: groupedPhotos } = usePhotoLoader();
 
   const photosList = useMemo(
-    () => organizedPhotos.flatMap(({ photos }) => photos),
-    [organizedPhotos],
+    () => (groupedPhotos ?? []).flatMap(({ photos }) => photos),
+    [groupedPhotos],
   );
 
   const [fullscreenPhoto, setFullscreenPhoto] = useState<Photo | null>(null);
@@ -112,10 +112,28 @@ const Body: FC = () => {
     setFullscreenPhotoId,
   ]);
 
+  if (isLoading) {
+    return (
+      <div className="body">
+        <Typography variant="h1">Loading...</Typography>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="body">
+        <Typography variant="h1" color="error">
+          Error: {error.message}
+        </Typography>
+      </div>
+    );
+  }
+
   return (
     <div className="body" ref={scrollRef}>
       {desktop && data.text && <h1 style={{ width: "100%" }}>{data.text}</h1>}
-      {Array.from(organizedPhotos).map(({ key, photos }) => (
+      {Array.from(groupedPhotos ?? []).map(({ key, photos }) => (
         <Box key={key}>
           <Typography variant="h1">{key}</Typography>
           <PhotoGrid photos={photos} handleClick={handleClick} />

@@ -39,6 +39,11 @@ export interface Photo {
   tags: string[];
 }
 
+export interface GroupedPhotos {
+  key: string;
+  photos: Photo[];
+}
+
 export interface FlickrPhoto {
   id: string;
   url_m?: string;
