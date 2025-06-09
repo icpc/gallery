@@ -22,8 +22,18 @@ const usePhotoLoader = () => {
       if (!tag) return true;
       return tags.some((t) => t === formatTag(prefix, tag));
     };
-    // Process by events or something
-    return hasTag(TAG_TEAM, data.team) && hasTag(TAG_PERSON, data.person);
+    if (data.event) {
+      const photoEventIndex = events.indexOf(photo.event);
+      const dataEventIndex = events.indexOf(data.event);
+      if (photoEventIndex !== -1 && photoEventIndex < dataEventIndex) {
+        return false;
+      }
+    }
+    return (
+      hasTag(TAG_ALBUM, data.year) &&
+      hasTag(TAG_TEAM, data.team) &&
+      hasTag(TAG_PERSON, data.person)
+    );
   };
 
   const albumFromTags = (tags: string[]) =>
