@@ -2,8 +2,13 @@
 /// <reference path="../src/consts.d.ts" />
 
 export const places = [
-  ["RC 2023-2024", "Regional Contests", ""],
-  ["2023", "", ""],
+  {
+    year: "RC 2023-2024",
+    contest_name: "Regional Contests",
+    place: "",
+    photoset_id: "",
+  },
+  { year: "2023", contest_name: "", place: "", photoset_id: "" },
 ];
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";

@@ -27,12 +27,7 @@ export const getPeopleData = async (year: string | null) =>
   getData(year, "people");
 
 console.log(`Loaded \n${JSON.stringify(consts, undefined, 4)}`);
-export const places: Place[] = consts.places.map((arr) => ({
-  year: arr[0] as string,
-  place: arr[1] as string,
-  contest_name: arr[2] as string,
-  photoset_id: arr[3] as string,
-}));
+export const places: Place[] = consts.places as Place[];
 export const api_key = consts.api_key;
 export const user_id = consts.user_id;
 export const title = consts.title;
