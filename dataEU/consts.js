@@ -2,12 +2,42 @@
 /// <reference path="../src/consts.d.ts" />
 
 export const places = [
-  ["2025", "EUC, Portu, Portugal", "", 8960],
-  ["RC 2024-2025", "Regional Contests", ""],
-  ["2024", "EUC, Prague, Czechia", "", 8402],
-  ["RC 2023-2024", "Regional Contests", ""],
-  ["RC 2022-2023", "Regional Contests", ""],
-  ["RC 2021-2022", "Regional Contests", ""],
+  {
+    year: "2025",
+    contest_name: "EUC",
+    place: "Portu, Portugal",
+    photoset_id: "72177720324315706",
+  },
+  {
+    year: "RC 2024-2025",
+    contest_name: "Regional Contests",
+    place: "",
+    photoset_id: "72177720322230830",
+  },
+  {
+    year: "2024",
+    contest_name: "EUC",
+    place: "Prague, Czechia",
+    photoset_id: "72177720315719654",
+  },
+  {
+    year: "RC 2023-2024",
+    contest_name: "Regional Contests",
+    place: "",
+    photoset_id: "72177720315366347",
+  },
+  {
+    year: "RC 2022-2023",
+    contest_name: "Regional Contests",
+    place: "",
+    photoset_id: "72177720324377393",
+  },
+  {
+    year: "RC 2021-2022",
+    contest_name: "Regional Contests",
+    place: "",
+    photoset_id: "72177720324365151",
+  },
 ];
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";
