@@ -2,9 +2,24 @@
 /// <reference path="../src/consts.d.ts" />
 
 export const places = [
-  ["2025", "Asia Pacific Championship", "Singapore", 8734],
-  ["2024", "Asia Pacific Championship", "Hanoi, Vietnam", 8633],
-  ["RC 2023-2024", "Regional Contests", ""],
+  {
+    year: "2025",
+    contest_name: "Asia Pacific Championship",
+    place: "Singapore",
+    photoset_id: "72177720324208191",
+  },
+  {
+    year: "2024",
+    contest_name: "Asia Pacific Championship",
+    place: "Hanoi, Vietnam",
+    photoset_id: "72177720315796565",
+  },
+  {
+    year: "RC 2023-2024",
+    contest_name: "Regional Contests",
+    place: "",
+    photoset_id: "",
+  },
 ];
 
 export const api_key = "d30033b3d833adaace90f8487da70bba";

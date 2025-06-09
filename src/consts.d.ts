@@ -1,11 +1,10 @@
 // Type definitions for ICPC Gallery consts.js files
 
 export interface Place {
-  0: string; // year
-  1: string; // place
-  2: string; // contestName
-  3: string; // photosetId
-  4?: number; // optional id or code
+  year: string;
+  place: string;
+  contest_name: string;
+  photoset_id: string;
 }
 
 export declare const places: Place[];
