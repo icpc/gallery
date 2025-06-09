@@ -7,6 +7,7 @@ export const places = [
     place: "Orlando, FL",
     contest_name: "North America Championship",
     photoset_id: "72177720326308271",
+    contest_id: 5678,
   },
   {
     year: "RC 2024-2025",
@@ -19,6 +20,7 @@ export const places = [
     place: "Orlando, FL",
     contest_name: "North America Championship",
     photoset_id: "72177720317246309",
+    contest_id: 7447,
   },
   {
     year: "RC 2023-2024",
@@ -31,6 +33,7 @@ export const places = [
     place: "Orlando, FL",
     contest_name: "North America Championship",
     photoset_id: "72177720308058113",
+    contest_id: 5368,
   },
   {
     year: "RC 2022-2023",
@@ -43,6 +46,7 @@ export const places = [
     place: "Orlando, FL",
     contest_name: "North America Championship",
     photoset_id: "72177720305414433",
+    contest_id: 4675,
   },
   {
     year: "RC 2021-2022",
@@ -55,12 +59,14 @@ export const places = [
     place: "Online",
     contest_name: "North America Championship",
     photoset_id: "72177720307660066",
+    contest_id: 4334,
   },
   {
     year: "2020",
     place: "Atlanta, GA",
     contest_name: "North America Championship",
     photoset_id: "72177720305417371",
+    contest_id: 4060,
   },
   {
     year: "RC 2019-2020",

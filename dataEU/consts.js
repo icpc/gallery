@@ -7,6 +7,7 @@ export const places = [
     contest_name: "EUC",
     place: "Portu, Portugal",
     photoset_id: "72177720324315706",
+    contest_id: 8960,
   },
   {
     year: "RC 2024-2025",
@@ -19,6 +20,7 @@ export const places = [
     contest_name: "EUC",
     place: "Prague, Czechia",
     photoset_id: "72177720315719654",
+    contest_id: 8402,
   },
   {
     year: "RC 2023-2024",

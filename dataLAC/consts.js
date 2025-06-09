@@ -7,6 +7,7 @@ export const places = [
     contest_name: "LAC",
     place: "Salvador, Brazil",
     photoset_id: "72177720324495259",
+    contest_id: 8940,
   },
   {
     year: "RC 2024-2025",
@@ -19,6 +20,7 @@ export const places = [
     contest_name: "LAC",
     place: "Guadalajara, Mexico",
     photoset_id: "72177720325666505",
+    contest_id: 7940,
   },
   {
     year: "RC 2023-2024",
