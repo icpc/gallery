@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 export interface Place {
   year: string;
   place: string;
-  contestName: string;
+  contest_name: string;
   photoset_id: string;
 }
 

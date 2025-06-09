@@ -30,7 +30,7 @@ console.log(`Loaded \n${JSON.stringify(consts, undefined, 4)}`);
 export const places: Place[] = consts.places.map((arr) => ({
   year: arr[0] as string,
   place: arr[1] as string,
-  contestName: arr[2] as string,
+  contest_name: arr[2] as string,
   photoset_id: arr[3] as string,
 }));
 export const api_key = consts.api_key;
