@@ -15,7 +15,6 @@ import "../../styles/Body.css";
 const Body: FC = () => {
   const { data, setFullscreenPhotoId, setIsSlideShow, desktop } =
     useAppContext();
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { isLoading, isError, error, data: groupedPhotos } = usePhotoLoader();
 
@@ -131,7 +130,7 @@ const Body: FC = () => {
   }
 
   return (
-    <div className="body" ref={scrollRef}>
+    <div className="body">
       {desktop && data.text && <h1 style={{ width: "100%" }}>{data.text}</h1>}
       {Array.from(groupedPhotos ?? []).map(({ key, photos }) => (
         <Box key={key}>
