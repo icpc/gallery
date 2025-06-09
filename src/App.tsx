@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import { Grid } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -19,38 +19,40 @@ function App(): JSX.Element {
   const { desktop } = useAppContext();
 
   return (
-    <ThemeProvider theme={theme}>
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-      </Helmet>
-      <SnackbarProvider />
-      <CssBaseline />
-      <Grid container columns={10} height="100vh" p={2} pb={0} spacing={1}>
-        {desktop && (
+    <HelmetProvider>
+      <ThemeProvider theme={theme}>
+        <Helmet>
+          <title>{title}</title>
+          <meta name="description" content={description} />
+        </Helmet>
+        <SnackbarProvider />
+        <CssBaseline />
+        <Grid container columns={10} height="100vh" p={2} pb={0} spacing={1}>
+          {desktop && (
+            <Grid
+              item
+              xs={2}
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+            >
+              <DesktopLogo />
+              <Sidebar />
+            </Grid>
+          )}
           <Grid
             item
-            xs={2}
+            xs
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
           >
-            <DesktopLogo />
-            <Sidebar />
+            <Header />
+            <Body />
           </Grid>
-        )}
-        <Grid
-          item
-          xs
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
-        >
-          <Header />
-          <Body />
         </Grid>
-      </Grid>
-    </ThemeProvider>
+      </ThemeProvider>
+    </HelmetProvider>
   );
 }
 

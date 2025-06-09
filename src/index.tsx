@@ -2,6 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
+import { QueryClient } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import LogRocket from "logrocket";
 import setupLogRocketReact from "logrocket-react";
 
@@ -23,6 +26,20 @@ function logRocketId() {
 LogRocket.init(logRocketId());
 setupLogRocketReact(LogRocket);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  },
+});
+
+const persister = createSyncStoragePersister({
+  storage: window.localStorage,
+  key: "icpc-gallery-query",
+});
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
@@ -30,11 +47,16 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AppContextProvider>
-        <PhotoInfoProvider>
-          <App />
-        </PhotoInfoProvider>
-      </AppContextProvider>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister }}
+      >
+        <AppContextProvider>
+          <PhotoInfoProvider>
+            <App />
+          </PhotoInfoProvider>
+        </AppContextProvider>
+      </PersistQueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>,
 );
