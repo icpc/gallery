@@ -5,26 +5,10 @@ import { BrowserRouter } from "react-router-dom";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import LogRocket from "logrocket";
-import setupLogRocketReact from "logrocket-react";
 
 import App from "./App";
 import { AppContextProvider } from "./components/AppContext";
 import { PhotoInfoProvider } from "./components/Body/PhotoInfo/PhotoInfoContext";
-
-function logRocketId() {
-  const env = import.meta.env.MODE || "development";
-  if (env === "production") {
-    return "0y4ijo/icpc-gallery-prod";
-  } else if (env === "staging") {
-    return "0y4ijo/icpc-gallery-staging";
-  } else {
-    return "0y4ijo/icpc-gallery-dev";
-  }
-}
-
-LogRocket.init(logRocketId());
-setupLogRocketReact(LogRocket);
 
 const queryClient = new QueryClient({
   defaultOptions: {
