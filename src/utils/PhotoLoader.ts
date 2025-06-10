@@ -50,7 +50,7 @@ const usePhotoLoader = () => {
   const processPhotos = (photos: FlickrPhoto[]): Photo[] =>
     photos.map(
       ({
-        url_m,
+        url_t,
         url_o,
         url_l,
         id,
@@ -60,7 +60,7 @@ const usePhotoLoader = () => {
         height_l = 0,
         tags,
       }) => ({
-        url_preview: url_m ?? url_o ?? "",
+        url_preview: url_t ?? url_o ?? "",
         url: url_l ?? url_o ?? "",
         width: width_l ?? width_o,
         height: height_l ?? height_o,
