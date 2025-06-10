@@ -73,8 +73,8 @@ const usePhotoLoader = () => {
     );
 
   const textQuery = useQuery({
-    queryKey: ["photos", "search", data.text],
-    queryFn: () => getAllWithText(data.text || ""),
+    queryKey: ["photos", "search", data.text ?? ""],
+    queryFn: () => getAllWithText(data.text ?? ""),
     enabled: !!data.text,
     select: (raw: FlickrPhoto[]): GroupedPhotos[] => {
       const photos = processPhotos(raw);
@@ -92,8 +92,8 @@ const usePhotoLoader = () => {
   const photosetId = places.find(({ year }) => year === data.year)?.photoset_id;
 
   const yearQuery = useQuery({
-    queryKey: ["photos", "photoset", photosetId],
-    queryFn: () => getAllPhotosFromPhotoset(photosetId || ""),
+    queryKey: ["photos", "photoset", photosetId ?? ""],
+    queryFn: () => getAllPhotosFromPhotoset(photosetId ?? ""),
     enabled: !!photosetId,
     select: (raw: FlickrPhoto[]): GroupedPhotos[] => {
       const photos = processPhotos(raw).filter(matchesFilters);
