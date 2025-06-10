@@ -47,7 +47,7 @@ export interface GroupedPhotos {
 
 export interface FlickrPhoto {
   id: string;
-  url_m?: string;
+  url_t?: string;
   url_o?: string;
   url_l?: string;
   width_o?: number;
