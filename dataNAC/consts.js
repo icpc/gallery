@@ -11,8 +11,8 @@ export const places = [
   },
   {
     year: "RC 2024-2025",
-    place: "",
-    contest_name: "Regional Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "72177720321718985",
   },
   {
@@ -24,8 +24,8 @@ export const places = [
   },
   {
     year: "RC 2023-2024",
-    place: "",
-    contest_name: "Regional Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "72177720311602173",
   },
   {
@@ -50,8 +50,8 @@ export const places = [
   },
   {
     year: "RC 2021-2022",
-    place: "",
-    contest_name: "Regional Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "72177720306204804",
   },
   {
@@ -70,26 +70,26 @@ export const places = [
   },
   {
     year: "RC 2019-2020",
-    place: "",
-    contest_name: "Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "72177720311642534",
   },
   {
     year: "RC 2018-2019",
-    place: "",
-    contest_name: "Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "72177720311632543",
   },
   {
     year: "RC 2016-2017",
-    place: "",
-    contest_name: "Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "72177720311695346",
   },
   {
     year: "RC 2015-2016",
-    place: "",
-    contest_name: "Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "72177720311600458",
   },
   {
@@ -106,8 +106,8 @@ export const places = [
   },
   {
     year: "RC 2013-2014",
-    place: "",
-    contest_name: "Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "",
   },
   {
@@ -118,14 +118,14 @@ export const places = [
   },
   {
     year: "RC 2012-2013",
-    place: "",
-    contest_name: "Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "72177720317136307",
   },
   {
     year: "RC 2011-2012",
-    place: "",
-    contest_name: "Contests",
+    place: "Regional Contests",
+    contest_name: "",
     photoset_id: "",
   },
 ];
