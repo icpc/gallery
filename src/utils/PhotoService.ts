@@ -6,7 +6,7 @@ import {
   FlickrPhotosetResponse,
 } from "../types";
 
-const extras = "tags,url_t,url_l,url_o,date_taken";
+const extras = "tags,url_m,url_l,url_o,date_taken";
 
 function buildQuery(params: Record<string, string | number>): string {
   const queryString = Object.keys(params)
