@@ -81,7 +81,7 @@ export async function getAllPhotosFromPhotoset(
   photoset_id: string,
   config: RequestInit = {},
 ) {
-  const perPage = 200;
+  const perPage = 100;
   const totalPages = Math.ceil(MAX_ALBUM_SIZE / perPage);
   const requests = Array.from({ length: totalPages }, (_, i) => {
     const page = i + 1;
