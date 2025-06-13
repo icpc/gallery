@@ -16,26 +16,6 @@ const usePhotoLoader = () => {
   const formatTag = (prefix: string, tag: string) =>
     convertRawFlickrTag(`${prefix}$${tag}`);
 
-  const matchesFilters = (photo: Photo) => {
-    const tags = photo.tags;
-    const hasTag = (prefix: string, tag: string | null) => {
-      if (!tag) return true;
-      return tags.some((t) => t === formatTag(prefix, tag));
-    };
-    if (data.event) {
-      const photoEventIndex = events.indexOf(photo.event);
-      const dataEventIndex = events.indexOf(data.event);
-      if (photoEventIndex !== -1 && photoEventIndex < dataEventIndex) {
-        return false;
-      }
-    }
-    return (
-      hasTag(TAG_ALBUM, data.year) &&
-      hasTag(TAG_TEAM, data.team) &&
-      hasTag(TAG_PERSON, data.person)
-    );
-  };
-
   const albumFromTags = (tags: string[]) =>
     places
       .map(({ year }) => year)
@@ -105,13 +85,37 @@ const usePhotoLoader = () => {
     },
     enabled: !!photosetId,
     select: (raw: FlickrPhoto[]): GroupedPhotos[] => {
-      const photos = processPhotos(raw).filter(matchesFilters);
+      const photos = processPhotos(raw).filter((photo: Photo) => {
+        const tags = photo.tags;
+        const hasTag = (prefix: string, tag: string | null) => {
+          if (!tag) return true;
+          return tags.some((t) => t === formatTag(prefix, tag));
+        };
+        return (
+          hasTag(TAG_ALBUM, data.year) &&
+          hasTag(TAG_TEAM, data.team) &&
+          hasTag(TAG_PERSON, data.person)
+        );
+      });
       const byEvent: Record<string, Photo[]> = {};
+      events.forEach((event) => {
+        byEvent[event] = [];
+      });
       photos.forEach((p) => {
         byEvent[p.event] ||= [];
         byEvent[p.event].push(p);
       });
       return Object.keys(byEvent)
+        .filter((event) => {
+          if (data.event) {
+            const photoEventIndex = events.indexOf(event);
+            const dataEventIndex = events.indexOf(data.event);
+            if (photoEventIndex !== -1 && photoEventIndex < dataEventIndex) {
+              return false;
+            }
+          }
+          return true;
+        })
         .sort((a, b) => {
           const ia = events.indexOf(a);
           const ib = events.indexOf(b);
