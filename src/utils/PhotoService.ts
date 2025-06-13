@@ -11,9 +11,7 @@ const sizes = flickrSizes;
 
 const extras =
   "tags," +
-  sizes
-    .flatMap((s) => [`url_${s}`, `width_${s}`, `height_${s}`])
-    .join(",") +
+  sizes.flatMap((s) => [`url_${s}`, `width_${s}`, `height_${s}`]).join(",") +
   ",date_taken";
 
 function buildQuery(params: Record<string, string | number>): string {
