@@ -69,6 +69,7 @@ const usePhotoLoader = () => {
         src,
         id: photo.id,
         tags: photo.tags.split(" "),
+        origin: photo.url_o,
         year: albumFromTags(photo.tags.split(" ")),
         event: eventFromTags(photo.tags.split(" ")),
       };

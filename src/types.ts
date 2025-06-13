@@ -38,6 +38,7 @@ export interface Photo {
   sources: PhotoSource[];
   src: PhotoSource;
   id: string;
+  origin?: string;
   event: string;
   year: string;
   tags: string[];

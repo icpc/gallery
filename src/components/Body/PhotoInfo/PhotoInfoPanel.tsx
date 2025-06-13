@@ -167,7 +167,7 @@ const PhotoInfoPanel: FC<Props> = ({ setFace, photo }) => {
         {!toolTipsHidden && (
           <Tooltip title="Download photo">
             <IconButton
-              href={photo.origin}
+              href={photo.origin ?? photo.src.url}
               download
               target="_blank"
               rel="noreferrer"
