@@ -47,12 +47,15 @@ const Selector: FC<Props> = ({
           onChange(newValue ? newValue.data : "clear");
         }}
         renderInput={(params) => {
+          const { InputProps, inputProps, ...rest } = params;
+
           return (
             <TextField
-              {...params}
+              {...rest}
               placeholder={name}
               slotProps={{
                 input: {
+                  ...InputProps,
                   startAdornment: (
                     <InputAdornment position="start">
                       <Box
@@ -63,6 +66,9 @@ const Selector: FC<Props> = ({
                       />
                     </InputAdornment>
                   ),
+                },
+                htmlInput: {
+                  ...inputProps,
                 },
               }}
             />

@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 
 import SearchIcon from "@mui/icons-material/Search";
-import { IconButton, Paper, TextField } from "@mui/material";
+import { IconButton, InputAdornment, Paper, TextField } from "@mui/material";
 
 import { useAppContext } from "../AppContext";
 
@@ -34,11 +34,13 @@ const Search: FC = () => {
           slotProps={{
             input: {
               endAdornment: (
-                <IconButton type="submit">
-                  <SearchIcon />
-                </IconButton>
+                <InputAdornment position="end">
+                  <IconButton type="submit">
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
               ),
-            }
+            },
           }}
         />
       </form>
