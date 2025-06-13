@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 import "../../consts";
 import { Photo } from "../../types";
@@ -8,7 +8,7 @@ import usePhotoLoader from "../../utils/PhotoLoader";
 import { useAppContext } from "../AppContext";
 
 import MyModal from "./MyModal";
-import PhotoGrid from "./PhotoGrid";
+import PhotoGallery from "./PhotoGallery";
 
 import "../../styles/Body.css";
 
@@ -132,15 +132,10 @@ const Body: FC = () => {
   return (
     <div className="body">
       {desktop && data.text && <h1 style={{ width: "100%" }}>{data.text}</h1>}
-      {Array.from(groupedPhotos ?? []).map(({ key, photos }) => (
-        <Box key={key}>
-          <Typography variant="h1">{key}</Typography>
-          <PhotoGrid photos={photos} handleClick={handleClick} />
-        </Box>
-      ))}
-      {photosList.length === 0 && (
-        <Typography variant="h1">No photo</Typography>
-      )}
+      <PhotoGallery
+        groupedPhotos={groupedPhotos ?? []}
+        handleClick={handleClick}
+      />
       {fullscreenPhoto != null && (
         <MyModal
           photo={fullscreenPhoto}

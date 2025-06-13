@@ -28,13 +28,16 @@ export interface PhotoInfo {
   photographer: string[];
 }
 
-export interface Photo {
-  url_preview: string;
+export interface PhotoSource {
   url: string;
   width: number;
   height: number;
+}
+
+export interface Photo {
+  sources: PhotoSource[];
+  src: PhotoSource;
   id: string;
-  origin: string;
   event: string;
   year: string;
   tags: string[];
@@ -45,17 +48,16 @@ export interface GroupedPhotos {
   photos: Photo[];
 }
 
-export interface FlickrPhoto {
+export const flickrSizes = ["t", "s", "n", "m", "z", "c", "l", "o"] as const;
+
+export type FlickrUrlSize = (typeof flickrSizes)[number];
+
+export type FlickrPhoto = {
   id: string;
-  url_m?: string;
-  url_o?: string;
-  url_l?: string;
-  width_o?: number;
-  width_l?: number;
-  height_o?: number;
-  height_l?: number;
   tags: string;
-}
+} & Partial<Record<`url_${FlickrUrlSize}`, string>> &
+  Partial<Record<`width_${FlickrUrlSize}`, number>> &
+  Partial<Record<`height_${FlickrUrlSize}`, number>>;
 
 export interface FlickrPhotos {
   page: number;

@@ -64,7 +64,10 @@ const ImageWithFaceSelection: FC<Props> = ({
     };
   }
 
-  const { width, height } = calculateImageSize(photo.width, photo.height);
+  const { width, height } = calculateImageSize(
+    photo.src.width,
+    photo.src.height,
+  );
 
   function createPerson(name: string, crop: Crop) {
     if (name) {
@@ -89,7 +92,7 @@ const ImageWithFaceSelection: FC<Props> = ({
         onChange={(c: Crop) => setCrop(c)}
         disabled={!editMode}
       >
-        <img width={width} height={height} src={photo.url} alt={alt} />
+        <img width={width} height={height} src={photo.src.url} alt={alt} />
         {photoInfo?.person?.map((person) => (
           <FaceDiv
             person={person}

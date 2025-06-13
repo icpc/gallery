@@ -27,7 +27,7 @@ const Slideshow: FC<Props> = ({ photo, handleRotationRight }) => {
       <div className="wrapper">
         <Control />
         <div className="img-container">
-          <img className="full" src={photo.url} alt={"fullsize"} />
+          <img className="full" src={photo.src.url} alt={"fullsize"} />
         </div>
       </div>
     </div>

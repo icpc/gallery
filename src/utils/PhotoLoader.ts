@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAppContext } from "../components/AppContext";
 import { TAG_ALBUM, TAG_EVENT, TAG_PERSON, TAG_TEAM, places } from "../consts";
-import { FlickrPhoto, GroupedPhotos, Photo } from "../types";
+import { FlickrPhoto, GroupedPhotos, Photo, flickrSizes } from "../types";
 
 import { getAllPhotosFromPhotoset, getAllWithText } from "./PhotoService";
 import { convertRawFlickrTag } from "./convertRawFlickrTag";
@@ -48,29 +48,31 @@ const usePhotoLoader = () => {
     ) ?? "Unknown";
 
   const processPhotos = (photos: FlickrPhoto[]): Photo[] =>
-    photos.map(
-      ({
-        url_m,
-        url_o,
-        url_l,
-        id,
-        width_o = 0,
-        width_l = 0,
-        height_o = 0,
-        height_l = 0,
-        tags,
-      }) => ({
-        url_preview: url_m ?? url_o ?? "",
-        url: url_l ?? url_o ?? "",
-        width: width_l ?? width_o,
-        height: height_l ?? height_o,
-        id,
-        origin: url_o ?? "",
-        tags: tags.split(" "),
-        year: albumFromTags(tags.split(" ")),
-        event: eventFromTags(tags.split(" ")),
-      }),
-    );
+    photos.map((photo) => {
+      const sources = flickrSizes
+        .map((s) => {
+          const url = photo[`url_${s}` as const];
+          const width = photo[`width_${s}` as const];
+          const height = photo[`height_${s}` as const];
+          if (!url) return null;
+          return { url, width: width ?? 0, height: height ?? 0 };
+        })
+        .filter((x) => x !== null);
+      sources.sort((a, b) => a.width - b.width);
+      // The default is the first photo with width > 1000
+      const src =
+        sources.find((source) => source?.width > 1000) ??
+        sources[sources.length - 1];
+
+      return {
+        sources,
+        src,
+        id: photo.id,
+        tags: photo.tags.split(" "),
+        year: albumFromTags(photo.tags.split(" ")),
+        event: eventFromTags(photo.tags.split(" ")),
+      };
+    });
 
   const textQuery = useQuery({
     queryKey: ["photos", "search", data.text ?? ""],

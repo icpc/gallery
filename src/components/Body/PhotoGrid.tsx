@@ -1,23 +1,45 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
+import { LazyLoadImage, ScrollPosition } from "react-lazy-load-image-component";
 
-import { Photo } from "../../types";
+import { Photo, PhotoSource } from "../../types";
 
 interface Props {
   photos: Photo[];
   handleClick: (id: string) => void;
+  scrollPosition: ScrollPosition;
 }
 
-const PhotoGrid: FC<Props> = ({ photos, handleClick }) => {
+function useWindowWidth() {
+  const [w, setW] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 0,
+  );
+  useEffect(() => {
+    const onResize = () => setW(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return w;
+}
+
+const PhotoGrid: FC<Props> = ({ photos, handleClick, scrollPosition }) => {
+  const winW = useWindowWidth();
+
+  const displayPx = (winW >= 900 ? 0.33 : 0.9) * winW;
+
+  const pickSrc = (sources: PhotoSource[]) =>
+    sources.findLast((s) => s.width <= displayPx) ?? sources[0];
+
   return (
     <div className="masonry">
       {photos.map((photo) => {
         return (
           <figure key={photo.id} className="masonry-brick">
-            <img
-              loading="lazy"
+            <LazyLoadImage
               className="preview"
-              src={photo?.url_preview}
-              alt={photo.url_preview}
+              src={pickSrc(photo.sources).url}
+              style={{ aspectRatio: photo.src.width / photo.src.height }}
+              scrollPosition={scrollPosition}
+              alt={`Photo ${photo.id}`}
               onClick={() => handleClick(photo.id)}
             />
           </figure>
