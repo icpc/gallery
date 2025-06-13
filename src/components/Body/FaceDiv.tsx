@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { Person } from "../../types";
 
@@ -14,17 +14,17 @@ interface RectangleProps {
   right: number;
 }
 
-const Rectangle = styled.fieldset<RectangleProps>`
-  top: ${(props) => props.top * 100}%;
-  bottom: ${(props) => 100 - props.bottom * 100 - 3}%;
-  left: ${(props) => props.left * 100}%;
-  right: ${(props) => 100 - props.right * 100}%;
-  position: absolute;
-  color: var(--colorRectangle);
-  padding: 3px 6px;
-  border: var(--borderRectangle) solid 3px;
-  transform: rotatex(180deg);
-`;
+const Rectangle = styled.fieldset<RectangleProps>((props) => ({
+  position: "absolute",
+  top: `${props.top * 100}%`,
+  bottom: `${100 - props.bottom * 100 - 3}%`,
+  left: `${props.left * 100}%`,
+  right: `${100 - props.right * 100}%`,
+  color: "var(--colorRectangle)",
+  padding: "3px 6px",
+  border: "var(--borderRectangle) solid 3px",
+  transform: "rotateX(180deg)",
+}));
 interface FaceDivProps {
   person: Person;
   hidden: boolean;

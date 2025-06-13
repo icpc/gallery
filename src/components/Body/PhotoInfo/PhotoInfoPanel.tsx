@@ -83,19 +83,19 @@ const PhotoInfoPanel: FC<Props> = ({ setFace, photo }) => {
 
       {changesPane && (
         <Grid container spacing={1}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <PersonEdit />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <EventEdit />
           </Grid>
-          <Grid item xs="auto">
+          <Grid size="auto">
             <TeamEdit />
           </Grid>
-          <Grid item xs="auto">
+          <Grid size="auto">
             <PhotographerEdit />
           </Grid>
-          <Grid item xs="auto">
+          <Grid size="auto">
             <AlbumEdit />
           </Grid>
         </Grid>

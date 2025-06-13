@@ -1,4 +1,4 @@
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { JSX } from "react";
 
 import { Grid } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,47 +12,42 @@ import { DesktopLogo } from "./components/Logo";
 import Sidebar from "./components/Sidebar";
 import { description, title } from "./consts";
 import theme from "./theme";
+import { useHead } from "./utils/useHead";
 
 import "./styles/App.css";
 
 function App(): JSX.Element {
   const { desktop } = useAppContext();
 
+  useHead({ title, description });
+
   return (
-    <HelmetProvider>
-      <ThemeProvider theme={theme}>
-        <Helmet>
-          <title>{title}</title>
-          <meta name="description" content={description} />
-        </Helmet>
-        <SnackbarProvider />
-        <CssBaseline />
-        <Grid container columns={10} height="100vh" p={2} pb={0} spacing={1}>
-          {desktop && (
-            <Grid
-              item
-              xs={2}
-              display="flex"
-              flexDirection="column"
-              justifyContent="space-between"
-            >
-              <DesktopLogo />
-              <Sidebar />
-            </Grid>
-          )}
+    <ThemeProvider theme={theme}>
+      <SnackbarProvider />
+      <CssBaseline />
+      <Grid container columns={10} height="100vh" p={2} pb={0} spacing={1}>
+        {desktop && (
           <Grid
-            item
-            xs
-            display="flex"
-            flexDirection="column"
+            container
+            size={2}
+            direction="column"
             justifyContent="space-between"
           >
-            <Header />
-            <Body />
+            <DesktopLogo />
+            <Sidebar />
           </Grid>
+        )}
+        <Grid
+          size="grow"
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <Header />
+          <Body />
         </Grid>
-      </ThemeProvider>
-    </HelmetProvider>
+      </Grid>
+    </ThemeProvider>
   );
 }
 
