@@ -3,20 +3,12 @@ import { FC } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Autocomplete,
+  Box,
+  InputAdornment,
   Paper,
   TextField,
   createFilterOptions,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-
-const TextFieldWithIcon = styled(TextField)(() => ({
-  "& .MuiInputBase-input.MuiAutocomplete-input": {
-    marginLeft: "25px",
-  },
-  "& .MuiInputLabel-root": {
-    marginLeft: "25px",
-  },
-}));
 
 interface Option {
   data: string;
@@ -41,6 +33,7 @@ const Selector: FC<Props> = ({
   disableClearable,
 }) => {
   const selectedValue = options.find((opt) => opt.data === value) ?? null;
+
   return (
     <Paper>
       <Autocomplete<Option, undefined, boolean>
@@ -49,23 +42,32 @@ const Selector: FC<Props> = ({
         filterOptions={createFilterOptions({ limit: 200 })}
         value={selectedValue}
         options={options}
-        isOptionEqualToValue={(option: Option, val: Option) =>
-          option.data === val.data
-        }
+        isOptionEqualToValue={(option, val) => option.data === val.data}
         onChange={(_, newValue) => {
           onChange(newValue ? newValue.data : "clear");
         }}
-        renderInput={(params) => (
-          <TextFieldWithIcon
-            {...params}
-            placeholder={name}
-            style={{
-              backgroundImage: `url(${leftIcon})`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "left 10px center",
-            }}
-          />
-        )}
+        renderInput={(params) => {
+          return (
+            <TextField
+              {...params}
+              placeholder={name}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Box
+                        component="img"
+                        src={leftIcon}
+                        alt=""
+                        sx={{ width: 20, height: 20 }}
+                      />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          );
+        }}
         popupIcon={<ExpandMoreIcon />}
         disableClearable={disableClearable}
       />

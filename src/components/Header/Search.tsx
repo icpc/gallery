@@ -31,12 +31,14 @@ const Search: FC = () => {
             setInputText(e.target.value)
           }
           placeholder="Global search..."
-          InputProps={{
-            endAdornment: (
-              <IconButton type="submit">
-                <SearchIcon />
-              </IconButton>
-            ),
+          slotProps={{
+            input: {
+              endAdornment: (
+                <IconButton type="submit">
+                  <SearchIcon />
+                </IconButton>
+              ),
+            }
           }}
         />
       </form>
