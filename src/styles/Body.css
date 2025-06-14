@@ -1,10 +1,12 @@
 @import "./theme-variables.css";
 
 .body {
-  height: calc(100vh - 150px);
   gap: 2em;
   overflow: auto;
   border-radius: 8px;
+  height: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
 }
 
 .body .control {

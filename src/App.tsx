@@ -1,8 +1,6 @@
 import { JSX } from "react";
 
-import { Grid } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 
 import { useAppContext } from "./components/AppContext";
@@ -25,28 +23,49 @@ function App(): JSX.Element {
     <ThemeProvider theme={theme}>
       <SnackbarProvider />
       <CssBaseline />
-      <Grid container columns={10} height="100vh" p={2} pb={0} spacing={1}>
+
+      <Box
+        display="grid"
+        height="100vh"
+        p={2}
+        pb={0}
+        gap={1}
+        gridTemplateColumns={desktop ? "2fr 8fr" : "1fr"}
+        gridTemplateRows={desktop ? "minmax(130px, auto) 1fr" : "auto 1fr"}
+        gridTemplateAreas={
+          desktop ? `"logo header"\n"sidebar body"` : `"header"\n"body"`
+        }
+      >
         {desktop && (
-          <Grid
-            container
-            size={2}
-            direction="column"
-            justifyContent="space-between"
-          >
-            <DesktopLogo />
-            <Sidebar />
-          </Grid>
+          <>
+            <Box
+              gridArea="logo"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <DesktopLogo />
+            </Box>
+
+            <Box gridArea="sidebar" minHeight={0}>
+              <Sidebar />
+            </Box>
+          </>
         )}
-        <Grid
-          size="grow"
+
+        <Box
+          gridArea="header"
           display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
+          alignItems="center"
+          justifyContent="center"
         >
           <Header />
+        </Box>
+
+        <Box gridArea="body" minHeight={0}>
           <Body />
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </ThemeProvider>
   );
 }

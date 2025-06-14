@@ -1,11 +1,7 @@
 @import "theme-variables.css";
 nav {
   direction: rtl;
-  position: -webkit-sticky; /* For Safari */
-  top: 24px; /* How far down the page you want your ToC to live */
-
-  /* Give table of contents a scrollbar */
-  height: calc(100vh - 150px);
+  height: 100%;
   overflow: auto;
   font-style: normal;
   font-weight: 700;
