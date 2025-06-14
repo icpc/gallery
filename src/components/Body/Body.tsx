@@ -16,7 +16,13 @@ const Body: FC = () => {
   const { data, setFullscreenPhotoId, setIsSlideShow, desktop } =
     useAppContext();
 
-  const { isLoading, isError, error, data: groupedPhotos } = usePhotoLoader();
+  const {
+    isLoading,
+    isPending,
+    isError,
+    error,
+    data: groupedPhotos,
+  } = usePhotoLoader();
 
   const photosList = useMemo(
     () => (groupedPhotos ?? []).flatMap(({ photos }) => photos),
@@ -111,7 +117,7 @@ const Body: FC = () => {
     setFullscreenPhotoId,
   ]);
 
-  if (isLoading) {
+  if (isLoading || isPending) {
     return (
       <div className="body">
         <Typography variant="h1">Loading...</Typography>
