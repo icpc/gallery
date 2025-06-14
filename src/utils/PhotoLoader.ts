@@ -98,9 +98,11 @@ const usePhotoLoader = () => {
         );
       });
       const byEvent: Record<string, Photo[]> = {};
-      events.forEach((event) => {
-        byEvent[event] = [];
-      });
+      if (data.event) {
+        events.forEach((event) => {
+          byEvent[event] = [];
+        });
+      }
       photos.forEach((p) => {
         byEvent[p.event] ||= [];
         byEvent[p.event].push(p);
