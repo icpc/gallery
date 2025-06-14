@@ -3,7 +3,7 @@ name: Continuous Deployment
 on:
   push:
     branches:
-      - '**'
+      - "**"
 
 permissions:
   contents: read
@@ -72,11 +72,19 @@ jobs:
           ref: ${{ matrix.branch }}
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
+      - name: Cache build output
+        id: cache-build
+        uses: actions/cache@v4
+        with:
+          path: ${{ matrix.public_url }}.zip
+          key: build-${{ matrix.branch }}-${{ github.sha }}
       - name: Install dependencies
+        if: steps.cache-build.outputs.cache-hit != 'true'
         run: npm ci --legacy-peer-deps
       - name: Build
+        if: steps.cache-build.outputs.cache-hit != 'true'
         run: |
           if [ "${{ matrix.branch }}" = "main" ]; then
             PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} MODE=staging ./build.sh
@@ -86,7 +94,7 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: build-${{ matrix.branch }}-${{ matrix.folder }}
+          name: build-${{ matrix.branch }}-${{ matrix.folder }}-${{ github.sha }}
           path: ${{ matrix.public_url }}.zip
 
   repack-gh-pages:
