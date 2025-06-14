@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import fetch from "node-fetch";
 import seedrandom from "seedrandom";
 import { describe, expect, it } from "vitest";

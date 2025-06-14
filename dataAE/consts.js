@@ -1,6 +1,3 @@
-// @ts-check
-/// <reference path="../src/consts.d.ts" />
-
 export const places = [
   {
     year: "RC 2023-2024",
