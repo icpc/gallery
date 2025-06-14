@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 
 import { Typography } from "@mui/material";
 
@@ -21,8 +21,6 @@ const Body: FC = () => {
     mobile,
     setIsOpenMenu,
   } = useAppContext();
-
-  const bodyRef = useRef<HTMLDivElement>(null);
 
   const {
     isLoading,
@@ -71,19 +69,18 @@ const Body: FC = () => {
     }
   }, [data.fullscreenPhotoId]);
 
-  // Close menu when scrolling on mobile
+  // Close mobile menu when scrolling
   useEffect(() => {
     if (!mobile) return;
+
+    const bodyElement = document.querySelector(".body");
+    if (!bodyElement) return;
 
     const handleScroll = () => {
       setIsOpenMenu(false);
     };
 
-    const bodyElement = bodyRef.current;
-    if (!bodyElement) return;
-
-    bodyElement.addEventListener("scroll", handleScroll, { passive: true });
-
+    bodyElement.addEventListener("scroll", handleScroll);
     return () => {
       bodyElement.removeEventListener("scroll", handleScroll);
     };
@@ -162,7 +159,7 @@ const Body: FC = () => {
   }
 
   return (
-    <div className="body" ref={bodyRef}>
+    <div className="body">
       {desktop && data.text && <h1 style={{ width: "100%" }}>{data.text}</h1>}
       <PhotoGallery
         groupedPhotos={groupedPhotos ?? []}
