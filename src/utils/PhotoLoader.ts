@@ -106,16 +106,6 @@ const usePhotoLoader = () => {
         byEvent[p.event].push(p);
       });
       return Object.keys(byEvent)
-        .filter((event) => {
-          if (data.event) {
-            const photoEventIndex = events.indexOf(event);
-            const dataEventIndex = events.indexOf(data.event);
-            if (photoEventIndex !== -1 && photoEventIndex < dataEventIndex) {
-              return false;
-            }
-          }
-          return true;
-        })
         .sort((a, b) => {
           const ia = events.indexOf(a);
           const ib = events.indexOf(b);
