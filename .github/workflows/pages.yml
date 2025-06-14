@@ -27,7 +27,7 @@ jobs:
       - name: Generate Matrix
         id: generate-matrix
         run: |
-          branches=($(git branch -r | cut -c 3- | sed 's/origin\///g'))
+          branches=($(git branch -r | sed 's/origin\\///g' | grep -vE '^(HEAD|->)' | sort | uniq))
           json_branches=$(printf '%s\n' "${branches[@]}" | jq -R . | jq -s -c .)
           echo "json_branches=${json_branches}" >> $GITHUB_OUTPUT
 
