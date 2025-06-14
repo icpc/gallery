@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   ScrollPosition,
   trackWindowScroll,
@@ -6,6 +6,8 @@ import {
 
 import { Box, Typography } from "@mui/material";
 import { GroupedPhotos } from "src/types";
+
+import { useAppContext } from "../AppContext";
 
 import PhotoGrid from "./PhotoGrid";
 
@@ -20,11 +22,21 @@ const PhotoGallery: FC<Props> = ({
   handleClick,
   scrollPosition,
 }) => {
+  const { data } = useAppContext();
+  useEffect(() => {
+    if (data.event) {
+      const id = encodeURIComponent(data.event);
+      const element = document.getElementById(id);
+      element?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [groupedPhotos, data.event]);
+
   if (!groupedPhotos.find(({ photos }) => photos.length > 0)) {
     return <Typography variant="h1">No photo</Typography>;
   }
+
   return Array.from(groupedPhotos).map(({ key, photos }) => (
-    <Box key={key}>
+    <Box key={key} id={encodeURIComponent(key)}>
       <Typography variant="h1">{key}</Typography>
       <PhotoGrid
         photos={photos}
