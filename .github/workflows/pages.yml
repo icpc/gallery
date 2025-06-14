@@ -1,43 +1,18 @@
-name: Continuous Deployment
+name: Publish GitHub Pages
 
 on:
   push:
     branches:
-      - "**"
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-  actions: read
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+      - "main"
+  workflow_dispatch:
 
 jobs:
-  build_matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      json_branches: ${{ steps.generate-matrix.outputs.json_branches }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Generate Matrix
-        id: generate-matrix
-        run: |
-          branches=($(git branch -r | sed 's/origin\\///g' | grep -vE '^(HEAD|->)' | sort | uniq))
-          json_branches=$(printf '%s\n' "${branches[@]}" | jq -R . | jq -s -c .)
-          echo "json_branches=${json_branches}" >> $GITHUB_OUTPUT
-
   build:
+    name: Create artifacts from master
     runs-on: ubuntu-latest
-    name: Build
-    needs: build_matrix
+
     strategy:
       matrix:
-        branch: ${{ fromJSON(needs.build_matrix.outputs.json_branches) }}
         include:
           - public_url: gallery # wf
             data_folder: data
@@ -66,37 +41,22 @@ jobs:
           - public_url: gallery/acpc # acpc
             data_folder: dataACPC
             folder: acpc
+
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ matrix.branch }}
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
-      - name: Cache build output
-        id: cache-build
-        uses: actions/cache@v4
-        with:
-          path: ${{ matrix.public_url }}.zip
-          key: build-${{ matrix.branch }}-${{ github.sha }}
       - name: Install dependencies
-        if: steps.cache-build.outputs.cache-hit != 'true'
         run: npm ci --legacy-peer-deps
       - name: Build
-        if: steps.cache-build.outputs.cache-hit != 'true'
-        run: |
-          if [ "${{ matrix.branch }}" = "main" ]; then
-            PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} MODE=staging ./build.sh
-          else
-            PUBLIC_URL=${{ matrix.branch }}/${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} MODE=staging ./build.sh
-          fi
+        run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} MODE=staging ./build.sh
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: build-${{ matrix.branch }}-${{ matrix.folder }}-${{ github.sha }}
+          name: build-${{ matrix.folder }}
           path: ${{ matrix.public_url }}.zip
-
   repack-gh-pages:
     name: Repack GitHub Pages
     runs-on: ubuntu-latest
@@ -113,23 +73,14 @@ jobs:
           cd build-all
           ls
           unzip '*.zip'
-          for d in */ ; do
-            if [ "$d" != "gallery/" ]; then
-              mv "$d"* .
-              rm -rf "$d"
-            fi
-          done
-          if [ -d gallery ]; then
-            mv gallery/* .
-            rm -rf gallery
-          fi
+          mv gallery/* .
+          rm -rf gallery
           rm *.zip
           ls
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: build-all
-
   deploy:
     name: Deploy to GitHub Pages
     needs: repack-gh-pages
