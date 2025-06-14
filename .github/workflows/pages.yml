@@ -1,100 +1,93 @@
-name: Publish GitHub Pages
+name: Publish Galleries to GitHub Pages
 
 on:
   push:
-    branches:
-      - "main"
-  pull_request:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+    branches-ignore:
+      - gh-pages # avoid deploy loop
 
 jobs:
-  build:
-    name: Create artifacts from master
+  publish:
+    name: Build & deploy each gallery
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         include:
-          - public_url: gallery # wf
+          - public_url: gallery
             data_folder: data
             folder: gallery
-          - public_url: gallery/nac # nac
+          - public_url: gallery/nac
             data_folder: dataNAC
             folder: nac
-          - public_url: gallery/nerc # nerc
+          - public_url: gallery/nerc
             data_folder: dataNERC
             folder: nerc
-          - public_url: gallery/lac # lac
+          - public_url: gallery/lac
             data_folder: dataLAC
             folder: lac
-          - public_url: gallery/ae # ae
+          - public_url: gallery/ae
             data_folder: dataAE
             folder: ae
-          - public_url: gallery/aw # aw
+          - public_url: gallery/aw
             data_folder: dataAW
             folder: aw
-          - public_url: gallery/ap # ap
+          - public_url: gallery/ap
             data_folder: dataAP
             folder: ap
-          - public_url: gallery/eu # eu
+          - public_url: gallery/eu
             data_folder: dataEU
             folder: eu
-          - public_url: gallery/acpc # acpc
+          - public_url: gallery/acpc
             data_folder: dataACPC
             folder: acpc
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
+
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
-      - name: Build
-        run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} MODE=staging ./build.sh
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-${{ matrix.folder }}
-          path: ${{ matrix.public_url }}.zip
-  repack-gh-pages:
-    name: Repack GitHub Pages
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: .
-      - name: Unzip all zip from multiple zips
+
+      - name: Build ${{ matrix.folder }} dataset
+        env:
+          PUBLIC_URL: ${{ matrix.public_url }}
+          VITE_DATA_FOLDER: ${{ matrix.data_folder }}
+          MODE: staging
+        run: ./build.sh
+
+      - name: Add .nojekyll (serve as‑is)
+        run: touch "${{ matrix.public_url }}/.nojekyll"
+
+      - name: Compute dest_dir
+        id: dest
         run: |
-          mkdir build-all
-          cp build-*/*.zip build-all
-          cd build-all
-          ls
-          unzip '*.zip'
-          mv gallery/* .
-          rm -rf gallery
-          rm *.zip
-          ls
-      - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v3
+          BRANCH="${GITHUB_REF_NAME}"
+          DATA="${{ matrix.folder }}"
+
+          if [ "$DATA" = "gallery" ]; then
+            if [ "$BRANCH" = "main" ]; then
+              DIR="."                # /  (root)
+            else
+              DIR="$BRANCH"          # /feature-x/
+            fi
+          else
+            if [ "$BRANCH" = "main" ]; then
+              DIR="$DATA"            # /nac
+            else
+              DIR="$BRANCH/$DATA"    # /feature-x/nac
+            fi
+          fi
+
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Publish ${{ matrix.folder }} to gh‑pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: build-all
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: repack-gh-pages
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    permissions: write-all
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ matrix.public_url }}
+          destination_dir: ${{ steps.dest.outputs.dir }}
+          keep_files: true
