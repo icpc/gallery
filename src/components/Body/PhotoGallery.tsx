@@ -22,16 +22,7 @@ const PhotoGallery: FC<Props> = ({
   handleClick,
   scrollPosition,
 }) => {
-  const { data, mobile, setIsOpenMenu } = useAppContext();
-
-  useEffect(() => {
-    if (!mobile) return;
-
-    const handleScroll = () => setIsOpenMenu(false);
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [mobile, setIsOpenMenu]);
+  const { data } = useAppContext();
 
   useEffect(() => {
     if (data.event) {

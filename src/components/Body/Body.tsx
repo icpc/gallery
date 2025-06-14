@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 
 import { Typography } from "@mui/material";
 
@@ -13,8 +13,16 @@ import PhotoGallery from "./PhotoGallery";
 import "../../styles/Body.css";
 
 const Body: FC = () => {
-  const { data, setFullscreenPhotoId, setIsSlideShow, desktop } =
-    useAppContext();
+  const {
+    data,
+    setFullscreenPhotoId,
+    setIsSlideShow,
+    desktop,
+    mobile,
+    setIsOpenMenu,
+  } = useAppContext();
+
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   const {
     isLoading,
@@ -62,6 +70,24 @@ const Body: FC = () => {
       setIsSlideShow(false);
     }
   }, [data.fullscreenPhotoId]);
+
+  // Close menu when scrolling on mobile
+  useEffect(() => {
+    if (!mobile) return;
+
+    const handleScroll = () => {
+      setIsOpenMenu(false);
+    };
+
+    const bodyElement = bodyRef.current;
+    if (!bodyElement) return;
+
+    bodyElement.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      bodyElement.removeEventListener("scroll", handleScroll);
+    };
+  }, [mobile, setIsOpenMenu]);
 
   const handleRotationRight = () => {
     if (fullscreenIndex === null) return;
@@ -136,7 +162,7 @@ const Body: FC = () => {
   }
 
   return (
-    <div className="body">
+    <div className="body" ref={bodyRef}>
       {desktop && data.text && <h1 style={{ width: "100%" }}>{data.text}</h1>}
       <PhotoGallery
         groupedPhotos={groupedPhotos ?? []}
