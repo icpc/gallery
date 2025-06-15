@@ -1,8 +1,4 @@
 import { FC, useEffect } from "react";
-import {
-  ScrollPosition,
-  trackWindowScroll,
-} from "react-lazy-load-image-component";
 
 import { Box, Typography } from "@mui/material";
 import { GroupedPhotos } from "src/types";
@@ -14,21 +10,16 @@ import PhotoGrid from "./PhotoGrid";
 interface Props {
   groupedPhotos: GroupedPhotos[];
   handleClick: (id: string) => void;
-  scrollPosition: ScrollPosition;
 }
 
-const PhotoGallery: FC<Props> = ({
-  groupedPhotos,
-  handleClick,
-  scrollPosition,
-}) => {
+const PhotoGallery: FC<Props> = ({ groupedPhotos, handleClick }) => {
   const { data } = useAppContext();
 
   useEffect(() => {
     if (data.event) {
       const id = encodeURIComponent(data.event);
       const element = document.getElementById(id);
-      element?.scrollIntoView({ behavior: "smooth" });
+      element?.scrollIntoView({ behavior: "instant" });
     }
   }, [groupedPhotos, data.event]);
 
@@ -39,13 +30,9 @@ const PhotoGallery: FC<Props> = ({
   return Array.from(groupedPhotos).map(({ key, photos }) => (
     <Box key={key} id={encodeURIComponent(key)}>
       <Typography variant="h1">{key}</Typography>
-      <PhotoGrid
-        photos={photos}
-        handleClick={handleClick}
-        scrollPosition={scrollPosition}
-      />
+      <PhotoGrid photos={photos} handleClick={handleClick} />
     </Box>
   ));
 };
 
-export default trackWindowScroll(PhotoGallery);
+export default PhotoGallery;

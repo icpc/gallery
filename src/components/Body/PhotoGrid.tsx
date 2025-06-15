@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from "react";
-import { LazyLoadImage, ScrollPosition } from "react-lazy-load-image-component";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import { Photo, PhotoSource } from "../../types";
 
 interface Props {
   photos: Photo[];
   handleClick: (id: string) => void;
-  scrollPosition: ScrollPosition;
 }
 
 function useWindowWidth() {
@@ -21,7 +20,7 @@ function useWindowWidth() {
   return w;
 }
 
-const PhotoGrid: FC<Props> = ({ photos, handleClick, scrollPosition }) => {
+const PhotoGrid: FC<Props> = ({ photos, handleClick }) => {
   const winW = useWindowWidth();
 
   const displayPx = (winW >= 900 ? 0.25 : 0.9) * winW;
@@ -38,7 +37,6 @@ const PhotoGrid: FC<Props> = ({ photos, handleClick, scrollPosition }) => {
               className="preview"
               src={pickSrc(photo.sources).url}
               style={{ aspectRatio: photo.src.width / photo.src.height }}
-              scrollPosition={scrollPosition}
               alt={`Photo ${photo.id}`}
               onClick={() => handleClick(photo.id)}
             />
