@@ -23,7 +23,7 @@ function useWindowWidth() {
 const PhotoGrid: FC<Props> = ({ photos, handleClick }) => {
   const winW = useWindowWidth();
 
-  const displayPx = (winW >= 900 ? 0.25 : 0.9) * winW;
+  const displayPx = (winW >= 900 ? 0.5 : 2) * winW;
 
   const pickSrc = (sources: PhotoSource[]) =>
     sources.findLast((s) => s.width <= displayPx) ?? sources[0];
