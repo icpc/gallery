@@ -3,8 +3,23 @@ import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 import { defineConfig } from "vite";
 
+import { robotsTxtGenerator } from "./src/plugins/robotsTxtGenerator.ts";
+import { sitemapGenerator } from "./src/plugins/sitemapGenerator.ts";
+
+const baseUrl = "https://news.icpc.global";
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    sitemapGenerator({
+      baseUrl,
+      publicUrl: process.env.PUBLIC_URL || "/",
+    }),
+    robotsTxtGenerator({
+      baseUrl,
+      publicUrl: process.env.PUBLIC_URL || "/",
+    }),
+  ],
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
