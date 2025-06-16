@@ -1,10 +1,26 @@
-import { readFileSync, readdirSync } from "fs";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import { join } from "path";
 import type { Plugin } from "vite";
 
 interface SitemapOptions {
   baseUrl: string;
   publicUrl: string;
+}
+
+function loadDataFile(filePath: string): string[] {
+  try {
+    if (!existsSync(filePath)) {
+      console.warn(`⚠️ Data file not found: ${filePath}`);
+      return [];
+    }
+
+    return readFileSync(filePath, "utf-8")
+      .split("\n")
+      .filter((line) => line.trim());
+  } catch (error) {
+    console.error(`❌ Error reading file ${filePath}:`, error);
+    return [];
+  }
 }
 
 export function sitemapGenerator(options: SitemapOptions): Plugin {
@@ -30,9 +46,7 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
         urls.push(`${baseUrl}/${publicUrl}/?album=${encodeURIComponent(year)}`);
 
         // Add events
-        const events = readFileSync(join(dataPath, `${year}.event`), "utf-8")
-          .split("\n")
-          .filter((line) => line.trim());
+        const events = loadDataFile(join(dataPath, `${year}.event`));
         for (const event of events) {
           urls.push(
             `${baseUrl}/${publicUrl}/?album=${encodeURIComponent(year)}&event=${encodeURIComponent(event)}`,
@@ -40,9 +54,7 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
         }
 
         // Add teams
-        const teams = readFileSync(join(dataPath, `${year}.team`), "utf-8")
-          .split("\n")
-          .filter((line) => line.trim());
+        const teams = loadDataFile(join(dataPath, `${year}.team`));
         for (const team of teams) {
           urls.push(
             `${baseUrl}/${publicUrl}/?album=${encodeURIComponent(year)}&team=${encodeURIComponent(team)}`,
@@ -50,9 +62,7 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
         }
 
         // Add people
-        const people = readFileSync(join(dataPath, `${year}.people`), "utf-8")
-          .split("\n")
-          .filter((line) => line.trim());
+        const people = loadDataFile(join(dataPath, `${year}.people`));
         for (const person of people) {
           urls.push(
             `${baseUrl}/${publicUrl}/?album=${encodeURIComponent(year)}&person=${encodeURIComponent(person)}`,
