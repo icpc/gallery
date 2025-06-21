@@ -10,7 +10,7 @@ export const places = [
     year: "RC 2024-2025",
     contest_name: "Regional Contests",
     place: "",
-    photoset_id: "",
+    photoset_id: "72177720327006347",
   },
   {
     year: "2024",
@@ -30,6 +30,12 @@ export const places = [
     contest_name: "LAC",
     place: "Chapeco, Brazil",
     photoset_id: "72177720320577047",
+  },
+  {
+    year: "RC 2022-2023",
+    contest_name: "Regional Contests",
+    place: "",
+    photoset_id: "72177720327020533",
   },
   {
     year: "2022",
