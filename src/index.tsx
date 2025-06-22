@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { UnheadProvider, createHead } from "@unhead/react/client";
 
 import App from "./App";
 import { AppContextProvider } from "./components/AppContext";
@@ -28,19 +29,23 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
 
+const head = createHead();
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{ persister }}
-      >
-        <AppContextProvider>
-          <PhotoInfoProvider>
-            <App />
-          </PhotoInfoProvider>
-        </AppContextProvider>
-      </PersistQueryClientProvider>
+      <UnheadProvider head={head}>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister }}
+        >
+          <AppContextProvider>
+            <PhotoInfoProvider>
+              <App />
+            </PhotoInfoProvider>
+          </AppContextProvider>
+        </PersistQueryClientProvider>
+      </UnheadProvider>
     </BrowserRouter>
   </React.StrictMode>,
 );

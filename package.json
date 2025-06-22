@@ -9,6 +9,7 @@
     "@tanstack/query-sync-storage-persister": "^5.80.7",
     "@tanstack/react-query": "^5.80.7",
     "@tanstack/react-query-persist-client": "^5.80.7",
+    "@unhead/react": "^2.0.10",
     "notistack": "^3.0.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

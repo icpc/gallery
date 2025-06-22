@@ -1,6 +1,7 @@
 import { JSX } from "react";
 
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
+import { useSeoMeta } from "@unhead/react";
 import { SnackbarProvider } from "notistack";
 
 import { useAppContext } from "./components/AppContext";
@@ -10,14 +11,20 @@ import { DesktopLogo } from "./components/Logo";
 import Sidebar from "./components/Sidebar";
 import { description, title } from "./consts";
 import theme from "./theme";
-import { useHead } from "./utils/useHead";
 
 import "./styles/App.css";
 
 function App(): JSX.Element {
   const { desktop } = useAppContext();
 
-  useHead({ title, description });
+  useSeoMeta({
+    title,
+    description,
+    ogTitle: title,
+    ogDescription: description,
+    twitterTitle: title,
+    twitterDescription: description,
+  });
 
   return (
     <ThemeProvider theme={theme}>
