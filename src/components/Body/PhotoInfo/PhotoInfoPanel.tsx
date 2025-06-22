@@ -9,6 +9,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Box, Grid, IconButton, Stack, Tooltip } from "@mui/material";
+import { useSeoMeta } from "@unhead/react";
 import { enqueueSnackbar } from "notistack";
 
 import { FLICKR_IMAGE_PREFIX, SUGGESTIONS_EMAIL } from "../../../consts";
@@ -68,6 +69,26 @@ const PhotoInfoPanel: FC<Props> = ({ setFace, photo }) => {
   function toogleHidden() {
     setHidden(!hidden);
   }
+
+  function getDescription() {
+    if (!photoInfo) return "";
+    return [...photoInfo.team, ...photoInfo.person.map((p) => p.name)].join(
+      ", ",
+    );
+  }
+
+  function getPhotoImageUrl() {
+    return photo.origin ?? photo.src.url;
+  }
+
+  useSeoMeta({
+    description: getDescription(),
+    ogDescription: getDescription(),
+    ogImage: getPhotoImageUrl(),
+    twitterDescription: getDescription(),
+    twitterImage: getPhotoImageUrl(),
+    twitterCard: "summary_large_image",
+  });
 
   return (
     <div className="photoInfo">
