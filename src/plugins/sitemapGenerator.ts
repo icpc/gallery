@@ -43,13 +43,18 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
         .reverse();
 
       for (const year of years) {
-        urls.push(`${baseUrl}/${publicUrl}/?album=${year}`.replaceAll(" ", "+"));
+        urls.push(
+          `${baseUrl}/${publicUrl}/?album=${year}`.replaceAll(" ", "+"),
+        );
 
         // Add events
         const events = loadDataFile(join(dataPath, `${year}.event`));
         for (const event of events) {
           urls.push(
-            `${baseUrl}/${publicUrl}/?album=${year}&event=${event}`.replaceAll(" ", "+"),
+            `${baseUrl}/${publicUrl}/?album=${year}&event=${event}`.replaceAll(
+              " ",
+              "+",
+            ),
           );
         }
 
@@ -57,7 +62,10 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
         const teams = loadDataFile(join(dataPath, `${year}.team`));
         for (const team of teams) {
           urls.push(
-            `${baseUrl}/${publicUrl}/?album=${year}&team=${team}`.replaceAll(" ", "+"),
+            `${baseUrl}/${publicUrl}/?album=${year}&team=${team}`.replaceAll(
+              " ",
+              "+",
+            ),
           );
         }
 
@@ -65,7 +73,10 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
         const people = loadDataFile(join(dataPath, `${year}.people`));
         for (const person of people) {
           urls.push(
-            `${baseUrl}/${publicUrl}/?album=${year}&person=${person}`.replaceAll(" ", "+"),
+            `${baseUrl}/${publicUrl}/?album=${year}&person=${person}`.replaceAll(
+              " ",
+              "+",
+            ),
           );
         }
       }
