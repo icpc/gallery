@@ -78,7 +78,7 @@ const PhotoInfoPanel: FC<Props> = ({ setFace, photo }) => {
   }
 
   function getPhotoImageUrl() {
-    return photo.origin ?? photo.src.url;
+    return photo.src.url;
   }
 
   useSeoMeta({
