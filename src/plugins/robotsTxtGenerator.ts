@@ -2,7 +2,7 @@ import type { Plugin } from "vite";
 
 interface RobotsOptions {
   baseUrl: string;
-  publicUrl: string;
+  publicUrl?: string;
 }
 
 export function robotsTxtGenerator(options: RobotsOptions): Plugin {
@@ -16,7 +16,7 @@ export function robotsTxtGenerator(options: RobotsOptions): Plugin {
         User-agent: *
         Allow: /
 
-        Sitemap: ${baseUrl}/${publicUrl}/sitemap.txt`;
+        Sitemap: ${baseUrl}${publicUrl ? `/${publicUrl}` : ""}/sitemap.txt`;
 
       this.emitFile({
         type: "asset",

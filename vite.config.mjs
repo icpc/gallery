@@ -19,11 +19,11 @@ export default defineConfig(({ mode }) => {
       react(),
       sitemapGenerator({
         baseUrl,
-        publicUrl: env.PUBLIC_URL || "/",
+        publicUrl: env.PUBLIC_URL,
       }),
       robotsTxtGenerator({
         baseUrl,
-        publicUrl: env.PUBLIC_URL || "/",
+        publicUrl: env.PUBLIC_URL,
       }),
     ],
     resolve: {

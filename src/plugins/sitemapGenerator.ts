@@ -4,7 +4,12 @@ import type { Plugin } from "vite";
 
 interface SitemapOptions {
   baseUrl: string;
-  publicUrl: string;
+  publicUrl?: string;
+}
+
+function formatUrl(url: string): string {
+  url = url.replaceAll(" ", "+");
+  return encodeURI(url);
 }
 
 function loadDataFile(filePath: string): string[] {
@@ -33,7 +38,8 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
       const dataPath = join(process.cwd(), dataFolder);
 
       const urls: string[] = [];
-      urls.push(`${baseUrl}/${publicUrl}/`);
+
+      const websiteRoot = `${baseUrl}${publicUrl ? `/${publicUrl}` : ""}`;
 
       // Get years from .event files
       const years = readdirSync(dataPath)
@@ -43,40 +49,25 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
         .reverse();
 
       for (const year of years) {
-        urls.push(
-          `${baseUrl}/${publicUrl}/?album=${year}`.replaceAll(" ", "+"),
-        );
+        urls.push(formatUrl(`${websiteRoot}/?album=${year}`));
 
         // Add events
         const events = loadDataFile(join(dataPath, `${year}.event`));
         for (const event of events) {
-          urls.push(
-            `${baseUrl}/${publicUrl}/?album=${year}&event=${event}`.replaceAll(
-              " ",
-              "+",
-            ),
-          );
+          urls.push(formatUrl(`${websiteRoot}/?album=${year}&event=${event}`));
         }
 
         // Add teams
         const teams = loadDataFile(join(dataPath, `${year}.team`));
         for (const team of teams) {
-          urls.push(
-            `${baseUrl}/${publicUrl}/?album=${year}&team=${team}`.replaceAll(
-              " ",
-              "+",
-            ),
-          );
+          urls.push(formatUrl(`${websiteRoot}/?album=${year}&team=${team}`));
         }
 
         // Add people
         const people = loadDataFile(join(dataPath, `${year}.people`));
         for (const person of people) {
           urls.push(
-            `${baseUrl}/${publicUrl}/?album=${year}&person=${person}`.replaceAll(
-              " ",
-              "+",
-            ),
+            formatUrl(`${websiteRoot}/?album=${year}&person=${person}`),
           );
         }
       }
