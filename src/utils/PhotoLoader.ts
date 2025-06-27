@@ -41,7 +41,7 @@ const usePhotoLoader = () => {
       sources.sort((a, b) => a.width - b.width);
       // The default is the first photo with width > 1000
       const src =
-        sources.find((source) => source?.width > 1000) ??
+        sources.find((source) => source?.width > 2000) ??
         sources[sources.length - 1];
 
       return {

@@ -49,7 +49,23 @@ export interface GroupedPhotos {
   photos: Photo[];
 }
 
-export const flickrSizes = ["t", "s", "n", "m", "z", "c", "l", "o"] as const;
+export const flickrSizes = [
+  "s", // 75px
+  "t", // 100px
+  "m", // 240px
+  "n", // 320px
+  "z", // 640px
+  "c", // 800px
+  "l", // 1024px (also, l gives a photo with a _b suffix)
+  // Photos larger then 1024px need a secret to access
+  "h", // 1600px
+  "k", // 2048px
+  "3k", // 3072px
+  "4k", // 4096px
+  "5k", // 5120px
+  "6k", // 6144px
+  "o", // original
+] as const;
 
 export type FlickrUrlSize = (typeof flickrSizes)[number];
 
