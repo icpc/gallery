@@ -22,10 +22,10 @@ const usePhotoLoader = () => {
       .find((year) => tags.some((tag) => tag === formatTag(TAG_ALBUM, year))) ??
     "Unknown";
 
-  const eventFromTags = (tags: string[]) =>
-    events.find((event) =>
+  const eventsFromTags = (tags: string[]) =>
+    events.filter((event) =>
       tags.some((t) => t === formatTag(TAG_EVENT, event)),
-    ) ?? "Unknown";
+    );
 
   const processPhotos = (photos: FlickrPhoto[]): Photo[] =>
     photos.map((photo) => {
@@ -51,7 +51,7 @@ const usePhotoLoader = () => {
         tags: photo.tags.split(" "),
         origin: photo.url_o,
         year: albumFromTags(photo.tags.split(" ")),
-        event: eventFromTags(photo.tags.split(" ")),
+        events: eventsFromTags(photo.tags.split(" ")),
       };
     });
 
@@ -104,8 +104,10 @@ const usePhotoLoader = () => {
         });
       }
       photos.forEach((p) => {
-        byEvent[p.event] ||= [];
-        byEvent[p.event].push(p);
+        (p.events.length > 0 ? p.events : ["Unknown"]).forEach((event) => {
+          byEvent[event] ||= [];
+          byEvent[event].push(p);
+        });
       });
       return Object.keys(byEvent)
         .sort((a, b) => {

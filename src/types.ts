@@ -39,7 +39,7 @@ export interface Photo {
   src: PhotoSource;
   id: string;
   origin?: string;
-  event: string;
+  events: string[];
   year: string;
   tags: string[];
 }
