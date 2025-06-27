@@ -30,10 +30,17 @@ const Body: FC = () => {
     data: groupedPhotos,
   } = usePhotoLoader();
 
-  const photosList = useMemo(
-    () => (groupedPhotos ?? []).flatMap(({ photos }) => photos),
-    [groupedPhotos],
-  );
+  const photosList = useMemo(() => {
+    const photos: Photo[] = [];
+    (groupedPhotos ?? [])
+      .flatMap(({ photos }) => photos)
+      .forEach((photo) => {
+        if (photos.find((p) => p.id === photo.id) === undefined) {
+          photos.push(photo);
+        }
+      });
+    return photos;
+  }, [groupedPhotos]);
 
   const [fullscreenPhoto, setFullscreenPhoto] = useState<Photo | null>(null);
   const [fullscreenIndex, setFullscreenIndex] = useState<number | null>(null);
