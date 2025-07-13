@@ -1,4 +1,4 @@
-import { MAX_ALBUM_SIZE, TAG_ALBUM, api_key, user_id } from "../consts";
+import { MAX_ALBUM_SIZE, api_key, user_id } from "../consts";
 import {
   FlickrPhoto,
   FlickrPhotoInfoResponse,
@@ -73,7 +73,7 @@ export async function getAllWithText(
     nojsoncallback: "?",
     tag_mode: "all",
     sort: "date-taken-desc",
-    text: `${text}%20and%20${TAG_ALBUM}$`,
+    text,
   };
   const url = buildQuery(params);
   const response = await fetchData<FlickrPhotosResponse>(url, config);

@@ -56,10 +56,10 @@ const usePhotoLoader = () => {
     });
 
   const textQuery = useQuery({
-    queryKey: ["photos", "search", data.text ?? ""],
+    queryKey: ["photos", "search", TAG_ALBUM, data.text ?? ""],
     queryFn: () => {
       if (!data.text) return [];
-      return getAllWithText(data.text);
+      return getAllWithText(`${data.text}%20and%20${TAG_ALBUM}$`);
     },
     enabled: !!data.text,
     select: (raw: FlickrPhoto[]): GroupedPhotos[] => {
