@@ -1,5 +1,12 @@
 export const places = [
   {
+    year: "2025",
+    place: "Baku, Azerbaijan",
+    contest_name: "World Finals",
+    photoset_id: "72177720327546558",
+    contest_id: 8732,
+  },
+  {
     year: "2024",
     place: "Astana, Kazakhstan",
     contest_name: "World Finals",
