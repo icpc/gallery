@@ -10,6 +10,7 @@ import { UnheadProvider, createHead } from "@unhead/react/client";
 import App from "./App";
 import { AppContextProvider } from "./components/AppContext";
 import { PhotoInfoProvider } from "./components/Body/PhotoInfo/PhotoInfoContext";
+import { UNIQUE_CONTEST_KEY } from "./consts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +23,7 @@ const queryClient = new QueryClient({
 
 const persister = createSyncStoragePersister({
   storage: window.localStorage,
-  key: "icpc-gallery-query",
+  key: `icpc-gallery-query+${UNIQUE_CONTEST_KEY}`,
 });
 
 const root = ReactDOM.createRoot(

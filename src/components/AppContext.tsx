@@ -14,7 +14,6 @@ import { useQuery } from "@tanstack/react-query";
 import {
   DEFAULT_EVENT,
   LAST_YEAR,
-  UNIQUE_CONTEST_KEY,
   getEventData,
   getPeopleData,
   getTeamData,
@@ -220,19 +219,19 @@ const AppContextProvider: FC<Props> = ({ children }) => {
   };
 
   const { data: events = [] } = useQuery({
-    queryKey: ["events", UNIQUE_CONTEST_KEY, data.year],
+    queryKey: ["events", data.year],
     queryFn: () => getEventData(data.year),
     enabled: !!data.year,
   });
 
   const { data: people = [] } = useQuery({
-    queryKey: ["people", UNIQUE_CONTEST_KEY, data.year],
+    queryKey: ["people", data.year],
     queryFn: () => getPeopleData(data.year),
     enabled: !!data.year,
   });
 
   const { data: teams = [] } = useQuery({
-    queryKey: ["teams", UNIQUE_CONTEST_KEY, data.year],
+    queryKey: ["teams", data.year],
     queryFn: () => getTeamData(data.year),
     enabled: !!data.year,
   });
