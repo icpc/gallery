@@ -44,5 +44,7 @@ export const DEFAULT_EVENT = consts.DEFAULT_EVENT;
 export const FLICKR_IMAGE_PREFIX = consts.FLICKR_IMAGE_PREFIX;
 export const SUGGESTIONS_EMAIL = consts.SUGGESTIONS_EMAIL;
 export const MAX_ALBUM_SIZE = consts.MAX_ALBUM_SIZE;
+
+export const UNIQUE_CONTEST_KEY = TAG_ALBUM;
 // todo: somehow replace this without redeclaration
 export const DEBUG = import.meta.env.mode === "development";
