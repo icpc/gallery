@@ -78,7 +78,7 @@ jobs:
           rm *.zip
           ls
       - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: build-all
   deploy:
