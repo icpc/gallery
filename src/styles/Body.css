@@ -207,3 +207,21 @@
   font-size: 2rem;
   margin-top: 2rem;
 }
+
+/* Hide overlay controls unless hovered (desktop/hover devices only) */
+@media (hover: hover) and (pointer: fine) {
+  .overlay .control,
+  .overlay .overlay-arrows_left,
+  .overlay .overlay-arrows_right {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease-in-out;
+  }
+
+  .overlay:hover .control,
+  .overlay:hover .overlay-arrows_left,
+  .overlay:hover .overlay-arrows_right {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
