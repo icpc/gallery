@@ -129,6 +129,7 @@ export interface AppContextData {
   team: string | null;
   fullscreenPhotoId: string | null;
   slideShow: boolean;
+  slideshowSpeed?: number; // seconds
 }
 
 export interface AppContextType {

@@ -45,6 +45,12 @@ function parseSearchParams(
   if (searchParams.has("slideshow")) {
     searchParamsData.slideShow = searchParams.get("slideshow") === "true";
   }
+  if (searchParams.has("slideshowSpeed")) {
+    const sec = parseFloat(searchParams.get("slideshowSpeed") || "");
+    if (!Number.isNaN(sec) && sec > 0) {
+      searchParamsData.slideshowSpeed = sec; // seconds
+    }
+  }
   if (searchParams.has("query")) {
     searchParamsData.text = decodeURIComponent(searchParams.get("query") || "");
     searchParamsData.year = null;
@@ -74,8 +80,16 @@ function parseSearchParams(
 }
 
 function serializeSearchParams(data: AppContextData): Record<string, string> {
-  const { year, event, text, person, team, fullscreenPhotoId, slideShow } =
-    data;
+  const {
+    year,
+    event,
+    text,
+    person,
+    team,
+    fullscreenPhotoId,
+    slideShow,
+    slideshowSpeed,
+  } = data;
   const searchParams: Record<string, string> = {};
   if (year != null) {
     searchParams.album = year;
@@ -97,6 +111,9 @@ function serializeSearchParams(data: AppContextData): Record<string, string> {
   }
   if (slideShow) {
     searchParams.slideshow = "true";
+  }
+  if (slideshowSpeed != null && slideshowSpeed > 0) {
+    searchParams.slideshowSpeed = String(slideshowSpeed);
   }
   return searchParams;
 }
