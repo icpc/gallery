@@ -31,7 +31,7 @@ describe("convertRawFlickrTag unit", () => {
   }
 });
 
-const API_KEY = "d30033b3d833adaace90f8487da70bba";
+const API_KEY = "b0d0fb81f09ddacbaaf240921cd4c918";
 const USER_ID = "141939107@N06";
 const BASE_URL = "https://api.flickr.com/services/rest/";
 
