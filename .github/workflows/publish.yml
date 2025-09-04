@@ -40,7 +40,7 @@ jobs:
       - name: Build
         run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} ./build.sh
       - name: Upload to ftp
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ftp.u.icpc.global
           port: 21
