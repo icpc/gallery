@@ -15,7 +15,7 @@ import { UNIQUE_CONTEST_KEY, api_key } from "./consts";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 30 * 60 * 1000, // 30 minutes
       gcTime: 7 * 24 * 60 * 60 * 1000, // 7 days
     },
   },

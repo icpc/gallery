@@ -45,7 +45,7 @@ export const places = [
   },
 ];
 
-export const api_key = "b0d0fb81f09ddacbaaf240921cd4c918";
+export const api_key = "aa713e700906ec8f2decea3f23e24abb";
 export const user_id = "141939107@N06";
 export const title = "ICPC LATAM Gallery";
 export const description = "ICPC LATAM Photo Gallery.";
