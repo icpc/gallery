@@ -1,11 +1,8 @@
-name: Publish release
+name: Create a release file
 
 # Releases artifact from the build workflow
 
-on:
-  push:
-    branches:
-      - "main"
+on: workflow_dispatch
 
 jobs:
   build:
