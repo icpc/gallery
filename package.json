@@ -24,7 +24,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "test": "vitest"
   },
   "browserslist": {
     "production": [
