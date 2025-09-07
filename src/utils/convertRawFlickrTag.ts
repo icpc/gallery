@@ -4,7 +4,7 @@ export function convertRawFlickrTag(raw: string): string {
   decoded = decoded.trim();
   decoded = decoded.normalize("NFC");
   decoded = decoded.toLowerCase();
-  // Only allow letters (\p{L}), numbers (\p{N}), section sign (§), and curly apostrophe (’)
-  decoded = decoded.replace(/[^\p{L}\p{N}\u00A7]+/gu, "");
+  // Only allow letters (\p{L}), numbers (\p{N}), section sign (§), plus-minus (±)
+  decoded = decoded.replace(/[^\p{L}\p{N}\u00A7\u00B1]+/gu, "");
   return decoded;
 }

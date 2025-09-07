@@ -23,6 +23,10 @@ describe("convertRawFlickrTag unit", () => {
       "Michael Douglas GonГ§alves NГіbrega(3645201549fb3db7)",
       "michaeldouglasgonг§alvesnгіbrega3645201549fb3db7",
     ],
+    [
+      "Adrian Muro Gardu±o(3c59454a4c596921)",
+      "adrianmurogardu±o3c59454a4c596921",
+    ],
   ];
   for (const [raw, expected] of RAW_TAG_UNIT_PAIRS) {
     it(`decodes raw tag '${raw}'`, () => {
