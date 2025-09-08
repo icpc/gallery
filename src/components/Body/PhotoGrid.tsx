@@ -36,7 +36,6 @@ const PhotoGrid: FC<Props> = ({ photos, handleClick }) => {
             <LazyLoadImage
               className="preview"
               src={pickSrc(photo.sources).url}
-              style={{ aspectRatio: photo.src.width / photo.src.height }}
               alt={`Photo ${photo.id}`}
               onClick={() => handleClick(photo.id)}
             />
