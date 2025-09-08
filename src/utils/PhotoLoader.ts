@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { useAppContext } from "../components/AppContext";
-import { TAG_ALBUM, TAG_EVENT, TAG_PERSON, TAG_TEAM, places } from "../consts";
+import { TAG_ALBUM, TAG_EVENT, TAG_TEAM, places } from "../consts";
 import { FlickrPhoto, GroupedPhotos, Photo, flickrSizes } from "../types";
 
 import { getAllPhotosFromPhotoset, getAllWithText } from "./PhotoService";
@@ -89,12 +89,16 @@ const usePhotoLoader = () => {
         const tags = photo.tags;
         const hasTag = (prefix: string, tag: string | null) => {
           if (!tag) return true;
-          return tags.some((t) => t === formatTag(prefix, tag));
+          return tags.includes(formatTag(prefix, tag));
+        };
+        const hasPerson = (person: string | null) => {
+          if (!person) return true;
+          return tags.some((t) => t.includes(convertRawFlickrTag(person)));
         };
         return (
           hasTag(TAG_ALBUM, data.year) &&
           hasTag(TAG_TEAM, data.team) &&
-          hasTag(TAG_PERSON, data.person)
+          hasPerson(data.person)
         );
       });
       const byEvent: Record<string, Photo[]> = {};
