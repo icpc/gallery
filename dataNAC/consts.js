@@ -1,5 +1,11 @@
 export const places = [
   {
+    year: "RC 2025-2026",
+    place: "Regional Contests",
+    contest_name: "",
+    photoset_id: "72177720329622803",
+  },
+  {
     year: "2025",
     place: "Orlando, FL",
     contest_name: "North America Championship",
