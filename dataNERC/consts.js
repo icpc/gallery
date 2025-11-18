@@ -122,6 +122,12 @@ export const places = [
     contest_id: 752,
   },
   {
+    year: "2007",
+    place: "SPb, Palace of Youth Creativity",
+    contest_name: "NEERC",
+    photoset_id: "72177720330406252",
+  },
+  {
     year: "2004",
     place: "SPb, Palace of Youth Creativity",
     contest_name: "NEERC",
