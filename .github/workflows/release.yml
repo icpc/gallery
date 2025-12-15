@@ -42,7 +42,7 @@ jobs:
       - name: Build
         run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} ./build.sh
       - name: Upload
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: build-${{ matrix.public_url }}
           path: ${{ matrix.public_url }}.zip
@@ -65,7 +65,7 @@ jobs:
           rm *.zip
           ls
       - name: Upload raw
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: all
           path: build-all

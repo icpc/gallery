@@ -53,7 +53,7 @@ jobs:
       - name: Build
         run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} MODE=staging ./build.sh
       - name: Upload
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: build-${{ matrix.folder }}
           path: ${{ matrix.public_url }}.zip
