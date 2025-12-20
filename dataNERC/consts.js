@@ -1,5 +1,11 @@
 export const places = [
   {
+    year: "2025",
+    place: "SPb, Novosibirsk, Almaty, Tbilisi",
+    contest_name: "NEF",
+    photoset_id: "72177720331023466",
+  },
+  {
     year: "RC 2025-2026",
     place: "",
     contest_name: "Regional Contests",
@@ -170,7 +176,7 @@ export const TAG_PHOTOGRAPHER = "photographer";
 export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
-export const LAST_YEAR = "RC 2025-2026";
+export const LAST_YEAR = "2025";
 export const DEFAULT_EVENT = "Photo Tour";
 
 export const MAX_ALBUM_SIZE = 2000;
