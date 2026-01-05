@@ -1,7 +1,13 @@
 export const places = [
   {
+    year: "RC 2025-2026",
+    place: "Regional Contests",
+    contest_name: "",
+    photoset_id: "72177720331320784",
+  },
+  {
     year: "2025",
-    place: "EUC, Portu, Portugal",
+    place: "EUC, Porto, Portugal",
     contest_name: "",
     photoset_id: "72177720324315706",
     contest_id: 8960,
