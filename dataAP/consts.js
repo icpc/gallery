@@ -1,5 +1,12 @@
 export const places = [
   {
+    year: "2026",
+    contest_name: "Asia Pacific Championship",
+    place: "Taoyuan, Taiwan",
+    photoset_id: "72177720332829338",
+    contest_id: 9385,
+  },
+  {
     year: "2025",
     contest_name: "Asia Pacific Championship",
     place: "Singapore",
@@ -38,7 +45,7 @@ export const TAG_PHOTOGRAPHER = "photographer";
 export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
-export const LAST_YEAR = "2025";
+export const LAST_YEAR = "2026";
 export const DEFAULT_EVENT = "Photo Tour";
 
 export const MAX_ALBUM_SIZE = 2000;
