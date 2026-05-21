@@ -1,5 +1,12 @@
 export const places = [
   {
+    year: "2026",
+    place: "Orlando, FL",
+    contest_name: "North America Championship",
+    photoset_id: "72177720332596375",
+    contest_id: 9323,
+  },
+  {
     year: "RC 2025-2026",
     place: "Regional Contests",
     contest_name: "",
@@ -150,7 +157,7 @@ export const TAG_PHOTOGRAPHER = "photographer";
 export const SVG_WIDTH = 60;
 export const SVG_HEIGHT = 60;
 
-export const LAST_YEAR = "2025";
+export const LAST_YEAR = "2026";
 export const DEFAULT_EVENT = "Photo Tour";
 
 export const MAX_ALBUM_SIZE = 2000;
