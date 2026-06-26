@@ -1,0 +1,11 @@
+[
+  {
+    "_comment": "EXAMPLE — replace these portraits with your own. The pipeline will resolve `url` over HTTP, find the face nearest `face_box` (fractional coordinates: x1,y1,x2,y2), embed it, and use that embedding to search photos.json. Multiple portraits per person are merged — the matcher takes the max cosine. Drop the _comment field; it's ignored.",
+    "person_id": "example-person",
+    "name":      "Example Person",
+    "portraits": [
+      {"url": "https://upload.wikimedia.org/wikipedia/commons/example/portrait.jpg",
+       "face_box": [0.30, 0.10, 0.70, 0.65]}
+    ]
+  }
+]
