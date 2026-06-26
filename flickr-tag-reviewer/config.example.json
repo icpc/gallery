@@ -1,0 +1,5 @@
+{
+  "_comment": "Copy this file to config.local.json and paste your own Flickr API credentials. config.local.json is gitignored and never leaves your machine. Get a key at https://www.flickr.com/services/apps/create (you need the Key AND Secret; request write permission).",
+  "flickr_api_key": "YOUR_FLICKR_API_KEY",
+  "flickr_api_secret": "YOUR_FLICKR_API_SECRET"
+}

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flickr Face-Tag Reviewer</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>Flickr Face-Tag Reviewer</h1>
+    <span id="mockBadge" class="badge mock" style="display:none">MOCK MODE</span>
+    <span id="authBadge" class="badge">auth: …</span>
+    <div class="spacer"></div>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+      <div id="progressText" class="progress-text">loading…</div>
+    </div>
+    <label class="meta">tier
+      <select id="tierFilter">
+        <option value="">all</option>
+        <option value="high">high (≥0.55)</option>
+        <option value="medium">medium (0.45–0.55)</option>
+        <option value="borderline">borderline (&lt;0.45)</option>
+      </select>
+    </label>
+    <input id="eventFilter" type="text" placeholder="event filter…" size="12">
+    <button id="authBtn">Authorize Flickr</button>
+  </header>
+
+  <main>
+    <div class="stage">
+      <div class="navbar">
+        <button id="prevBtn">◀ Prev <span class="kbd">←</span></button>
+        <span id="posText" class="meta"></span>
+        <button id="nextBtn">Next ▶ <span class="kbd">→</span></button>
+        <label class="meta">go to
+          <input id="jumpInput" type="text" placeholder="# or photo id" size="10">
+        </label>
+        <div class="spacer"></div>
+        {% if enable_hotkeys %}<span class="meta">Approve <span class="kbd">a</span> · Reject <span class="kbd">r</span> · Skip <span class="kbd">s</span></span>{% endif %}
+      </div>
+      <div id="stageInner">
+        <div class="empty">Loading queue…</div>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="card">
+        <h3>Photo</h3>
+        <div id="photoMeta" class="meta">—</div>
+      </div>
+      <div class="card">
+        <h3>Suggested tags</h3>
+        <div id="suggList"><div class="meta">—</div></div>
+      </div>
+      <div class="card">
+        <h3>Already on photo (Flickr)</h3>
+        <div id="existingList" class="meta">—</div>
+      </div>
+      <div class="card">
+        <h3>Legend</h3>
+        <div class="meta">
+          <span class="dot high"></span>high
+          <span class="dot medium"></span>medium
+          <span class="dot borderline"></span>borderline
+          <span class="dot existing"></span>existing (dashed)
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="authModal" class="modal-bg">
+    <div class="modal">
+      <h2>Authorize with Flickr</h2>
+      <p>1. Click below to open Flickr and grant <b>write</b> access. 2. Copy the
+         9-digit code Flickr shows you. 3. Paste it here and confirm.</p>
+      <button id="openAuthUrl" class="primary">Open Flickr authorization page</button>
+      <input id="verifierInput" type="text" placeholder="paste verifier code (e.g. 123-456-789)">
+      <div class="actions">
+        <button id="completeAuth" class="primary">Confirm</button>
+        <button id="closeAuth">Cancel</button>
+      </div>
+      <p id="authMsg"></p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script>window.ENABLE_HOTKEYS = {{ enable_hotkeys|tojson }};</script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

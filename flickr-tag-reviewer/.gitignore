@@ -1,0 +1,9 @@
+# local secrets / state — never commit
+config.local.json
+data/*.db
+data/*.sqlite
+data/oauth-tokens.sqlite
+*.pyc
+__pycache__/
+.venv/
+venv/
