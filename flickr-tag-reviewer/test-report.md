@@ -9,16 +9,16 @@
 
 All tested workflows passed. One bug was found and fixed mid-session (duplicate flag not re-applied on cache hits — details below).
 
-| # | Test | Result |
-|---|------|--------|
-| 1 | rect64 overlays render on coordinate grid | PASS |
-| 2 | Approve posts (mock) and advances; counters update | PASS |
-| 3 | Reject updates status and advances | PASS |
-| 4 | Skip updates status and advances | PASS |
-| 5 | Jump-to-photo by photo ID | PASS |
-| 6 | Duplicate flagging (person already tagged) | PASS (after fix) |
-| 7 | Arrow-key navigation through queue | PASS |
-| 8 | Review state persists across page refresh | PASS |
+| #   | Test                                               | Result           |
+| --- | -------------------------------------------------- | ---------------- |
+| 1   | rect64 overlays render on coordinate grid          | PASS             |
+| 2   | Approve posts (mock) and advances; counters update | PASS             |
+| 3   | Reject updates status and advances                 | PASS             |
+| 4   | Skip updates status and advances                   | PASS             |
+| 5   | Jump-to-photo by photo ID                          | PASS             |
+| 6   | Duplicate flagging (person already tagged)         | PASS (after fix) |
+| 7   | Arrow-key navigation through queue                 | PASS             |
+| 8   | Review state persists across page refresh          | PASS             |
 
 ---
 
@@ -32,13 +32,13 @@ Skip on photo 4 (Carlos Ferreira), header shows `skipped 1`:
 
 ## 5–6. Jump-to-photo + duplicate flagging
 
-Typed photo ID `26710994406` into the "go to" box and jumped straight to it. This photo has **Bill Poucher** already tagged on Flickr (mock) *and* suggested by the face-recog output. The suggestion is correctly flagged **duplicate · "person already tagged on this photo"**, and the header `dup` counter increments. The duplicate is still reviewable (you can override and Approve if you disagree).
+Typed photo ID `26710994406` into the "go to" box and jumped straight to it. This photo has **Bill Poucher** already tagged on Flickr (mock) _and_ suggested by the face-recog output. The suggestion is correctly flagged **duplicate · "person already tagged on this photo"**, and the header `dup` counter increments. The duplicate is still reviewable (you can override and Approve if you disagree).
 
 ![Duplicate flagged](https://staging.itsdev.in/attachments/b7af4108-5b61-4b80-b3a5-8c6688f5523c/ss_26d86fe7.png)
 
 ### Bug found & fixed during this test
 
-Initially Bill Poucher showed as `pending`, not `duplicate`, even though he was listed under "Already on photo". Root cause: dedup (`mark_duplicates`) only ran when the Flickr tag cache was *stale* (`need_img or need_tags`). On a cache hit — or after a suggestion's status was reset — it never re-ran, so the flag was missed. Screenshot of the buggy state:
+Initially Bill Poucher showed as `pending`, not `duplicate`, even though he was listed under "Already on photo". Root cause: dedup (`mark_duplicates`) only ran when the Flickr tag cache was _stale_ (`need_img or need_tags`). On a cache hit — or after a suggestion's status was reset — it never re-ran, so the flag was missed. Screenshot of the buggy state:
 
 ![Duplicate not flagged (bug)](https://staging.itsdev.in/attachments/fc9aae10-fe00-4fc9-97b8-932d92b9d723/ss_13b95533.png)
 

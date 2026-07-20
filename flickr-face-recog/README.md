@@ -38,6 +38,7 @@ python demo.py
 ```
 
 First run:
+
 - Writes `data/photos.json` with 5 real ICPCNews Flickr photo records.
 - Writes `data/references.json` from the example template.
 - Embeds the 5 photos in one batch (~30s on CPU).
@@ -62,8 +63,14 @@ metadata that surfaces on the review sheet:
 
 ```json
 [
-  {"id": "26649123441", "sv": "1474", "sc": "2340182a1d",
-   "yr": "2012", "ev": ["eventclisymposium"], "pk": []}
+  {
+    "id": "26649123441",
+    "sv": "1474",
+    "sc": "2340182a1d",
+    "yr": "2012",
+    "ev": ["eventclisymposium"],
+    "pk": []
+  }
 ]
 ```
 
@@ -83,12 +90,16 @@ Array of records, one per person you want to find:
 
 ```json
 [
-  {"person_id": "alice",
-   "name":      "Alice Example",
-   "portraits": [
-     {"url": "https://example.org/alice.jpg",
-      "face_box": [0.30, 0.10, 0.70, 0.65]}
-   ]}
+  {
+    "person_id": "alice",
+    "name": "Alice Example",
+    "portraits": [
+      {
+        "url": "https://example.org/alice.jpg",
+        "face_box": [0.3, 0.1, 0.7, 0.65]
+      }
+    ]
+  }
 ]
 ```
 
