@@ -157,6 +157,12 @@ export const places = [
     contest_name: "NEERC",
     photoset_id: "72177720306235129",
   },
+  {
+    year: "1998",
+    place: "SPb, Palace of Youth Creativity",
+    contest_name: "NEERC",
+    photoset_id: "72177720335189752",
+  },
 ];
 
 export const api_key = "aa713e700906ec8f2decea3f23e24abb";
