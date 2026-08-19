@@ -173,6 +173,45 @@ export const places = [
     contest_name: "World Finals",
     photoset_id: "72157665424879804",
   },
+
+  {
+    year: "1996",
+    place: "Philadelphia, Pennsylvania, USA",
+    contest_name: "World Finals",
+    photoset_id: "72177720335216739",
+  },
+  {
+    year: "1995",
+    place: "Nashville, Tennessee, USA",
+    contest_name: "World Finals",
+    photoset_id: "72177720335144572",
+  },
+  {
+    year: "1994",
+    place: "Phoenix, Arizona, USA",
+    contest_name: "World Finals",
+    photoset_id: "72177720335171814",
+  },
+  {
+    year: "1993",
+    place: "Indianapolis, Indiana, USA",
+    contest_name: "World Finals",
+    photoset_id: "72177720335139300",
+  },
+  {
+    year: "1992",
+    place: "Kansas City, Missouri, USA",
+    contest_name: "World Finals",
+    photoset_id: "72177720335171354",
+  },
+  {
+    year: "1991",
+    place: "San Antonio, Texas, USA",
+    contest_name: "World Finals",
+    photoset_id: "72177720335159413",
+  }
+
+
 ];
 
 export const api_key = "aa713e700906ec8f2decea3f23e24abb";
