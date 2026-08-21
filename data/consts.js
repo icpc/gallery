@@ -173,6 +173,18 @@ export const places = [
     contest_name: "World Finals",
     photoset_id: "72157665424879804",
   },
+  {
+    year: "2000",
+    place: "Orlando, Florida, USA",
+    contest_name: "World Finals",
+    photoset_id: "72177720335230979",
+  },
+  {
+    year: "1999",
+    place: "Eindhoven, Netherlands",
+    contest_name: "World Finals",
+    photoset_id: "72177720335233791",
+  },
 
   {
     year: "1996",
