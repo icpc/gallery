@@ -186,6 +186,12 @@ export const places = [
     photoset_id: "72177720335233791",
   },
   {
+    year: "1998",
+    place: "Atlanta, Georgia, USA",
+    contest_name: "World Finals",
+    photoset_id: "72177720335345177",
+  },
+  {
     year: "1997",
     place: "San Jose, California, USA",
     contest_name: "World Finals",
