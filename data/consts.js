@@ -232,9 +232,7 @@ export const places = [
     place: "San Antonio, Texas, USA",
     contest_name: "World Finals",
     photoset_id: "72177720335159413",
-  }
-
-
+  },
 ];
 
 export const api_key = "aa713e700906ec8f2decea3f23e24abb";

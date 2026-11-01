@@ -1,5 +1,11 @@
 export const places = [
   {
+    year: "RC 2026-2027",
+    place: "",
+    contest_name: "Regional Contests",
+    photoset_id: "72177720336454148",
+  },
+  {
     year: "2025",
     place: "SPb, Novosibirsk, Almaty, Tbilisi",
     contest_name: "NEF",
