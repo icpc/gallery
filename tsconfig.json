@@ -25,5 +25,5 @@
       "@data/*": ["./data/*"]
     }
   },
-  "include": ["src", "tests", "vite.config.ts"]
+  "include": ["src", "vite.config.ts"]
 }

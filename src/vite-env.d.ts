@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 declare module "@data/consts.js" {
-  import type { Place } from "./types";
+  import type { Place } from "./types/gallery";
 
   export const places: Place[];
   export const api_key: string;
