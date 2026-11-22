@@ -1,9 +1,8 @@
-import { FC, useEffect, useMemo, useState } from "react";
-
 import { Typography } from "@mui/material";
+import { type FC, useCallback, useEffect, useMemo, useState } from "react";
 
 import "../../consts";
-import { Photo } from "../../types";
+import type { Photo } from "../../types";
 import usePhotoLoader from "../../utils/PhotoLoader";
 import { useAppContext } from "../AppContext";
 
@@ -47,21 +46,24 @@ const Body: FC = () => {
   const [rightArrow, setRightArrow] = useState<boolean>(false);
   const [leftArrow, setLeftArrow] = useState<boolean>(false);
 
-  const handleClick = (id: string) => {
-    setFullscreenPhotoId(id);
-  };
+  const handleClick = useCallback(
+    (id: string) => {
+      setFullscreenPhotoId(id);
+    },
+    [setFullscreenPhotoId],
+  );
 
   useEffect(() => {
     const id = data.fullscreenPhotoId;
     if (id != null) {
       const index = photosList.findIndex((photo) => photo.id === id);
 
-      const photo = photosList[index];
+      const photo = photosList[index] ?? null;
       setFullscreenIndex(index);
       setFullscreenPhoto(photo);
 
-      setLeftArrow(index !== 0);
-      setRightArrow(index + 1 < photosList.length);
+      setLeftArrow(index > 0);
+      setRightArrow(index >= 0 && index + 1 < photosList.length);
     } else {
       setFullscreenIndex(null);
       setFullscreenPhoto(null);
@@ -74,7 +76,7 @@ const Body: FC = () => {
     if (data.fullscreenPhotoId === null) {
       setIsSlideShow(false);
     }
-  }, [data.fullscreenPhotoId]);
+  }, [data.fullscreenPhotoId, setIsSlideShow]);
 
   // Close mobile menu when scrolling
   useEffect(() => {
@@ -93,26 +95,33 @@ const Body: FC = () => {
     };
   }, [mobile, setIsOpenMenu]);
 
-  const handleRotationRight = () => {
+  const handleRotationRight = useCallback(() => {
     if (fullscreenIndex === null) return;
     let newIndex = fullscreenIndex + 1;
     if (newIndex >= photosList.length && photosList.length > 0) {
       newIndex = 0;
     }
-    handleClick(photosList[newIndex].id);
-  };
+    const nextPhoto = photosList[newIndex];
+    if (nextPhoto) {
+      handleClick(nextPhoto.id);
+    }
+  }, [fullscreenIndex, photosList, handleClick]);
 
-  const handleRotationLeft = () => {
+  const handleRotationLeft = useCallback(() => {
     if (fullscreenIndex === null) return;
     let newIndex = fullscreenIndex - 1;
     if (newIndex < 0 && photosList.length > 0) {
       newIndex = photosList.length - 1;
     }
-    handleClick(photosList[newIndex].id);
-  };
+    const prevPhoto = photosList[newIndex];
+    if (prevPhoto) {
+      handleClick(prevPhoto.id);
+    }
+  }, [fullscreenIndex, photosList, handleClick]);
 
   useEffect(() => {
     const target = document.getElementsByTagName("body")[0];
+    if (!target) return;
     const listener = (e: KeyboardEvent) => {
       if (fullscreenPhoto) {
         switch (e.key) {

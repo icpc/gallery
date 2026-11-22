@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, readdirSync } from "fs";
-import { join } from "path";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { Plugin } from "vite";
 
 interface SitemapOptions {
@@ -8,14 +8,13 @@ interface SitemapOptions {
 }
 
 function formatUrl(url: string): string {
-  url = url.replaceAll(" ", "+");
-  return encodeURI(url);
+  return encodeURI(url.replaceAll(" ", "+"));
 }
 
 function loadDataFile(filePath: string): string[] {
   try {
     if (!existsSync(filePath)) {
-      console.warn(`⚠️ Data file not found: ${filePath}`);
+      console.warn(`Data file not found: ${filePath}`);
       return [];
     }
 
@@ -23,7 +22,7 @@ function loadDataFile(filePath: string): string[] {
       .split("\n")
       .filter((line) => line.trim());
   } catch (error) {
-    console.error(`❌ Error reading file ${filePath}:`, error);
+    console.error(`Error reading file ${filePath}:`, error);
     return [];
   }
 }
@@ -38,7 +37,6 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
       const dataPath = join(process.cwd(), dataFolder);
 
       const urls: string[] = [];
-
       const websiteRoot = `${baseUrl}${publicUrl ? `/${publicUrl}` : ""}`;
 
       // Get years from .event files
@@ -51,19 +49,16 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
       for (const year of years) {
         urls.push(formatUrl(`${websiteRoot}/?album=${year}`));
 
-        // Add events
         const events = loadDataFile(join(dataPath, `${year}.event`));
         for (const event of events) {
           urls.push(formatUrl(`${websiteRoot}/?album=${year}&event=${event}`));
         }
 
-        // Add teams
         const teams = loadDataFile(join(dataPath, `${year}.team`));
         for (const team of teams) {
           urls.push(formatUrl(`${websiteRoot}/?album=${year}&team=${team}`));
         }
 
-        // Add people
         const people = loadDataFile(join(dataPath, `${year}.people`));
         for (const person of people) {
           urls.push(
@@ -77,8 +72,6 @@ export function sitemapGenerator(options: SitemapOptions): Plugin {
         fileName: "sitemap.txt",
         source: urls.join("\n"),
       });
-
-      console.log(`✅ Sitemap generated with ${urls.length} URLs`);
     },
   };
 }

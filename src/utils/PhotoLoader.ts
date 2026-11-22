@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { useAppContext } from "../components/AppContext";
-import { TAG_ALBUM, TAG_EVENT, TAG_TEAM, places } from "../consts";
-import { FlickrPhoto, GroupedPhotos, Photo, flickrSizes } from "../types";
-
-import { getAllPhotosFromPhotoset, getAllWithText } from "./PhotoService";
+import { places, TAG_ALBUM, TAG_EVENT, TAG_TEAM } from "../consts";
+import {
+  type FlickrPhoto,
+  flickrSizes,
+  type GroupedPhotos,
+  type Photo,
+} from "../types";
 import { convertRawFlickrTag } from "./convertRawFlickrTag";
+import { getAllPhotosFromPhotoset, getAllWithText } from "./PhotoService";
 
 /**
  * Custom hook that loads photos based on the current app context.
@@ -28,32 +32,36 @@ const usePhotoLoader = () => {
     );
 
   const processPhotos = (photos: FlickrPhoto[]): Photo[] =>
-    photos.map((photo) => {
-      const sources = flickrSizes
-        .map((s) => {
-          const url = photo[`url_${s}` as const];
-          const width = photo[`width_${s}` as const];
-          const height = photo[`height_${s}` as const];
-          if (!url) return null;
-          return { url, width: width ?? 0, height: height ?? 0 };
-        })
-        .filter((x) => x !== null);
-      sources.sort((a, b) => a.width - b.width);
-      // The default is the first photo with width > 1000
-      const src =
-        sources.find((source) => source?.width > 2000) ??
-        sources[sources.length - 1];
+    photos
+      .map((photo): Photo | null => {
+        const sources = flickrSizes
+          .map((s) => {
+            const url = photo[`url_${s}` as const];
+            const width = photo[`width_${s}` as const];
+            const height = photo[`height_${s}` as const];
+            if (!url) return null;
+            return { url, width: width ?? 0, height: height ?? 0 };
+          })
+          .filter((x) => x !== null);
+        sources.sort((a, b) => a.width - b.width);
+        // The default is the first photo with width > 2000
+        const src =
+          sources.find((source) => source.width > 2000) ??
+          sources[sources.length - 1];
+        if (!src) return null;
 
-      return {
-        sources,
-        src,
-        id: photo.id,
-        tags: photo.tags.split(" "),
-        origin: photo.url_o,
-        year: albumFromTags(photo.tags.split(" ")),
-        events: eventsFromTags(photo.tags.split(" ")),
-      };
-    });
+        const tags = photo.tags.split(" ");
+        return {
+          sources,
+          src,
+          id: photo.id,
+          tags,
+          origin: photo.url_o,
+          year: albumFromTags(tags),
+          events: eventsFromTags(tags),
+        };
+      })
+      .filter((photo): photo is Photo => photo !== null);
 
   const textQuery = useQuery({
     queryKey: ["photos", "search", TAG_ALBUM, data.text ?? ""],
@@ -66,8 +74,9 @@ const usePhotoLoader = () => {
       const photos = processPhotos(raw);
       const byYear: Record<string, Photo[]> = {};
       photos.forEach((p) => {
-        byYear[p.year] ||= [];
-        byYear[p.year].push(p);
+        const list = byYear[p.year] ?? [];
+        list.push(p);
+        byYear[p.year] = list;
       });
       return Object.entries(byYear)
         .sort(([a], [b]) => Number(b) - Number(a))
@@ -109,8 +118,9 @@ const usePhotoLoader = () => {
       }
       photos.forEach((p) => {
         (p.events.length > 0 ? p.events : ["Unknown"]).forEach((event) => {
-          byEvent[event] ||= [];
-          byEvent[event].push(p);
+          const list = byEvent[event] ?? [];
+          list.push(p);
+          byEvent[event] = list;
         });
       });
       return Object.keys(byEvent)
@@ -119,7 +129,7 @@ const usePhotoLoader = () => {
           const ib = events.indexOf(b);
           return (ia === -1 ? Infinity : ia) - (ib === -1 ? Infinity : ib);
         })
-        .map((evt) => ({ key: evt, photos: byEvent[evt] }));
+        .map((evt) => ({ key: evt, photos: byEvent[evt] ?? [] }));
     },
   });
 

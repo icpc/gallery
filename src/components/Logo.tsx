@@ -1,6 +1,5 @@
-import { FC } from "react";
-
 import { Box, Link } from "@mui/material";
+import type { FC } from "react";
 
 import { LAST_YEAR } from "../consts";
 import logo from "../images/white.svg";

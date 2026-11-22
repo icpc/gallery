@@ -1,13 +1,13 @@
 import {
-  FC,
-  ReactNode,
   createContext,
+  type FC,
+  type ReactNode,
   useContext,
   useEffect,
   useState,
 } from "react";
 
-import { Person, PhotoInfo, PhotoInfoContextType } from "../../../types";
+import type { Person, PhotoInfo, PhotoInfoContextType } from "../../../types";
 import { ParsePhotoInfo } from "../../../utils/PhotoInfoHelper";
 import { getPhotoInfo } from "../../../utils/PhotoService";
 import { useAppContext } from "../../AppContext";

@@ -1,17 +1,17 @@
-import { FC, useEffect, useState } from "react";
-import ReactCrop, { Crop } from "react-image-crop";
+import { type FC, useEffect, useState } from "react";
+import ReactCrop, { type Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
 import {
   Autocomplete,
   Box,
+  createFilterOptions,
   Paper,
   TextField,
-  createFilterOptions,
 } from "@mui/material";
 
 import { getPeopleData } from "../../consts";
-import { Person, Photo } from "../../types";
+import type { Person, Photo } from "../../types";
 import { useAppContext } from "../AppContext";
 
 import FaceDiv from "./FaceDiv";
@@ -86,7 +86,7 @@ const ImageWithFaceSelection: FC<Props> = ({
   }
 
   return (
-    <Box width={width} height={height}>
+    <Box sx={{ width, height }}>
       <ReactCrop
         crop={crop}
         onChange={(c: Crop) => setCrop(c)}

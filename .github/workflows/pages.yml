@@ -6,6 +6,9 @@ on:
       - "main"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Create artifacts from master
@@ -44,12 +47,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
         with:
-          node-version: "20"
-          cache: "npm"
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: bun install --frozen-lockfile
       - name: Build
         run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} MODE=staging ./build.sh
       - name: Upload
@@ -88,7 +92,9 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    permissions: write-all
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

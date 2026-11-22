@@ -1,9 +1,8 @@
-import { FC, ReactNode } from "react";
-
 import { Autocomplete, TextField } from "@mui/material";
+import type { FC, ReactNode } from "react";
 
 import { places } from "../../../consts";
-import { Person } from "../../../types";
+import type { Person } from "../../../types";
 import { useAppContext } from "../../AppContext";
 
 import { usePhotoInfo } from "./PhotoInfoContext";
@@ -11,7 +10,7 @@ import { usePhotoInfo } from "./PhotoInfoContext";
 const ComaSeparated = (
   list: (ReactNode | string)[],
 ): (ReactNode | string | boolean)[] => {
-  return list.map((item, index) => [index > 0 && ", ", item]).flat();
+  return list.flatMap((item, index) => [index > 0 && ", ", item]);
 };
 
 // TODO: Unify
@@ -47,7 +46,7 @@ const PhotographerEdit: FC = () => {
       freeSolo
       options={[]}
       value={photoInfo.photographer}
-      onChange={(event, newValue) => {
+      onChange={(_event, newValue) => {
         setPhotographer(newValue);
       }}
       renderInput={(params) => (
@@ -88,7 +87,7 @@ const AlbumEdit: FC = () => {
       freeSolo
       options={places.map(({ year }) => year)}
       value={photoInfo.album}
-      onChange={(event, newValue) => {
+      onChange={(_event, newValue) => {
         setAlbum(newValue);
       }}
       renderInput={(params) => (
@@ -131,7 +130,7 @@ const EventEdit: FC = () => {
       freeSolo
       options={events}
       value={photoInfo.event || []}
-      onChange={(event, newValue) => {
+      onChange={(_event, newValue) => {
         setEvents(newValue);
       }}
       renderInput={(params) => (
@@ -174,7 +173,7 @@ const TeamEdit: FC = () => {
       freeSolo
       options={teams}
       value={photoInfo.team || []}
-      onChange={(event, newValue) => {
+      onChange={(_event, newValue) => {
         setTeam(newValue);
       }}
       renderInput={(params) => (
@@ -233,7 +232,7 @@ const PersonEdit: FC = () => {
       multiple
       options={[]}
       value={photoInfo.person.map((person) => person.name)}
-      onChange={(event, newValue) => {
+      onChange={(_event, newValue) => {
         setPerson(newValue);
       }}
       fullWidth={false}

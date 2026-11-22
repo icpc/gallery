@@ -1,24 +1,23 @@
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useQuery } from "@tanstack/react-query";
 import {
-  FC,
-  ReactNode,
   createContext,
+  type FC,
+  type ReactNode,
   useContext,
   useEffect,
   useState,
 } from "react";
-import { useSearchParams } from "react-router-dom";
-
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router";
 
 import {
   DEFAULT_EVENT,
-  LAST_YEAR,
   getEventData,
   getPeopleData,
   getTeamData,
+  LAST_YEAR,
 } from "../consts";
-import { AppContextData, AppContextType } from "../types";
+import type { AppContextData, AppContextType } from "../types";
 
 /**
  * The default context object for AppContext.

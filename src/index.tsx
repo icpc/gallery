@@ -1,16 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { UnheadProvider, createHead } from "@unhead/react/client";
+import { createHead, UnheadProvider } from "@unhead/react/client";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router";
 
 import App from "./App";
 import { AppContextProvider } from "./components/AppContext";
 import { PhotoInfoProvider } from "./components/Body/PhotoInfo/PhotoInfoContext";
-import { UNIQUE_CONTEST_KEY, api_key } from "./consts";
+import { api_key, UNIQUE_CONTEST_KEY } from "./consts";
 
 const queryClient = new QueryClient({
   defaultOptions: {

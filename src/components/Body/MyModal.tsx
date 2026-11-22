@@ -1,6 +1,6 @@
-import { FC } from "react";
+import type { FC } from "react";
 
-import { Photo } from "../../types";
+import type { Photo } from "../../types";
 import { useAppContext } from "../AppContext";
 
 import Lightbox from "./Lightbox";
@@ -34,8 +34,15 @@ const MyModal: FC<Props> = ({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
       className="overlay dismiss"
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") {
+          setFullscreenPhotoId(null);
+        }
+      }}
       style={{ backgroundColor: isSlideShow ? "black" : "" }}
     >
       {isSlideShow ? (

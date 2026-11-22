@@ -1,9 +1,8 @@
-import { FC } from "react";
-
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { IconButton } from "@mui/material";
+import type { FC } from "react";
 
-import { Photo } from "../../types";
+import type { Photo } from "../../types";
 
 import Control from "./Control";
 import ImageWithFaceSelection from "./ImageWithFaceSelection";

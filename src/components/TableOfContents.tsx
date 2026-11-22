@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 
 import { places } from "../consts";
 
@@ -20,32 +20,31 @@ const TableOfContents: FC = () => {
   return (
     <nav aria-label="Table of contents">
       {places.map(({ year, place, contest_name }) => {
-        if (year !== data.year) {
-          return (
-            <div
-              className="year-wrapper"
-              key={year}
-              onClick={() => handleClick(year)}
-            >
-              <div className="year">{year}</div>
-              <div className="place">{place}</div>
+        const isCurrent = year === data.year;
+        return (
+          <button
+            type="button"
+            className="year-wrapper"
+            key={year}
+            title={isCurrent ? "to top" : undefined}
+            onClick={() => handleClick(year)}
+            style={{
+              background: "none",
+              border: "none",
+              textAlign: "left",
+              width: "100%",
+              padding: 0,
+              color: "inherit",
+            }}
+          >
+            <div className={isCurrent ? "year big-year" : "year"}>
+              {isCurrent ? `${contest_name} ${year}` : year}
             </div>
-          );
-        } else {
-          return (
-            <div
-              className="year-wrapper"
-              key={year}
-              title="to top"
-              onClick={() => handleClick(year)}
-            >
-              <div className="year big-year">
-                {contest_name} {year}
-              </div>
-              <div className="place big-place">{place}</div>
+            <div className={isCurrent ? "place big-place" : "place"}>
+              {place}
             </div>
-          );
-        }
+          </button>
+        );
       })}
     </nav>
   );

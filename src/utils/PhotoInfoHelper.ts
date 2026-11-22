@@ -5,7 +5,7 @@ import {
   TAG_PHOTOGRAPHER,
   TAG_TEAM,
 } from "../consts";
-import { Person, PhotoInfo, Position } from "../types";
+import type { Person, PhotoInfo, Position } from "../types";
 
 import UniqueList from "./UniqueList";
 

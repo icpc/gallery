@@ -1,14 +1,13 @@
-import { FC } from "react";
-
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Autocomplete,
   Box,
+  createFilterOptions,
   InputAdornment,
   Paper,
   TextField,
-  createFilterOptions,
 } from "@mui/material";
+import type { FC } from "react";
 
 interface Option {
   data: string;
@@ -46,34 +45,28 @@ const Selector: FC<Props> = ({
         onChange={(_, newValue) => {
           onChange(newValue ? newValue.data : "clear");
         }}
-        renderInput={(params) => {
-          const { InputProps, inputProps, ...rest } = params;
-
-          return (
-            <TextField
-              {...rest}
-              placeholder={name}
-              slotProps={{
-                input: {
-                  ...InputProps,
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Box
-                        component="img"
-                        src={leftIcon}
-                        alt=""
-                        sx={{ width: 20, height: 20 }}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-                htmlInput: {
-                  ...inputProps,
-                },
-              }}
-            />
-          );
-        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder={name}
+            slotProps={{
+              ...params.slotProps,
+              input: {
+                ...params.slotProps.input,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Box
+                      component="img"
+                      src={leftIcon}
+                      alt=""
+                      sx={{ width: 20, height: 20 }}
+                    />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        )}
         popupIcon={<ExpandMoreIcon />}
         disableClearable={disableClearable}
       />

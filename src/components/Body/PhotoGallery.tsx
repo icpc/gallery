@@ -1,7 +1,6 @@
-import { FC, useEffect } from "react";
-
 import { Box, Typography } from "@mui/material";
-import { GroupedPhotos } from "src/types";
+import { type FC, useEffect } from "react";
+import type { GroupedPhotos } from "../../types";
 
 import { useAppContext } from "../AppContext";
 
@@ -16,12 +15,12 @@ const PhotoGallery: FC<Props> = ({ groupedPhotos, handleClick }) => {
   const { data } = useAppContext();
 
   useEffect(() => {
-    if (data.event) {
+    if (data.event && groupedPhotos.length > 0) {
       const id = encodeURIComponent(data.event);
       const element = document.getElementById(id);
       element?.scrollIntoView({ behavior: "instant" });
     }
-  }, [groupedPhotos, data.event]);
+  }, [groupedPhotos.length, data.event]);
 
   if (!groupedPhotos.find(({ photos }) => photos.length > 0)) {
     return <Typography variant="h1">No photo</Typography>;

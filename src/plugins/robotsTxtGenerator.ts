@@ -12,19 +12,17 @@ export function robotsTxtGenerator(options: RobotsOptions): Plugin {
       const publicUrl = options.publicUrl;
       const baseUrl = options.baseUrl;
 
-      const robotsTxt = `
-        User-agent: *
-        Allow: /
+      const robotsTxt = `User-agent: *
+Allow: /
 
-        Sitemap: ${baseUrl}${publicUrl ? `/${publicUrl}` : ""}/sitemap.txt`;
+Sitemap: ${baseUrl}${publicUrl ? `/${publicUrl}` : ""}/sitemap.txt
+`;
 
       this.emitFile({
         type: "asset",
         fileName: "robots.txt",
         source: robotsTxt,
       });
-
-      console.log("✅ robots.txt generated");
     },
   };
 }

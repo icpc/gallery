@@ -1,8 +1,7 @@
-import { JSX } from "react";
-
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { useSeoMeta } from "@unhead/react";
 import { SnackbarProvider } from "notistack";
+import type { JSX } from "react";
 
 import { useAppContext } from "./components/AppContext";
 import Body from "./components/Body/Body";
@@ -32,44 +31,50 @@ function App(): JSX.Element {
       <CssBaseline />
 
       <Box
-        display="grid"
-        height="100vh"
-        p={2}
-        pb={0}
-        gap={1}
-        gridTemplateColumns={desktop ? "2fr 8fr" : "1fr"}
-        gridTemplateRows={desktop ? "minmax(130px, auto) 1fr" : "auto 1fr"}
-        gridTemplateAreas={
-          desktop ? `"logo header"\n"sidebar body"` : `"header"\n"body"`
-        }
+        sx={{
+          display: "grid",
+          height: "100vh",
+          p: 2,
+          pb: 0,
+          gap: 1,
+          gridTemplateColumns: desktop ? "2fr 8fr" : "1fr",
+          gridTemplateRows: desktop ? "minmax(130px, auto) 1fr" : "auto 1fr",
+          gridTemplateAreas: desktop
+            ? `"logo header"\n"sidebar body"`
+            : `"header"\n"body"`,
+        }}
       >
         {desktop && (
           <>
             <Box
-              gridArea="logo"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
+              sx={{
+                gridArea: "logo",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <DesktopLogo />
             </Box>
 
-            <Box gridArea="sidebar" minHeight={0}>
+            <Box sx={{ gridArea: "sidebar", minHeight: 0 }}>
               <Sidebar />
             </Box>
           </>
         )}
 
         <Box
-          gridArea="header"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
+          sx={{
+            gridArea: "header",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
           <Header />
         </Box>
 
-        <Box gridArea="body" minHeight={0}>
+        <Box sx={{ gridArea: "body", minHeight: 0 }}>
           <Body />
         </Box>
       </Box>
