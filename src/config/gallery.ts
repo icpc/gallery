@@ -18,7 +18,6 @@ export const LAST_YEAR: string = consts.LAST_YEAR;
 export const DEFAULT_EVENT: string = consts.DEFAULT_EVENT;
 export const FLICKR_IMAGE_PREFIX: string = consts.FLICKR_IMAGE_PREFIX;
 export const SUGGESTIONS_EMAIL: string = consts.SUGGESTIONS_EMAIL;
-export const MAX_ALBUM_SIZE: number = consts.MAX_ALBUM_SIZE;
 export const UNIQUE_CONTEST_KEY: string = TAG_ALBUM;
 
 const rawDataLoaders = import.meta.glob<string>(

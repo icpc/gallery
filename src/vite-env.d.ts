@@ -19,5 +19,4 @@ declare module "@data/consts.js" {
   export const DEFAULT_EVENT: string;
   export const FLICKR_IMAGE_PREFIX: string;
   export const SUGGESTIONS_EMAIL: string;
-  export const MAX_ALBUM_SIZE: number;
 }

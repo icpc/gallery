@@ -1,40 +1,39 @@
 import { Box, Typography } from "@mui/material";
-import { type FC, useEffect } from "react";
+import { type FC, memo, useEffect } from "react";
 import { useGallery } from "@/features/gallery/state/GalleryContext";
-import type { GroupedPhotos } from "@/types/gallery";
+import type { GallerySection } from "@/features/gallery/utils/gallerySections";
 import { PhotoGrid } from "./PhotoGrid";
 
 interface PhotoGalleryProps {
-  groupedPhotos: GroupedPhotos[];
-  handleClick: (id: string) => void;
+  sections: readonly GallerySection[];
+  onSelectIndex: (flatIndex: number) => void;
 }
 
-export const PhotoGallery: FC<PhotoGalleryProps> = ({
-  groupedPhotos,
-  handleClick,
-}) => {
-  const { data } = useGallery();
+export const PhotoGallery: FC<PhotoGalleryProps> = memo(
+  ({ sections, onSelectIndex }) => {
+    const { data } = useGallery();
 
-  useEffect(() => {
-    if (data.event && groupedPhotos.length > 0) {
-      const id = encodeURIComponent(data.event);
-      const element = document.getElementById(id);
-      element?.scrollIntoView({ behavior: "instant" });
+    useEffect(() => {
+      if (data.event && sections.length > 0) {
+        const id = encodeURIComponent(data.event);
+        const element = document.getElementById(id);
+        element?.scrollIntoView({ behavior: "instant" });
+      }
+    }, [sections.length, data.event]);
+
+    if (!sections.some(({ items }) => items.length > 0)) {
+      return <Typography variant="h1">No photo</Typography>;
     }
-  }, [groupedPhotos.length, data.event]);
 
-  if (!groupedPhotos.some(({ photos }) => photos.length > 0)) {
-    return <Typography variant="h1">No photo</Typography>;
-  }
-
-  return (
-    <>
-      {groupedPhotos.map(({ key, photos }) => (
-        <Box key={key} id={encodeURIComponent(key)}>
-          <Typography variant="h1">{key}</Typography>
-          <PhotoGrid photos={photos} handleClick={handleClick} />
-        </Box>
-      ))}
-    </>
-  );
-};
+    return (
+      <>
+        {sections.map(({ key, items }) => (
+          <Box key={key} id={encodeURIComponent(key)}>
+            <Typography variant="h1">{key}</Typography>
+            <PhotoGrid items={items} onSelectIndex={onSelectIndex} />
+          </Box>
+        ))}
+      </>
+    );
+  },
+);

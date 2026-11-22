@@ -48,4 +48,3 @@ export const SVG_HEIGHT = 60;
 export const LAST_YEAR = "2026";
 export const DEFAULT_EVENT = "Photo Tour";
 
-export const MAX_ALBUM_SIZE = 2000;

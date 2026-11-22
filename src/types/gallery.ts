@@ -140,7 +140,10 @@ export interface GalleryContextValue {
   setText: (newText: string) => void;
   setPerson: (newPerson: string) => void;
   setTeam: (newTeam: string) => void;
-  setFullscreenPhotoId: (newFullscreenPhotoId: string | null) => void;
+  setFullscreenPhotoId: (
+    newFullscreenPhotoId: string | null,
+    options?: { replace?: boolean },
+  ) => void;
   isSlideShow: boolean;
   setIsSlideShow: (newIsSlideShow: boolean) => void;
   isOpenMenu: boolean;
