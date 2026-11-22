@@ -23,8 +23,12 @@ import {
   type Dimensions,
   fitDimensions,
 } from "@/features/viewer/utils/imageFit";
+import {
+  getDiffFaceEntries,
+  getPersonTagKey,
+} from "@/features/viewer/utils/suggestions";
 import { useSwipeNavigation } from "@/shared/hooks/useSwipeNavigation";
-import type { Person, Photo } from "@/types/gallery";
+import type { FaceDiffStatus, Person, Photo } from "@/types/gallery";
 import { FaceBox } from "./FaceBox";
 
 const filterOptions = createFilterOptions<string>({ limit: 200 });
@@ -57,11 +61,6 @@ interface PhotoStageProps {
   hideFaces?: boolean;
 }
 
-/**
- * Responsive photo stage shared by desktop and mobile layouts.
- * Uses ResizeObserver so toggling the desktop sidebar or resizing the viewport
- * keeps the image and FaceBox percentages pixel-accurate.
- */
 export const PhotoStage: FC<PhotoStageProps> = ({
   photo,
   showNavArrows,
@@ -75,7 +74,15 @@ export const PhotoStage: FC<PhotoStageProps> = ({
   hideFaces = false,
 }) => {
   const { data, desktop, people } = useGallery();
-  const { photoInfo, editMode, face, setFace, appendPerson } = usePhotoInfo();
+  const {
+    photoInfo,
+    editMode,
+    isPreviewingSuggestion,
+    activeDiff,
+    face,
+    setFace,
+    appendPerson,
+  } = usePhotoInfo();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerSize, setContainerSize] = useState<Dimensions>({
@@ -176,6 +183,13 @@ export const PhotoStage: FC<PhotoStageProps> = ({
   });
 
   const infoMatchesPhoto = data.fullscreenPhotoId === photo.id;
+  const faceEntries =
+    activeDiff && (editMode || isPreviewingSuggestion)
+      ? getDiffFaceEntries(activeDiff)
+      : (photoInfo?.person ?? []).map((person) => ({
+          person,
+          status: "unchanged" as FaceDiffStatus,
+        }));
 
   return (
     <Box
@@ -253,12 +267,17 @@ export const PhotoStage: FC<PhotoStageProps> = ({
           />
           {!hideFaces &&
             infoMatchesPhoto &&
-            (photoInfo?.person ?? []).map((person) => (
+            faceEntries.map(({ person, status }) => (
               <FaceBox
                 person={person}
+                status={status}
                 setFace={setFace}
-                hidden={!editMode && face?.name !== person.name}
-                key={`${person.name}-${person.position?.left ?? "nopos"}-${person.position?.top ?? "nopos"}`}
+                hidden={
+                  !editMode &&
+                  !isPreviewingSuggestion &&
+                  face?.name !== person.name
+                }
+                key={`${status}-${getPersonTagKey(person)}`}
               />
             ))}
         </ReactCrop>

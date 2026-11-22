@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
+import type { PhotoInfoDiff } from "@/features/viewer/utils/suggestions";
 
 export interface Place {
   year: string;
@@ -19,6 +20,8 @@ export interface Person {
   name: string;
   position?: Position;
 }
+
+export type FaceDiffStatus = "added" | "removed" | "unchanged";
 
 export interface PhotoInfo {
   event: string[];
@@ -122,6 +125,13 @@ export interface FlickrPhotoInfoResponse {
   stat: string;
 }
 
+export interface FlickrAuthCredentials {
+  apiKey: string;
+  apiSecret: string;
+  oauthToken: string;
+  oauthTokenSecret: string;
+}
+
 export interface GalleryFilterState {
   year: string | null;
   event: string | null;
@@ -131,6 +141,7 @@ export interface GalleryFilterState {
   fullscreenPhotoId: string | null;
   slideShow: boolean;
   slideshowSpeed?: number; // seconds
+  suggestion: string | null;
 }
 
 export interface GalleryContextValue {
@@ -144,6 +155,10 @@ export interface GalleryContextValue {
     newFullscreenPhotoId: string | null,
     options?: { replace?: boolean },
   ) => void;
+  setSuggestion: (encodedSuggestion: string | null) => void;
+  isSettingsOpen: boolean;
+  openSettings: () => void;
+  closeSettings: () => void;
   isSlideShow: boolean;
   setIsSlideShow: (newIsSlideShow: boolean) => void;
   isOpenMenu: boolean;
@@ -157,6 +172,13 @@ export interface GalleryContextValue {
 
 export interface PhotoInfoContextValue {
   photoInfo: PhotoInfo | null;
+  originalPhotoInfo: PhotoInfo | null;
+  suggestedPhotoInfo: PhotoInfo | null;
+  isPreviewingSuggestion: boolean;
+  activeDiff: PhotoInfoDiff | null;
+  isLoading: boolean;
+  isSaving: boolean;
+  saveError: string | null;
   setPhotoInfo: Dispatch<SetStateAction<PhotoInfo | null>>;
   editMode: boolean;
   setEditMode: Dispatch<SetStateAction<boolean>>;
@@ -168,4 +190,11 @@ export interface PhotoInfoContextValue {
   setTeam: (newTeam: string[]) => void;
   setPhotographer: (newPhotographer: string[]) => void;
   appendPerson: (newPerson: Person) => void;
+  resetDraft: () => void;
+  loadSuggestionIntoEditor: () => void;
+  dismissSuggestion: () => void;
+  buildSuggestionPreviewUrl: () => string | null;
+  saveToFlickr: (
+    targetInfo?: PhotoInfo,
+  ) => Promise<{ ok: true } | { ok: false; error: string }>;
 }

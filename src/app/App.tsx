@@ -1,5 +1,5 @@
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
-import type { FC } from "react";
+import { type FC, lazy, Suspense } from "react";
 import { theme } from "@/app/theme";
 import { description, title } from "@/config/gallery";
 import { GalleryBody } from "@/features/gallery/components/GalleryBody";
@@ -11,8 +11,12 @@ import { useDocumentSeo } from "@/shared/hooks/useDocumentSeo";
 
 import "@/styles/global.css";
 
+const FlickrSettingsDialog = lazy(
+  () => import("@/features/settings/components/FlickrSettingsDialog"),
+);
+
 export const App: FC = () => {
-  const { desktop } = useGallery();
+  const { data, desktop, isSettingsOpen, closeSettings } = useGallery();
 
   useDocumentSeo({
     title,
@@ -75,6 +79,16 @@ export const App: FC = () => {
           <GalleryBody />
         </Box>
       </Box>
+
+      {isSettingsOpen && (
+        <Suspense fallback={null}>
+          <FlickrSettingsDialog
+            open={isSettingsOpen}
+            onClose={closeSettings}
+            fromSuggestionPreview={Boolean(data.suggestion)}
+          />
+        </Suspense>
+      )}
     </ThemeProvider>
   );
 };

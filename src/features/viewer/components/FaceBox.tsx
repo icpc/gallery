@@ -1,14 +1,20 @@
 import { Box } from "@mui/material";
 import type { FC } from "react";
-import type { Person } from "@/types/gallery";
+import type { FaceDiffStatus, Person } from "@/types/gallery";
 
 interface FaceBoxProps {
   person: Person;
   hidden: boolean;
+  status?: FaceDiffStatus;
   setFace: (person: Person | null) => void;
 }
 
-export const FaceBox: FC<FaceBoxProps> = ({ person, hidden, setFace }) => {
+export const FaceBox: FC<FaceBoxProps> = ({
+  person,
+  hidden,
+  status = "unchanged",
+  setFace,
+}) => {
   if (!person.position) {
     return null;
   }
@@ -22,6 +28,13 @@ export const FaceBox: FC<FaceBoxProps> = ({ person, hidden, setFace }) => {
       : centerX > 0.92
         ? { right: 0 }
         : { left: "50%", transform: "translateX(-50%)" };
+  const borderColor =
+    status === "added"
+      ? "success.light"
+      : status === "removed"
+        ? "error.light"
+        : "warning.light";
+  const prefix = status === "added" ? "+ " : status === "removed" ? "- " : "";
 
   return (
     <Box
@@ -33,8 +46,8 @@ export const FaceBox: FC<FaceBoxProps> = ({ person, hidden, setFace }) => {
         left: `${left * 100}%`,
         width: `${Math.max(0, right - left) * 100}%`,
         height: `${Math.max(0, bottom - top) * 100}%`,
-        border: "2px solid",
-        borderColor: "warning.light",
+        border: status === "removed" ? "2px dashed" : "2px solid",
+        borderColor,
         borderRadius: 1,
         boxSizing: "border-box",
         opacity: hidden ? 0 : 1,
@@ -63,6 +76,7 @@ export const FaceBox: FC<FaceBoxProps> = ({ person, hidden, setFace }) => {
           zIndex: 2,
         }}
       >
+        {prefix}
         {person.name}
       </Box>
     </Box>

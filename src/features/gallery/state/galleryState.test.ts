@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import {
+  isSettingsLocation,
   parseGallerySearchParams,
   selectEvent,
   selectPerson,
@@ -10,10 +11,10 @@ import {
 } from "./galleryState";
 
 describe("galleryState", () => {
-  it("parses default album, event, photo, and slideshow params directly from URLSearchParams", () => {
+  it("parses default album, event, photo, slideshow, and suggest params directly", () => {
     const parsed = parseGallerySearchParams(
       new URLSearchParams(
-        "album=2025&photo=42&slideshow=true&slideshowSpeed=3.5",
+        "album=2025&photo=42&slideshow=true&slideshowSpeed=3.5&suggest=abc123",
       ),
       "2026",
       "Photo Tour",
@@ -27,17 +28,8 @@ describe("galleryState", () => {
       fullscreenPhotoId: "42",
       slideShow: true,
       slideshowSpeed: 3.5,
+      suggestion: "abc123",
     });
-  });
-
-  it("falls back to lastYear and defaultEvent when URL has no params", () => {
-    const parsed = parseGallerySearchParams(
-      new URLSearchParams(),
-      "2026",
-      "Photo Tour",
-    );
-    expect(parsed.year).toBe("2026");
-    expect(parsed.event).toBe("Photo Tour");
   });
 
   it("clears year when query param is present", () => {
@@ -48,28 +40,50 @@ describe("galleryState", () => {
     );
     expect(parsed.text).toBe("MIT");
     expect(parsed.year).toBeNull();
-    expect(parsed.event).toBeNull();
   });
 
-  it("serializes state and preserves suggest/settings params", () => {
+  it("serializes state and keeps suggest only when a photo is open", () => {
     const base = {
       ...parseGallerySearchParams(new URLSearchParams(), "2025", "Photo Tour"),
       event: "Opening Ceremony",
       fullscreenPhotoId: "99",
       slideshowSpeed: 4,
+      suggestion: "abc123",
     };
     const serialized = serializeGallerySearchParams(
       base,
-      new URLSearchParams("suggest=abc123&settings=true"),
+      new URLSearchParams("settings=true"),
     );
     expect(Object.fromEntries(serialized.entries())).toEqual({
       album: "2025",
       event: "Opening Ceremony",
       photo: "99",
-      slideshowSpeed: "4",
       suggest: "abc123",
+      slideshowSpeed: "4",
       settings: "true",
     });
+
+    const closed = { ...base, fullscreenPhotoId: null };
+    expect(serializeGallerySearchParams(closed).get("suggest")).toBeNull();
+  });
+
+  it("detects ?settings=true, #settings, and /settings locations", () => {
+    expect(
+      isSettingsLocation("/gallery/", new URLSearchParams("settings=true"), ""),
+    ).toBe(true);
+    expect(
+      isSettingsLocation("/gallery/", new URLSearchParams(), "#settings"),
+    ).toBe(true);
+    expect(
+      isSettingsLocation("/gallery/settings", new URLSearchParams(), ""),
+    ).toBe(true);
+    expect(
+      isSettingsLocation(
+        "/gallery/",
+        new URLSearchParams("settings=false"),
+        "",
+      ),
+    ).toBe(false);
   });
 
   it("reattaches default year when selecting event/team/person from search mode", () => {

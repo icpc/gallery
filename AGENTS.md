@@ -41,11 +41,12 @@ src/
   plugins/               Vite build plugins (`robotsTxtGenerator.ts`, `sitemapGenerator.ts`)
   features/
     gallery/             Photo grid, progressive TanStack Query Flickr loading, canonical section ordering, URL-synced filter state & duplicate-safe navigation
-    viewer/              Fullscreen photo viewer, slideshow, face tagging, metadata panel
+    viewer/              Unified fullscreen viewer, slideshow, ResizeObserver photo stage, face boxes, info sidebar, suggestion preview & diff
     navigation/          Header, filter selectors, search bar, year navigation, logo
+    settings/            Lazy-loaded Flickr OAuth admin settings dialog
   services/
-    flickr/              Flickr REST client (`api.ts`), URL builders (`urls.ts`), tag normalization (`tags.ts`)
-  shared/                Domain-agnostic reusable primitives (`ErrorBoundary`, `NotificationProvider`, `useDocumentSeo`, `uniqueList`)
+    flickr/              Flickr REST read/write client (`api.ts`), URL builders (`urls.ts`), tag normalization (`tags.ts`), RFC 5849 OAuth 1.0a (`oauth.ts`), localStorage auth store (`authStore.ts`)
+  shared/                Domain-agnostic reusable primitives (`ErrorBoundary`, `NotificationProvider`, `useDocumentSeo`, `useLocalStorage`, `useSwipeNavigation`, `uniqueList`)
   types/                 Shared TypeScript domain types (`gallery.ts`)
   assets/icons/          SVG icons
   styles/                Global CSS (`global.css`, `theme-variables.css`)
@@ -59,12 +60,19 @@ src/
 ## Key Architectural Invariants
 
 1. **Prioritize real-world perceived speed and reload persistence over bundle size**:
-   - Retain `@tanstack/react-query` + `PersistQueryClientProvider` (`localStorage` sync persister in `src/app/queryClient.ts`) so navigating years, filters, and reloading the browser feels instant with cached responses.
+   - Retain `@tanstack/react-query` + `PersistQueryClientProvider` (`localStorage` sync persister in `src/app/queryClient.ts`) so navigating years, filters, and reloading the browser feels instant with persisted cached responses.
    - Use **progressive page-1-first album loading**: render page 1 (first 500 photos) immediately after 1 RTT, then fetch pages `2..totalPages` in parallel based on Flickr's response `pages` count (no hardcoded `MAX_ALBUM_SIZE`).
    - Because the full album is always loaded into memory/cache, viewer lookup and navigation rely directly on the loaded album items (preferring the URL's `event` section if it contains the photo, otherwise falling back to the first event that contains it) without a separate `getPhotoById` / `getSizes` fallback loader.
 2. **Regional `data*/` folders stay at repo root in plain JS/text**: External data scripts and GitHub Actions matrices (`pages.yml`, `publish.yml`, `release.yml`) depend on `VITE_DATA_FOLDER=data*` with `consts.js` and `<year>.{event,team,people}`. Type them via `src/vite-env.d.ts` and `src/config/gallery.ts`; do not convert `data*/` to TypeScript.
 3. **Preserve build-time SEO generation**: `vite.config.ts` runs `sitemapGenerator` and `robotsTxtGenerator` on every regional build to emit `sitemap.txt` and `robots.txt`.
 4. **Duplicate-safe index-based photo navigation**: The same Flickr photo can appear in multiple events (e.g., `Photo Tour` and `Opening Ceremony`). `buildGallerySections` produces canonical `sections` and flattened `items` with unique `entryKey` (`${sectionKey}:${photo.id}`) and `flatIndex`. `useGalleryNavigation` tracks the active photo by `flatIndex` while syncing `?photo=<id>` to the URL — never navigate Next/Prev by doing `findIndex(p => p.id === id)`, which causes jumps/loops on duplicates.
+5. **Unified viewer across desktop, mobile, and slideshow**:
+   - Slideshow is a playback mode (`useSlideshow`) inside `PhotoViewer`, not a separate component tree.
+   - Desktop (Google Photos right rail, collapsible with `localStorage` persistence) and mobile (Google Photos collapsible bottom panel, hidden by default so the photo fills 100% height and the top close toolbar stays pinned) render the **exact same** `PhotoViewer` → `PhotoViewerToolbar` + `PhotoStage` + `PhotoInfoSidebar` components, differing only in flex layout direction (`row` vs `column`).
+   - `PhotoStage` uses `ResizeObserver` (`fitDimensions`) so image dimensions and `FaceBox` percentages stay accurate when toggling the sidebar or resizing.
+6. **Safe Flickr write API & credentials**:
+   - `flickr.photos.setTags` replaces all tags on a photo; always merge managed gallery tags with `preservedTags` (`extractPreservedTags`) so unrelated Flickr tags are never wiped out.
+   - Flickr OAuth 1.0a credentials are stored only in `localStorage` (`gallery:flickrAuth`) via `?settings=true` / `#settings` / `/settings` (query/hash routes are required because GitHub Pages and static FTP hosts do not support SPA path rewrites). Never put OAuth tokens or secrets in URLs or committed files.
 
 ## Coding Conventions
 
@@ -74,4 +82,4 @@ src/
   - Use `<Grid size={...}>` (not `<Grid item xs={...}>`).
   - Use `slotProps` instead of deprecated `InputProps` / `PaperProps`.
   - Outlined icons use the `*Outlined` suffix (e.g. `DeleteOutlined`, `CheckCircleOutlined`, `PersonOutlined`).
-- **Testing**: Add or update `bun:test` unit tests alongside pure domain, tag normalization, URL, and navigation logic.
+- **Testing**: Add or update `bun:test` unit tests alongside pure domain, tag normalization, URL, OAuth, suggestion diff, and navigation logic.

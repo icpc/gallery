@@ -10,7 +10,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useSearchParams } from "react-router";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
 import {
   DEFAULT_EVENT,
   getEventData,
@@ -20,6 +20,7 @@ import {
 } from "@/config/gallery";
 import type { GalleryContextValue, GalleryFilterState } from "@/types/gallery";
 import {
+  isSettingsLocation,
   parseGallerySearchParams,
   selectEvent,
   selectPerson,
@@ -33,15 +34,22 @@ const GalleryContext = createContext<GalleryContextValue | null>(null);
 
 export const GalleryProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const desktop = useMediaQuery("(min-width:900px)");
   const mobile = !desktop;
 
   const [isOpenMenu, setIsOpenMenu] = useState(desktop);
 
-  // URL searchParams is the single source of truth so browser Back/Forward works natively.
+  // URL searchParams & location are the single source of truth so browser Back/Forward works natively.
   const data = useMemo(
     () => parseGallerySearchParams(searchParams, LAST_YEAR, DEFAULT_EVENT),
     [searchParams],
+  );
+  const isSettingsOpen = isSettingsLocation(
+    location.pathname,
+    searchParams,
+    location.hash,
   );
 
   useEffect(() => {
@@ -117,12 +125,49 @@ export const GalleryProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const setFullscreenPhotoId = useCallback(
     (id: string | null, options?: { replace?: boolean }) => {
       updateState(
-        (prev) => ({ ...prev, fullscreenPhotoId: id }),
+        (prev) => ({
+          ...prev,
+          fullscreenPhotoId: id,
+          suggestion: id === prev.fullscreenPhotoId ? prev.suggestion : null,
+        }),
         options?.replace ?? false,
       );
     },
     [updateState],
   );
+
+  const setSuggestion = useCallback(
+    (encodedSuggestion: string | null) => {
+      updateState((prev) => ({ ...prev, suggestion: encodedSuggestion }), true);
+    },
+    [updateState],
+  );
+
+  const openSettings = useCallback(() => {
+    setSearchParams(
+      (prevParams) => {
+        const next = new URLSearchParams(prevParams);
+        next.set("settings", "true");
+        return next;
+      },
+      { replace: true },
+    );
+  }, [setSearchParams]);
+
+  const closeSettings = useCallback(() => {
+    const next = new URLSearchParams(searchParams);
+    next.delete("settings");
+    const nextPathname = location.pathname.replace(/\/settings\/?$/i, "/");
+    const nextSearch = next.toString();
+    navigate(
+      {
+        pathname: nextPathname || "/",
+        search: nextSearch ? `?${nextSearch}` : "",
+        hash: "",
+      },
+      { replace: true },
+    );
+  }, [location.pathname, navigate, searchParams]);
 
   const setIsSlideShow = useCallback(
     (enabled: boolean) => {
@@ -140,6 +185,10 @@ export const GalleryProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPerson,
       setTeam,
       setFullscreenPhotoId,
+      setSuggestion,
+      isSettingsOpen,
+      openSettings,
+      closeSettings,
       isSlideShow: data.slideShow,
       setIsSlideShow,
       isOpenMenu,
@@ -158,6 +207,10 @@ export const GalleryProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPerson,
       setTeam,
       setFullscreenPhotoId,
+      setSuggestion,
+      isSettingsOpen,
+      openSettings,
+      closeSettings,
       setIsSlideShow,
       isOpenMenu,
       desktop,

@@ -62,15 +62,53 @@ export function parsePersonTag(rawTag: string): Person | null {
   return { name, position };
 }
 
-export function serializePersonTag(person: Person): string {
+export function serializePersonTag(
+  person: Person,
+  personPrefix: string,
+): string {
   if (person.position) {
     return `${person.name}(${encodeFacePosition(person.position)})`;
   }
-  return person.name;
+  return `${personPrefix}$${person.name}`;
+}
+
+function isManagedGalleryTag(tag: string, prefixes: TagPrefixes): boolean {
+  return (
+    tag.startsWith(`${prefixes.event}$`) ||
+    tag.startsWith(`${prefixes.team}$`) ||
+    tag.startsWith(`${prefixes.person}$`) ||
+    tag.startsWith(`${prefixes.album}$`) ||
+    tag.startsWith(`${prefixes.photographer}$`) ||
+    parsePersonTag(tag) !== null
+  );
+}
+
+/**
+ * Extracts Flickr tags that are NOT managed by the gallery (e.g. custom labels)
+ * so calling `flickr.photos.setTags` preserves them instead of wiping them out.
+ */
+export function extractPreservedTags(
+  tags: readonly (string | null)[] | null | undefined,
+  prefixes: TagPrefixes,
+): string[] {
+  if (!tags) {
+    return [];
+  }
+  const preserved: string[] = [];
+  for (const tag of tags) {
+    if (tag === null) {
+      continue;
+    }
+    const trimmed = tag.trim();
+    if (trimmed !== "" && !isManagedGalleryTag(trimmed, prefixes)) {
+      preserved.push(trimmed);
+    }
+  }
+  return uniqueList(preserved);
 }
 
 export function parsePhotoInfoWithPrefixes(
-  tags: readonly string[] | undefined,
+  tags: readonly (string | null)[] | null | undefined,
   description: string | undefined,
   prefixes: TagPrefixes,
 ): PhotoInfo {
@@ -128,7 +166,7 @@ export function parsePhotoInfoWithPrefixes(
   return info;
 }
 
-export function serializePhotoInfoWithPrefixes(
+export function serializeRawPhotoTags(
   photoInfo: PhotoInfo | null,
   prefixes: TagPrefixes,
 ): string[] {
@@ -137,19 +175,41 @@ export function serializePhotoInfoWithPrefixes(
   }
   const tags: string[] = [];
   for (const event of photoInfo.event) {
-    tags.push(`${prefixes.event}$${event}`);
+    tags.push(`${prefixes.event}$${event}`.trim());
   }
   for (const team of photoInfo.team) {
-    tags.push(`${prefixes.team}$${team}`);
+    tags.push(`${prefixes.team}$${team}`.trim());
   }
   for (const album of photoInfo.album) {
-    tags.push(`${prefixes.album}$${album}`);
+    tags.push(`${prefixes.album}$${album}`.trim());
   }
   for (const photographer of photoInfo.photographer) {
-    tags.push(`${prefixes.photographer}$${photographer}`);
+    tags.push(`${prefixes.photographer}$${photographer}`.trim());
   }
   for (const person of photoInfo.person) {
-    tags.push(serializePersonTag(person));
+    tags.push(serializePersonTag(person, prefixes.person).trim());
   }
-  return tags.map((tag) => `"${tag.trim()}"`);
+  return tags;
+}
+
+export function serializePhotoInfoWithPrefixes(
+  photoInfo: PhotoInfo | null,
+  prefixes: TagPrefixes,
+): string[] {
+  return serializeRawPhotoTags(photoInfo, prefixes).map((tag) => `"${tag}"`);
+}
+
+/**
+ * Formats the complete space-delimited quoted tag payload expected by
+ * `flickr.photos.setTags`, merging managed gallery tags with any preserved
+ * non-gallery tags already on the photo.
+ */
+export function buildFlickrSetTagsPayload(
+  photoInfo: PhotoInfo,
+  preservedTags: readonly string[],
+  prefixes: TagPrefixes,
+): string {
+  const managed = serializeRawPhotoTags(photoInfo, prefixes);
+  const all = uniqueList([...preservedTags, ...managed]);
+  return all.map((tag) => `"${tag.replaceAll('"', "")}"`).join(" ");
 }

@@ -74,7 +74,7 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
   onClose,
 }) => {
   const { data, desktop, isSlideShow, setIsSlideShow } = useGallery();
-  const { editMode, setEditMode } = usePhotoInfo();
+  const { editMode, setEditMode, isPreviewingSuggestion } = usePhotoInfo();
 
   const [desktopInfoOpen, setDesktopInfoOpen] = useLocalStorageBoolean(
     DESKTOP_INFO_STORAGE_KEY,
@@ -114,10 +114,10 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
   }, []);
 
   useEffect(() => {
-    if (editMode && isSlideShow) {
+    if ((editMode || isPreviewingSuggestion) && isSlideShow) {
       setIsSlideShow(false);
     }
-  }, [editMode, isSlideShow, setIsSlideShow]);
+  }, [editMode, isPreviewingSuggestion, isSlideShow, setIsSlideShow]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: photo.id resets info panel scroll and transient drag on photo change
   useEffect(() => {
@@ -145,7 +145,7 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
           if (!editMode) onNext(false);
           break;
         case " ":
-          if (!editMode) {
+          if (!editMode && !isPreviewingSuggestion) {
             e.preventDefault();
             setIsSlideShow(!isSlideShow);
           }
@@ -161,9 +161,16 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [editMode, isSlideShow, onPrev, onNext, setIsSlideShow, onClose]);
+  }, [
+    editMode,
+    isPreviewingSuggestion,
+    isSlideShow,
+    onPrev,
+    onNext,
+    setIsSlideShow,
+    onClose,
+  ]);
 
-  // Auto-hide toolbar and cursor during slideshow after mouse inactivity
   const bumpSlideshowActivity = useCallback(() => {
     if (!isSlideShow) return;
     setSlideshowControlsVisible(true);
@@ -203,7 +210,7 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
 
   useSlideshow({
     active: isSlideShow,
-    paused: editMode,
+    paused: editMode || isPreviewingSuggestion,
     totalItems,
     resetKey: activeIndex ?? photo.id,
     onAdvance: handleSlideshowAdvance,
@@ -224,7 +231,8 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
   }, [desktop, setDesktopInfoOpen]);
 
   const infoOpen = desktop ? desktopInfoOpen : mobileInfoOpen;
-  const showSidebar = !isSlideShow && (infoOpen || editMode);
+  const showSidebar =
+    !isSlideShow && (infoOpen || editMode || isPreviewingSuggestion);
   const showNavArrows = desktop && !isSlideShow && !editMode;
   const hideSlideshowChrome = isSlideShow && !slideshowControlsVisible;
 

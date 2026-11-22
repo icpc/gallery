@@ -1,7 +1,9 @@
 import { describe, expect, it } from "bun:test";
 import {
+  buildFlickrSetTagsPayload,
   decodeFacePosition,
   encodeFacePosition,
+  extractPreservedTags,
   parsePhotoInfoWithPrefixes,
   serializePhotoInfoWithPrefixes,
   type TagPrefixes,
@@ -27,25 +29,29 @@ describe("photoTagParser", () => {
     expect(decoded?.bottom).toBeCloseTo(pos.bottom, 4);
   });
 
-  it("parses and serializes gallery tags cleanly", () => {
+  it("parses, serializes, and preserves non-gallery tags safely", () => {
     const encoded = encodeFacePosition({
       left: 0.1,
       top: 0.2,
       right: 0.3,
       bottom: 0.4,
     });
+    const rawTags = [
+      "event$Opening Ceremony",
+      "team$MIT",
+      "albumWF$2025",
+      `Jane Doe(${encoded})`,
+      "featured-homepage",
+      "camera:sony",
+    ];
     const parsed = parsePhotoInfoWithPrefixes(
-      [
-        "event$Opening Ceremony",
-        "team$MIT",
-        "albumWF$2025",
-        `Jane Doe(${encoded})`,
-        "unrelated-tag",
-      ],
+      rawTags,
       "Photographer: John Smith",
       prefixes,
     );
+    const preserved = extractPreservedTags(rawTags, prefixes);
 
+    expect(preserved).toEqual(["featured-homepage", "camera:sony"]);
     expect(parsed.event).toEqual(["Opening Ceremony"]);
     expect(parsed.team).toEqual(["MIT"]);
     expect(parsed.album).toEqual(["2025"]);
@@ -55,9 +61,11 @@ describe("photoTagParser", () => {
 
     const serialized = serializePhotoInfoWithPrefixes(parsed, prefixes);
     expect(serialized).toContain('"event$Opening Ceremony"');
-    expect(serialized).toContain('"team$MIT"');
-    expect(serialized).toContain('"albumWF$2025"');
-    expect(serialized).toContain('"photographer$John Smith"');
     expect(serialized).toContain(`"Jane Doe(${encoded})"`);
+
+    const payload = buildFlickrSetTagsPayload(parsed, preserved, prefixes);
+    expect(payload).toContain('"featured-homepage"');
+    expect(payload).toContain('"camera:sony"');
+    expect(payload).toContain('"team$MIT"');
   });
 });

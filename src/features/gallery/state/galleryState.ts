@@ -1,11 +1,33 @@
 import type { GalleryFilterState } from "@/types/gallery";
 
+export function isSettingsLocation(
+  pathname: string,
+  searchParams: URLSearchParams,
+  hash: string,
+): boolean {
+  if (searchParams.has("settings")) {
+    const val = searchParams.get("settings");
+    if (val !== "false" && val !== "0") {
+      return true;
+    }
+  }
+  const normalizedHash = hash.replace(/^#\/?/, "").toLowerCase();
+  if (normalizedHash === "settings") {
+    return true;
+  }
+  const segments = pathname.split("/").filter(Boolean);
+  return segments[segments.length - 1]?.toLowerCase() === "settings";
+}
+
 export function parseGallerySearchParams(
   searchParams: URLSearchParams,
   lastYear: string,
   defaultEvent: string,
 ): GalleryFilterState {
   const fullscreenPhotoId = searchParams.get("photo");
+  const rawSuggest = searchParams.get("suggest");
+  const suggestion =
+    rawSuggest && rawSuggest.trim() !== "" ? rawSuggest.trim() : null;
   const slideShow = searchParams.get("slideshow") === "true";
 
   const rawSpeed = searchParams.get("slideshowSpeed");
@@ -23,6 +45,7 @@ export function parseGallerySearchParams(
       fullscreenPhotoId,
       slideShow,
       slideshowSpeed,
+      suggestion,
     };
   }
 
@@ -46,6 +69,7 @@ export function parseGallerySearchParams(
     fullscreenPhotoId,
     slideShow,
     slideshowSpeed,
+    suggestion,
   };
 }
 
@@ -62,17 +86,18 @@ export function serializeGallerySearchParams(
   if (data.text != null) params.set("query", data.text);
   if (data.fullscreenPhotoId != null)
     params.set("photo", data.fullscreenPhotoId);
+  if (data.fullscreenPhotoId != null && data.suggestion != null) {
+    params.set("suggest", data.suggestion);
+  }
   if (data.slideShow) params.set("slideshow", "true");
   if (data.slideshowSpeed != null && data.slideshowSpeed > 0) {
     params.set("slideshowSpeed", String(data.slideshowSpeed));
   }
 
-  if (extraParams) {
-    for (const preservedKey of ["suggest", "settings"]) {
-      const value = extraParams.get(preservedKey);
-      if (value !== null) {
-        params.set(preservedKey, value);
-      }
+  if (extraParams?.has("settings")) {
+    const value = extraParams.get("settings");
+    if (value !== null) {
+      params.set("settings", value);
     }
   }
 
@@ -99,6 +124,7 @@ export function selectYear(
     team: null,
     fullscreenPhotoId: null,
     slideShow: false,
+    suggestion: null,
   };
 }
 
@@ -115,6 +141,7 @@ export function selectText(
     team: null,
     fullscreenPhotoId: null,
     slideShow: false,
+    suggestion: null,
   };
 }
 
@@ -132,6 +159,7 @@ export function selectEvent(
       team: null,
       fullscreenPhotoId: null,
       slideShow: false,
+      suggestion: null,
     },
     lastYear,
   );
@@ -151,6 +179,7 @@ export function selectTeam(
       team,
       fullscreenPhotoId: null,
       slideShow: false,
+      suggestion: null,
     },
     lastYear,
   );
@@ -170,6 +199,7 @@ export function selectPerson(
       team: null,
       fullscreenPhotoId: null,
       slideShow: false,
+      suggestion: null,
     },
     lastYear,
   );

@@ -1,4 +1,5 @@
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
+import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import EditIcon from "@mui/icons-material/Edit";
@@ -6,27 +7,35 @@ import EmailIcon from "@mui/icons-material/Email";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import EventOutlinedIcon from "@mui/icons-material/EventOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FaceIcon from "@mui/icons-material/Face";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import LinkIcon from "@mui/icons-material/Link";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import PhotoAlbumOutlinedIcon from "@mui/icons-material/PhotoAlbumOutlined";
+import RestoreIcon from "@mui/icons-material/Restore";
+import SaveIcon from "@mui/icons-material/Save";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
   Chip,
+  CircularProgress,
   Divider,
   IconButton,
   ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
+  Paper,
   Skeleton,
   Stack,
   TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { forwardRef, type ReactNode, useState } from "react";
+import { forwardRef, type ReactNode, useEffect, useState } from "react";
 import {
   FLICKR_IMAGE_PREFIX,
   places,
@@ -35,9 +44,17 @@ import {
 import { useGallery } from "@/features/gallery/state/GalleryContext";
 import { usePhotoInfo } from "@/features/viewer/state/PhotoInfoContext";
 import { serializePhotoInfo } from "@/features/viewer/utils/photoTags";
+import {
+  getPersonTagKey,
+  type ListDiff,
+  type PhotoInfoDiff,
+} from "@/features/viewer/utils/suggestions";
+import { useFlickrAuth } from "@/services/flickr/authStore";
 import { useNotify } from "@/shared/components/NotificationProvider";
 import { useDocumentSeo } from "@/shared/hooks/useDocumentSeo";
-import type { Photo } from "@/types/gallery";
+import type { Person, Photo, PhotoInfo } from "@/types/gallery";
+
+const TOKEN_PROMPT_SESSION_KEY = "gallery:flickrTokenPromptSeen";
 
 interface PhotoInfoSidebarProps {
   photo: Photo;
@@ -76,10 +93,104 @@ const InfoSection = ({
   </Stack>
 );
 
-/**
- * Unified info & tag-editing sidebar shared identically between desktop
- * (collapsible right rail) and mobile (collapsible bottom panel).
- */
+const StringDiffChips = ({
+  label,
+  diff,
+}: {
+  label: string;
+  diff: ListDiff<string>;
+}) => {
+  if (diff.added.length === 0 && diff.removed.length === 0) {
+    return null;
+  }
+  return (
+    <Stack spacing={0.5}>
+      <Typography variant="caption" sx={{ color: "text.secondary" }}>
+        {label}
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+        {diff.added.map((val) => (
+          <Chip
+            key={`+${val}`}
+            label={`+ ${val}`}
+            size="small"
+            color="success"
+            variant="outlined"
+          />
+        ))}
+        {diff.removed.map((val) => (
+          <Chip
+            key={`-${val}`}
+            label={`- ${val}`}
+            size="small"
+            color="error"
+            variant="outlined"
+            sx={{ textDecoration: "line-through" }}
+          />
+        ))}
+      </Box>
+    </Stack>
+  );
+};
+
+const SuggestionDiffView = ({
+  diff,
+  setFace,
+}: {
+  diff: PhotoInfoDiff;
+  setFace: (person: Person | null) => void;
+}) => {
+  if (!diff.hasChanges) {
+    return (
+      <Typography variant="body2" sx={{ color: "text.secondary" }}>
+        No differences compared to current Flickr tags.
+      </Typography>
+    );
+  }
+
+  return (
+    <Stack spacing={1.25}>
+      <StringDiffChips label="Photographer" diff={diff.photographer} />
+      <StringDiffChips label="Album" diff={diff.album} />
+      <StringDiffChips label="Event" diff={diff.event} />
+      <StringDiffChips label="Team" diff={diff.team} />
+      {(diff.person.added.length > 0 || diff.person.removed.length > 0) && (
+        <Stack spacing={0.5}>
+          <Typography variant="caption" sx={{ color: "text.secondary" }}>
+            People
+          </Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            {diff.person.added.map((person) => (
+              <Chip
+                key={`+${getPersonTagKey(person)}`}
+                label={`+ ${person.name}`}
+                size="small"
+                color="success"
+                variant="outlined"
+                icon={person.position ? <FaceIcon /> : undefined}
+                onMouseEnter={() => setFace(person)}
+                onMouseLeave={() => setFace(null)}
+              />
+            ))}
+            {diff.person.removed.map((person) => (
+              <Chip
+                key={`-${getPersonTagKey(person)}`}
+                label={`- ${person.name}`}
+                size="small"
+                color="error"
+                variant="outlined"
+                icon={person.position ? <FaceIcon /> : undefined}
+                sx={{ textDecoration: "line-through" }}
+                onMouseEnter={() => setFace(person)}
+                onMouseLeave={() => setFace(null)}
+              />
+            ))}
+          </Box>
+        </Stack>
+      )}
+    </Stack>
+  );
+};
 export const PhotoInfoSidebar = forwardRef<
   HTMLDivElement,
   PhotoInfoSidebarProps
@@ -91,27 +202,67 @@ export const PhotoInfoSidebar = forwardRef<
     setEvent,
     setTeam,
     setPerson: filterByPerson,
+    isSettingsOpen,
+    openSettings,
   } = useGallery();
   const {
     photoInfo,
+    suggestedPhotoInfo,
+    isPreviewingSuggestion,
+    activeDiff,
+    isSaving,
+    saveError,
     editMode,
     setEditMode,
+    face,
     setFace,
     setEvents,
     setTeam: setPhotoTeams,
     setAlbum,
     setPhotographer,
     setPerson: setPhotoPersons,
+    resetDraft,
+    loadSuggestionIntoEditor,
+    dismissSuggestion,
+    buildSuggestionPreviewUrl,
+    saveToFlickr,
   } = usePhotoInfo();
+  const { isAuthenticated } = useFlickrAuth();
   const notify = useNotify();
   const [otherMenuAnchor, setOtherMenuAnchor] = useState<HTMLElement | null>(
     null,
   );
 
+  // Automatically prompt once per session to add a Flickr admin token when
+  // opening a `?suggest=` preview link without credentials. Dismissing the
+  // dialog leaves the full suggestion preview working cleanly in read-only mode.
+  useEffect(() => {
+    if (!isPreviewingSuggestion || isAuthenticated || isSettingsOpen) {
+      return;
+    }
+    try {
+      if (window.sessionStorage.getItem(TOKEN_PROMPT_SESSION_KEY) === "true") {
+        return;
+      }
+      window.sessionStorage.setItem(TOKEN_PROMPT_SESSION_KEY, "true");
+    } catch {
+      // Ignore storage access errors in private mode
+    }
+    openSettings();
+  }, [isPreviewingSuggestion, isAuthenticated, isSettingsOpen, openSettings]);
+
   const photoLink = `${FLICKR_IMAGE_PREFIX}${photo.id}`;
   const tags = serializePhotoInfo(photoInfo).join(", ");
+  const previewUrl = buildSuggestionPreviewUrl();
   const emailSubject = `Photo info update ${photo.id}`;
-  const emailBody = `Photo link: ${photoLink}\n\nGallery link: ${window.location.href}\n\nTags: ${tags}`;
+  const emailBody = [
+    `Photo link: ${photoLink}`,
+    `Gallery link: ${window.location.href}`,
+    previewUrl ? `Preview suggestion: ${previewUrl}` : null,
+    `Tags: ${tags}`,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
   const mailtoLink = `mailto:${SUGGESTIONS_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
   const gmailLink = `https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to=${encodeURIComponent(SUGGESTIONS_EMAIL)}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 
@@ -130,11 +281,23 @@ export const PhotoInfoSidebar = forwardRef<
 
   const handleCopyTags = () => {
     setOtherMenuAnchor(null);
-    setEditMode(false);
     navigator.clipboard.writeText(tags);
     notify("New tags copied to clipboard", "success");
   };
 
+  const handleCopyPreviewLink = () => {
+    setOtherMenuAnchor(null);
+    if (!previewUrl) return;
+    navigator.clipboard.writeText(previewUrl);
+    notify("Suggestion preview link copied to clipboard", "success");
+  };
+
+  const handleSaveToFlickr = async (targetInfo: PhotoInfo) => {
+    const result = await saveToFlickr(targetInfo);
+    if (result.ok) {
+      notify("Tags updated on Flickr", "success");
+    }
+  };
   const sortedPersons = photoInfo
     ? [...photoInfo.person].sort(
         (a, b) => (a.position?.left ?? 0) - (b.position?.left ?? 0),
@@ -190,10 +353,34 @@ export const PhotoInfoSidebar = forwardRef<
         }}
       >
         <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-          {editMode ? "Edit tags" : "Info"}
+          {editMode
+            ? "Edit tags"
+            : isPreviewingSuggestion
+              ? "Suggested changes"
+              : "Info"}
         </Typography>
 
         <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
+          <Tooltip
+            title={
+              isAuthenticated
+                ? "Flickr admin connected (Settings)"
+                : "Flickr write settings"
+            }
+          >
+            <IconButton
+              size="small"
+              color={isAuthenticated ? "success" : "default"}
+              onClick={(e) => {
+                e.stopPropagation();
+                openSettings();
+              }}
+              aria-label="Flickr settings"
+            >
+              <SettingsOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+
           {!editMode ? (
             <Tooltip title="Edit tags">
               <IconButton
@@ -222,7 +409,7 @@ export const PhotoInfoSidebar = forwardRef<
             </Tooltip>
           )}
 
-          {!editMode && onCloseSidebar && (
+          {!editMode && !isPreviewingSuggestion && onCloseSidebar && (
             <Tooltip title="Close info panel">
               <IconButton
                 size="small"
@@ -237,11 +424,80 @@ export const PhotoInfoSidebar = forwardRef<
       </Stack>
 
       <Stack spacing={2.5} sx={{ p: 2, flex: 1 }}>
+        {saveError && <Alert severity="error">{saveError}</Alert>}
+
         {!photoInfo ? (
           <Stack spacing={1.5}>
             <Skeleton variant="rounded" height={28} />
             <Skeleton variant="rounded" height={28} />
             <Skeleton variant="rounded" height={48} />
+          </Stack>
+        ) : isPreviewingSuggestion && suggestedPhotoInfo && activeDiff ? (
+          <Stack spacing={2}>
+            <Alert severity="info">
+              Reviewing suggested tag changes. Green tags/boxes will be added;
+              red dashed ones will be removed.
+            </Alert>
+
+            <Paper
+              variant="outlined"
+              sx={{ p: 1.5, bgcolor: "background.paper" }}
+            >
+              <SuggestionDiffView diff={activeDiff} setFace={setFace} />
+            </Paper>
+
+            <Stack spacing={1}>
+              {isAuthenticated ? (
+                <Button
+                  variant="contained"
+                  color="success"
+                  startIcon={
+                    isSaving ? (
+                      <CircularProgress size={16} color="inherit" />
+                    ) : (
+                      <CheckCircleOutlinedIcon />
+                    )
+                  }
+                  disabled={isSaving || !activeDiff.hasChanges}
+                  onClick={() => {
+                    void handleSaveToFlickr(suggestedPhotoInfo);
+                  }}
+                  fullWidth
+                >
+                  {isSaving
+                    ? "Saving to Flickr..."
+                    : "Approve & Save to Flickr"}
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  startIcon={<SettingsOutlinedIcon />}
+                  onClick={openSettings}
+                  fullWidth
+                >
+                  Add Flickr token to approve
+                </Button>
+              )}
+
+              <Stack direction="row" spacing={1}>
+                <Button
+                  variant="outlined"
+                  startIcon={<EditIcon />}
+                  onClick={loadSuggestionIntoEditor}
+                  fullWidth
+                >
+                  Edit first
+                </Button>
+                <Button
+                  variant="text"
+                  color="inherit"
+                  onClick={dismissSuggestion}
+                  fullWidth
+                >
+                  Dismiss
+                </Button>
+              </Stack>
+            </Stack>
           </Stack>
         ) : editMode ? (
           <Stack spacing={2}>
@@ -329,13 +585,60 @@ export const PhotoInfoSidebar = forwardRef<
               )}
             />
 
+            {activeDiff?.hasChanges && (
+              <Paper
+                variant="outlined"
+                sx={{ p: 1.5, bgcolor: "background.paper" }}
+              >
+                <Stack
+                  direction="row"
+                  sx={{
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    mb: 1,
+                  }}
+                >
+                  <Typography variant="subtitle2">Preview changes</Typography>
+                  <Button
+                    size="small"
+                    startIcon={<RestoreIcon />}
+                    onClick={resetDraft}
+                  >
+                    Reset
+                  </Button>
+                </Stack>
+                <SuggestionDiffView diff={activeDiff} setFace={setFace} />
+              </Paper>
+            )}
+
             <Divider />
 
             <Stack spacing={1}>
+              {isAuthenticated && (
+                <Button
+                  variant="contained"
+                  color="success"
+                  startIcon={
+                    isSaving ? (
+                      <CircularProgress size={16} color="inherit" />
+                    ) : (
+                      <SaveIcon />
+                    )
+                  }
+                  disabled={isSaving || !activeDiff?.hasChanges}
+                  onClick={() => {
+                    void handleSaveToFlickr(photoInfo);
+                  }}
+                  fullWidth
+                >
+                  {isSaving ? "Saving to Flickr..." : "Save to Flickr"}
+                </Button>
+              )}
+
               <Stack direction="row" spacing={1}>
                 <Button
                   fullWidth
-                  variant="contained"
+                  variant={isAuthenticated ? "outlined" : "contained"}
                   startIcon={<EmailIcon />}
                   href={gmailLink}
                   target="_blank"
@@ -371,6 +674,15 @@ export const PhotoInfoSidebar = forwardRef<
                 open={Boolean(otherMenuAnchor)}
                 onClose={() => setOtherMenuAnchor(null)}
               >
+                <MenuItem
+                  onClick={handleCopyPreviewLink}
+                  disabled={!previewUrl}
+                >
+                  <ListItemIcon>
+                    <LinkIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Copy suggestion preview link</ListItemText>
+                </MenuItem>
                 <MenuItem onClick={handleCopyTags}>
                   <ListItemIcon>
                     <ContentCopyIcon fontSize="small" />
@@ -454,17 +766,23 @@ export const PhotoInfoSidebar = forwardRef<
                 icon={<PersonOutlinedIcon fontSize="small" />}
                 label="People"
               >
-                {sortedPersons.map((person) => (
-                  <Chip
-                    key={`${person.name}-${person.position?.left ?? "nopos"}`}
-                    label={person.name}
-                    size="small"
-                    clickable
-                    onMouseEnter={() => setFace(person)}
-                    onMouseLeave={() => setFace(null)}
-                    onClick={() => filterByPerson(person.name)}
-                  />
-                ))}
+                {sortedPersons.map((person) => {
+                  const isHighlighted = face?.name === person.name;
+                  return (
+                    <Chip
+                      key={getPersonTagKey(person)}
+                      label={person.name}
+                      size="small"
+                      icon={person.position ? <FaceIcon /> : undefined}
+                      color={isHighlighted ? "warning" : "default"}
+                      variant={isHighlighted ? "filled" : "outlined"}
+                      clickable
+                      onMouseEnter={() => setFace(person)}
+                      onMouseLeave={() => setFace(null)}
+                      onClick={() => filterByPerson(person.name)}
+                    />
+                  );
+                })}
               </InfoSection>
             )}
 
