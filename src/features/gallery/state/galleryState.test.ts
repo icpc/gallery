@@ -102,4 +102,23 @@ describe("galleryState", () => {
       text: null,
     });
   });
+
+  it("closes fullscreen photo view and slideshow when selecting any filter", () => {
+    const viewingPhoto = {
+      ...parseGallerySearchParams(new URLSearchParams(), "2025", "Photo Tour"),
+      fullscreenPhotoId: "12345",
+      slideShow: true,
+    };
+
+    for (const next of [
+      selectYear(viewingPhoto, "2024"),
+      selectEvent(viewingPhoto, "Awards", "2025"),
+      selectTeam(viewingPhoto, "MIT", "2025"),
+      selectPerson(viewingPhoto, "Bill Poucher", "2025"),
+      selectText(viewingPhoto, "baku"),
+    ]) {
+      expect(next.fullscreenPhotoId).toBeNull();
+      expect(next.slideShow).toBe(false);
+    }
+  });
 });
