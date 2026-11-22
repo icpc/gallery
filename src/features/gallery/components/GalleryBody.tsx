@@ -8,9 +8,9 @@ import { PhotoGallery } from "./PhotoGallery";
 
 import "../styles/GalleryBody.css";
 
-const LazyPhotoModal = lazy(() =>
-  import("@/features/viewer/components/PhotoModal").then((mod) => ({
-    default: mod.PhotoModal,
+const LazyPhotoViewer = lazy(() =>
+  import("@/features/viewer/components/PhotoViewer").then((mod) => ({
+    default: mod.PhotoViewer,
   })),
 );
 
@@ -30,6 +30,9 @@ export const GalleryBody: FC = () => {
   const {
     activeIndex,
     activePhoto,
+    prevPhoto,
+    nextPhoto,
+    totalCount,
     hasPrev,
     hasNext,
     openAtIndex,
@@ -57,38 +60,6 @@ export const GalleryBody: FC = () => {
     };
   }, [mobile, setIsOpenMenu]);
 
-  useEffect(() => {
-    if (!activePhoto) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.isContentEditable)
-      ) {
-        return;
-      }
-      switch (e.key) {
-        case "ArrowLeft":
-          if (hasPrev) goPrev(false);
-          break;
-        case "ArrowRight":
-          if (hasNext) goNext(false);
-          break;
-        case "Escape":
-          closeViewer();
-          break;
-        default:
-          break;
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [activePhoto, hasPrev, hasNext, goPrev, goNext, closeViewer]);
-
   if (isLoading) {
     return (
       <div className="body" ref={bodyRef}>
@@ -113,12 +84,17 @@ export const GalleryBody: FC = () => {
       <PhotoGallery sections={sequence.sections} onSelectIndex={openAtIndex} />
       {activePhoto != null && (
         <Suspense fallback={null}>
-          <LazyPhotoModal
+          <LazyPhotoViewer
             photo={activePhoto}
-            handleRotationRight={() => goNext(true)}
-            handleRotationLeft={() => goPrev(true)}
-            rightArrow={hasNext}
-            leftArrow={hasPrev}
+            prevPhoto={prevPhoto}
+            nextPhoto={nextPhoto}
+            activeIndex={activeIndex}
+            totalItems={totalCount}
+            hasPrev={hasPrev}
+            hasNext={hasNext}
+            onPrev={goPrev}
+            onNext={goNext}
+            onClose={closeViewer}
           />
         </Suspense>
       )}

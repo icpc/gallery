@@ -25,10 +25,10 @@ export const PhotoInfoProvider: FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     const fullscreenPhotoId = data.fullscreenPhotoId;
+    setFace(null);
     if (fullscreenPhotoId === null) {
       setPhotoInfo(null);
       setEditMode(false);
-      setFace(null);
       return;
     }
 
@@ -41,6 +41,7 @@ export const PhotoInfoProvider: FC<{ children: ReactNode }> = ({
       return;
     }
 
+    setPhotoInfo(null);
     const controller = new AbortController();
     getPhotoInfo(fullscreenPhotoId, controller.signal)
       .then((response) => {
