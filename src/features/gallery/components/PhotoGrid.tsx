@@ -1,9 +1,10 @@
 import { type FC, memo, useEffect, useState } from "react";
-import type { Photo, PhotoSource } from "@/types/gallery";
+import type { GalleryPhotoItem } from "@/features/gallery/utils/gallerySections";
+import type { PhotoSource } from "@/types/gallery";
 
 interface PhotoGridProps {
-  photos: Photo[];
-  handleClick: (id: string) => void;
+  items: readonly GalleryPhotoItem[];
+  onSelectIndex: (flatIndex: number) => void;
 }
 
 function useWindowWidth(): number {
@@ -25,33 +26,36 @@ function pickSrc(
   return sources.findLast((s) => s.width <= displayPx) ?? sources[0];
 }
 
-export const PhotoGrid: FC<PhotoGridProps> = memo(({ photos, handleClick }) => {
-  const winW = useWindowWidth();
-  const displayPx = (winW >= 900 ? 0.5 : 2) * winW;
+export const PhotoGrid: FC<PhotoGridProps> = memo(
+  ({ items, onSelectIndex }) => {
+    const winW = useWindowWidth();
+    const displayPx = (winW >= 900 ? 0.5 : 2) * winW;
 
-  return (
-    <div className="masonry">
-      {photos.map((photo) => {
-        const picked = pickSrc(photo.sources, displayPx) ?? photo.src;
-        return (
-          <figure key={photo.id} className="masonry-brick">
-            <button
-              type="button"
-              className="masonry-button"
-              onClick={() => handleClick(photo.id)}
-              aria-label={`View photo ${photo.id}`}
-            >
-              <img
-                className="preview"
-                src={picked.url}
-                alt={`Gallery item ${photo.id}`}
-                loading="lazy"
-                decoding="async"
-              />
-            </button>
-          </figure>
-        );
-      })}
-    </div>
-  );
-});
+    return (
+      <div className="masonry">
+        {items.map((item) => {
+          const picked =
+            pickSrc(item.photo.sources, displayPx) ?? item.photo.src;
+          return (
+            <figure key={item.entryKey} className="masonry-brick">
+              <button
+                type="button"
+                className="masonry-button"
+                onClick={() => onSelectIndex(item.flatIndex)}
+                aria-label={`View gallery item ${item.photo.id}`}
+              >
+                <img
+                  className="preview"
+                  src={picked.url}
+                  alt={`Gallery item ${item.photo.id}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </button>
+            </figure>
+          );
+        })}
+      </div>
+    );
+  },
+);

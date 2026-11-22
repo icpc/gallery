@@ -70,6 +70,8 @@
     min-width: min(150px, 30%);
     max-width: 35%;
     margin: 0 0 3px 0;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 300px;
   }
 
   .masonry-brick:nth-child(7n + 1),

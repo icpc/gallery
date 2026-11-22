@@ -1,50 +1,41 @@
-import { apiKey, MAX_ALBUM_SIZE, userId } from "@/config/gallery";
-import {
-  type FlickrPhoto,
-  type FlickrPhotoInfoResponse,
-  type FlickrPhotosetResponse,
-  type FlickrPhotosResponse,
-  flickrSizes,
+import { queryClient } from "@/app/queryClient";
+import { apiKey, userId } from "@/config/gallery";
+import type {
+  FlickrPhoto,
+  FlickrPhotoInfoResponse,
+  FlickrPhotosetResponse,
+  FlickrPhotosResponse,
 } from "@/types/gallery";
+import {
+  buildPhotoInfoUrl,
+  buildPhotosetUrl,
+  buildTagSearchUrl,
+  buildTextSearchUrl,
+} from "./urls";
 
-const extras =
-  "tags," +
-  flickrSizes
-    .flatMap((s) => [`url_${s}`, `width_${s}`, `height_${s}`])
-    .join(",") +
-  ",date_taken";
+const clientConfig = { apiKey, userId };
+const PER_PAGE = 500;
 
-function buildQuery(params: Record<string, string | number>): string {
-  const queryString = Object.keys(params)
-    .map((key) => `${key}=${params[key]}`)
-    .join("&");
-  return `https://api.flickr.com/services/rest?${queryString}`;
+export interface FlickrPhotosPage {
+  photos: FlickrPhoto[];
+  totalPages: number;
 }
 
-function buildPhotoInfoUrl(id: string): string {
-  return buildQuery({
-    method: "flickr.photos.getInfo",
-    api_key: apiKey,
-    user_id: userId,
-    format: "json",
-    nojsoncallback: "?",
-    photo_id: id,
-  });
-}
-
-async function fetchData<T>(
+async function fetchJson<T>(
   url: string,
-  config: RequestInit = {},
-): Promise<{ data: T } | undefined> {
+  signal?: AbortSignal,
+): Promise<T | undefined> {
   try {
-    const response = await fetch(url, config);
+    const response = await fetch(url, { signal });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = (await response.json()) as T;
-    return { data };
+    return (await response.json()) as T;
   } catch (error) {
-    console.error(error);
+    if (error instanceof DOMException && error.name === "AbortError") {
+      return undefined;
+    }
+    console.error("Flickr request failed:", error);
     return undefined;
   }
 }
@@ -52,63 +43,145 @@ async function fetchData<T>(
 export async function getAllWithText(
   text: string,
   page = 1,
-  config: RequestInit = {},
+  signal?: AbortSignal,
 ): Promise<FlickrPhoto[]> {
-  const url = buildQuery({
-    method: "flickr.photos.search",
-    api_key: apiKey,
-    user_id: userId,
-    page,
-    per_page: 500,
-    extras,
-    format: "json",
-    nojsoncallback: "?",
-    tag_mode: "all",
-    sort: "date-taken-desc",
-    text,
-  });
-  const response = await fetchData<FlickrPhotosResponse>(url, config);
-  return response?.data.photos.photo ?? [];
+  const url = buildTextSearchUrl(clientConfig, text, page, PER_PAGE);
+  const data = await fetchJson<FlickrPhotosResponse>(url, signal);
+  return data?.photos?.photo ?? [];
 }
 
-export async function getAllPhotosFromPhotoset(
+/**
+ * Fetches a single page of a Flickr photoset along with the total page count
+ * so page 1 can render immediately after 1 RTT before remaining pages stream in.
+ */
+export async function getPhotosetPage(
   photosetId: string,
-  config: RequestInit = {},
-): Promise<FlickrPhoto[]> {
-  const perPage = 500;
-  const totalPages = Math.ceil(MAX_ALBUM_SIZE / perPage);
-  const requests = Array.from({ length: totalPages }, (_, i) => {
-    const url = buildQuery({
-      method: "flickr.photosets.getPhotos",
-      api_key: apiKey,
-      user_id: userId,
-      page: i + 1,
-      per_page: perPage,
-      extras,
-      format: "json",
-      nojsoncallback: "?",
-      photoset_id: photosetId,
-    });
-    return fetchData<FlickrPhotosetResponse>(url, config);
-  });
-  const responses = await Promise.all(requests);
-  const allPhotos: FlickrPhoto[] = [];
-  for (const response of responses) {
-    if (response?.data?.photoset?.photo) {
-      allPhotos.push(...response.data.photoset.photo);
-    }
+  page: number,
+  signal?: AbortSignal,
+): Promise<FlickrPhotosPage> {
+  const data = await fetchJson<FlickrPhotosetResponse>(
+    buildPhotosetUrl(clientConfig, photosetId, page, PER_PAGE),
+    signal,
+  );
+  const photoset = data?.photoset;
+  if (!photoset?.photo) {
+    return { photos: [], totalPages: 1 };
   }
-  allPhotos.sort((a, b) => {
-    const dateA = a.date_taken ? Date.parse(a.date_taken) : 0;
-    const dateB = b.date_taken ? Date.parse(b.date_taken) : 0;
-    return dateB - dateA;
-  });
-  return allPhotos;
+  const totalPages = Math.max(1, Number(photoset.pages) || 1);
+  // Guard against Flickr clamping out-of-range page requests to the last page
+  if (Number(photoset.page) > totalPages) {
+    return { photos: [], totalPages };
+  }
+  return { photos: photoset.photo, totalPages };
 }
 
-export function getPhotoInfo(
-  id: string,
-  config: RequestInit = {},
-): Promise<{ data: FlickrPhotoInfoResponse } | undefined> {
-  return fetchData<FlickrPhotoInfoResponse>(buildPhotoInfoUrl(id), config);
+/**
+ * Fetches pages 2..totalPages of a Flickr photoset in parallel.
+ */
+export async function getPhotosetRemainingPages(
+  photosetId: string,
+  totalPages: number,
+  signal?: AbortSignal,
+): Promise<FlickrPhoto[]> {
+  if (totalPages <= 1) {
+    return [];
+  }
+  const pages = await Promise.all(
+    Array.from({ length: totalPages - 1 }, (_, idx) =>
+      getPhotosetPage(photosetId, idx + 2, signal),
+    ),
+  );
+  return pages.flatMap((entry) => entry.photos);
+}
+
+/**
+ * Fetches a single page of tag-matched photos (used as fallback when a place
+ * entry has an empty `photoset_id`).
+ */
+export async function getTagSearchPage(
+  albumTag: string,
+  page: number,
+  signal?: AbortSignal,
+): Promise<FlickrPhotosPage> {
+  const data = await fetchJson<FlickrPhotosResponse>(
+    buildTagSearchUrl(clientConfig, [albumTag], page, PER_PAGE),
+    signal,
+  );
+  const photos = data?.photos;
+  if (!photos?.photo) {
+    return { photos: [], totalPages: 1 };
+  }
+  const totalPages = Math.max(1, Number(photos.pages) || 1);
+  if (Number(photos.page) > totalPages) {
+    return { photos: [], totalPages };
+  }
+  return { photos: photos.photo, totalPages };
+}
+
+/**
+ * Fetches pages 2..totalPages of a tag search in parallel.
+ */
+export async function getTagSearchRemainingPages(
+  albumTag: string,
+  totalPages: number,
+  signal?: AbortSignal,
+): Promise<FlickrPhoto[]> {
+  if (totalPages <= 1) {
+    return [];
+  }
+  const pages = await Promise.all(
+    Array.from({ length: totalPages - 1 }, (_, idx) =>
+      getTagSearchPage(albumTag, idx + 2, signal),
+    ),
+  );
+  return pages.flatMap((entry) => entry.photos);
+}
+
+export function photoInfoQueryKey(photoId: string): readonly [string, string] {
+  return ["photoInfo", photoId] as const;
+}
+
+export function getCachedPhotoInfo(
+  photoId: string,
+): FlickrPhotoInfoResponse | undefined {
+  return queryClient.getQueryData<FlickrPhotoInfoResponse>(
+    photoInfoQueryKey(photoId),
+  );
+}
+
+export function invalidatePhotoInfoCache(photoId: string): void {
+  void queryClient.invalidateQueries({
+    queryKey: photoInfoQueryKey(photoId),
+  });
+}
+
+async function fetchPhotoInfoDirect(
+  photoId: string,
+  signal?: AbortSignal,
+): Promise<FlickrPhotoInfoResponse | undefined> {
+  const url = buildPhotoInfoUrl(clientConfig, photoId);
+  const data = await fetchJson<FlickrPhotoInfoResponse>(url, signal);
+  return data && data.stat === "ok" ? data : undefined;
+}
+
+export async function getPhotoInfo(
+  photoId: string,
+  signal?: AbortSignal,
+): Promise<FlickrPhotoInfoResponse | undefined> {
+  try {
+    return await queryClient.fetchQuery({
+      queryKey: photoInfoQueryKey(photoId),
+      queryFn: ({ signal: querySignal }) =>
+        fetchPhotoInfoDirect(photoId, signal ?? querySignal),
+    });
+  } catch {
+    return undefined;
+  }
+}
+
+export function prefetchPhotoInfo(photoId: string): void {
+  void queryClient.prefetchQuery({
+    queryKey: photoInfoQueryKey(photoId),
+    queryFn: ({ signal }) => fetchPhotoInfoDirect(photoId, signal),
+  });
 }

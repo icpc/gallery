@@ -10,7 +10,7 @@ import {
 } from "react";
 import { useGallery } from "@/features/gallery/state/GalleryContext";
 import { parsePhotoInfo } from "@/features/viewer/utils/photoTags";
-import { getPhotoInfo } from "@/services/flickr/api";
+import { getCachedPhotoInfo, getPhotoInfo } from "@/services/flickr/api";
 import type { Person, PhotoInfo, PhotoInfoContextValue } from "@/types/gallery";
 
 const PhotoInfoContext = createContext<PhotoInfoContextValue | null>(null);
@@ -26,16 +26,29 @@ export const PhotoInfoProvider: FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fullscreenPhotoId = data.fullscreenPhotoId;
     if (fullscreenPhotoId === null) {
+      setPhotoInfo(null);
+      setEditMode(false);
+      setFace(null);
       return;
     }
+
+    // Hydrate synchronously from LRU cache when prefetched
+    const cached = getCachedPhotoInfo(fullscreenPhotoId);
+    if (cached) {
+      const tags = cached.photo?.tags?.tag?.map((tag) => tag.raw);
+      const description = cached.photo?.description?._content;
+      setPhotoInfo(parsePhotoInfo(tags, description));
+      return;
+    }
+
     const controller = new AbortController();
-    getPhotoInfo(fullscreenPhotoId, { signal: controller.signal })
+    getPhotoInfo(fullscreenPhotoId, controller.signal)
       .then((response) => {
         if (!response || controller.signal.aborted) {
           return;
         }
-        const tags = response.data?.photo?.tags?.tag?.map((tag) => tag.raw);
-        const description = response.data?.photo?.description?._content;
+        const tags = response.photo?.tags?.tag?.map((tag) => tag.raw);
+        const description = response.photo?.description?._content;
         setPhotoInfo(parsePhotoInfo(tags, description));
       })
       .catch((err) => {
