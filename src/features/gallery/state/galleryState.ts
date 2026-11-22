@@ -97,6 +97,8 @@ export function selectYear(
     text: null,
     person: null,
     team: null,
+    fullscreenPhotoId: null,
+    slideShow: false,
   };
 }
 
@@ -111,6 +113,8 @@ export function selectText(
     text,
     person: null,
     team: null,
+    fullscreenPhotoId: null,
+    slideShow: false,
   };
 }
 
@@ -126,6 +130,8 @@ export function selectEvent(
       text: null,
       person: null,
       team: null,
+      fullscreenPhotoId: null,
+      slideShow: false,
     },
     lastYear,
   );
@@ -143,6 +149,8 @@ export function selectTeam(
       text: null,
       person: null,
       team,
+      fullscreenPhotoId: null,
+      slideShow: false,
     },
     lastYear,
   );
@@ -160,6 +168,8 @@ export function selectPerson(
       text: null,
       person,
       team: null,
+      fullscreenPhotoId: null,
+      slideShow: false,
     },
     lastYear,
   );
