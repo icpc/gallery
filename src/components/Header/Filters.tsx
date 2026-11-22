@@ -1,13 +1,12 @@
-import { FC } from "react";
-
 import { Stack } from "@mui/material";
+import type { FC } from "react";
 
 import { places } from "../../consts";
 import calendarIcon from "../../images/calender.svg";
 import eventIcon from "../../images/event.svg";
 import personIcon from "../../images/person.svg";
 import teamIcon from "../../images/team.svg";
-import { Place } from "../../types";
+import type { Place } from "../../types";
 import { useAppContext } from "../AppContext";
 
 import Search from "./Search";

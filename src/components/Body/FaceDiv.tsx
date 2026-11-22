@@ -1,8 +1,7 @@
-import { FC } from "react";
-
 import styled from "@emotion/styled";
+import type { FC } from "react";
 
-import { Person } from "../../types";
+import type { Person } from "../../types";
 
 import "../../styles/FaceDiv.css";
 import "../../styles/theme-variables.css";

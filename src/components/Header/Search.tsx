@@ -1,7 +1,6 @@
-import { ChangeEvent, FC, FormEvent, useState } from "react";
-
 import SearchIcon from "@mui/icons-material/Search";
 import { IconButton, InputAdornment, Paper, TextField } from "@mui/material";
+import { type ChangeEvent, type FC, type FormEvent, useState } from "react";
 
 import { useAppContext } from "../AppContext";
 

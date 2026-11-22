@@ -1,4 +1,4 @@
-import { Place } from "./types";
+import type { Place } from "./types";
 import UniqueList from "./utils/UniqueList";
 
 const consts = await import(`@data/consts.js`);
@@ -14,7 +14,7 @@ const getData = async (
     data
       .split("\n")
       .map((i) => i.trim())
-      .filter((i) => i != ""),
+      .filter((i) => i !== ""),
   );
 };
 
@@ -25,8 +25,6 @@ export const getTeamData = async (year: string | null) => getData(year, "team");
 
 export const getPeopleData = async (year: string | null) =>
   getData(year, "people");
-
-console.log(`Loaded \n${JSON.stringify(consts, undefined, 4)}`);
 export const places: Place[] = consts.places as Place[];
 export const api_key = consts.api_key;
 export const user_id = consts.user_id;

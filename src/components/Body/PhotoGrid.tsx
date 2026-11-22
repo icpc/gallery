@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
-import { Photo, PhotoSource } from "../../types";
+import type { Photo, PhotoSource } from "../../types";
 
 interface Props {
   photos: Photo[];
@@ -31,11 +31,12 @@ const PhotoGrid: FC<Props> = ({ photos, handleClick }) => {
   return (
     <div className="masonry">
       {photos.map((photo) => {
+        const picked = pickSrc(photo.sources) ?? photo.src;
         return (
           <figure key={photo.id} className="masonry-brick">
             <LazyLoadImage
               className="preview"
-              src={pickSrc(photo.sources).url}
+              src={picked.url}
               alt={`Photo ${photo.id}`}
               onClick={() => handleClick(photo.id)}
             />

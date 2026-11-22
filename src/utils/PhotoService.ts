@@ -1,9 +1,9 @@
-import { MAX_ALBUM_SIZE, api_key, user_id } from "../consts";
+import { api_key, MAX_ALBUM_SIZE, user_id } from "../consts";
 import {
-  FlickrPhoto,
-  FlickrPhotoInfoResponse,
-  FlickrPhotosResponse,
-  FlickrPhotosetResponse,
+  type FlickrPhoto,
+  type FlickrPhotoInfoResponse,
+  type FlickrPhotosetResponse,
+  type FlickrPhotosResponse,
   flickrSizes,
 } from "../types";
 
@@ -52,7 +52,8 @@ async function fetchData<T>(
     // Mimic axios response structure for compatibility
     return { data };
   } catch (e) {
-    console.log(e);
+    console.error(e);
+    return undefined;
   }
 }
 

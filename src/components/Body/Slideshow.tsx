@@ -1,6 +1,6 @@
-import { FC, useEffect } from "react";
+import { type FC, useEffect } from "react";
 
-import { Photo } from "../../types";
+import type { Photo } from "../../types";
 import { useAppContext } from "../AppContext";
 
 import Control from "./Control";
