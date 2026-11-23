@@ -4,13 +4,15 @@ name: Create a release file
 
 on: workflow_dispatch
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   build:
     name: Create artifacts from master
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
 
     strategy:
       matrix:
@@ -35,28 +37,35 @@ jobs:
             data_folder: dataACPC
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: latest
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
       - name: Build
-        run: PUBLIC_URL=${{ matrix.public_url }} VITE_DATA_FOLDER=${{ matrix.data_folder }} ./build.sh
+        env:
+          PUBLIC_URL: ${{ matrix.public_url }}
+          VITE_DATA_FOLDER: ${{ matrix.data_folder }}
+        run: ./build.sh
       - name: Upload
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: build-${{ matrix.public_url }}
           path: ${{ matrix.public_url }}.zip
+          retention-days: 1
+          if-no-files-found: error
   merge:
     name: Merge zips into one
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: build
+    permissions: {}
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           path: .
       - name: Unzip all zip from multiple zips
@@ -69,7 +78,7 @@ jobs:
           rm *.zip
           ls
       - name: Upload raw
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: all
           path: build-all

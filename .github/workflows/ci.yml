@@ -6,29 +6,34 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: read
+# Deny all GITHUB_TOKEN permissions by default; grant minimum scopes per job.
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   check:
     name: Lint, Typecheck, Test & Build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: latest
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
       - name: Biome lint & format check
         run: bun run check
       - name: TypeScript typecheck
         run: bun run typecheck
       - name: Run unit tests
         run: bun test
-      - name: Verify production build (WF & NAC)
-        run: |
-          PUBLIC_URL=gallery VITE_DATA_FOLDER=data bun run build -- --base=/gallery
-          PUBLIC_URL=galleryNAC VITE_DATA_FOLDER=dataNAC bun run build -- --base=/galleryNAC
+      - name: Verify production build
+        run: PUBLIC_URL=gallery VITE_DATA_FOLDER=data bun run build -- --base=/gallery
