@@ -141,3 +141,32 @@ export function resolveHorizontalSnap(
   }
   return null;
 }
+
+const DISMISS_DISTANCE_RATIO = 0.18;
+const DISMISS_MAX_THRESHOLD_PX = 140;
+const DISMISS_MIN_FLICK_PX = 24;
+
+/**
+ * Decides whether a downward vertical drag on the mobile photo stage (when the
+ * info drawer is closed) should dismiss the viewer back to the gallery.
+ */
+export function resolveDismissSnap(
+  deltaY: number,
+  viewerHeight: number,
+  velocityY: number,
+): boolean {
+  if (viewerHeight <= 0 || deltaY <= 0) {
+    return false;
+  }
+  if (velocityY <= -FLICK_VELOCITY_PX_PER_MS) {
+    return false;
+  }
+  if (velocityY >= FLICK_VELOCITY_PX_PER_MS && deltaY >= DISMISS_MIN_FLICK_PX) {
+    return true;
+  }
+  const threshold = Math.min(
+    DISMISS_MAX_THRESHOLD_PX,
+    viewerHeight * DISMISS_DISTANCE_RATIO,
+  );
+  return deltaY >= threshold;
+}
