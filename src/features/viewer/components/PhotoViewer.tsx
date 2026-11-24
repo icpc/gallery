@@ -17,6 +17,7 @@ import {
   computeMobileInfoHeight,
   type Dimensions,
   MOBILE_TOOLBAR_OFFSET_PX,
+  resolveDismissSnap,
   resolveSheetSnap,
 } from "@/features/viewer/utils/imageFit";
 import { useLocalStorageBoolean } from "@/shared/hooks/useLocalStorage";
@@ -29,6 +30,9 @@ const DESKTOP_INFO_STORAGE_KEY = "gallery:infoSidebarOpen";
 const DESKTOP_SIDEBAR_WIDTH = 360;
 const SLIDESHOW_IDLE_HIDE_MS = 2500;
 const SIDEBAR_DRAG_DEADZONE_PX = 8;
+const DISMISS_EXIT_MS = 180;
+
+type VerticalDragIntent = "sheet" | "dismiss" | null;
 
 interface SidebarDragState {
   startX: number;
@@ -62,8 +66,9 @@ interface PhotoViewerProps {
  *   info sidebar (open/closed state persisted in `localStorage`) and
  *   hover-revealed edge navigation buttons.
  * - Mobile (Google Photos style): full-height photo by default with swipe
- *   navigation, pinned floating top toolbar, and a continuously draggable
- *   bottom info sheet that attaches flush beneath the photo with zero gap.
+ *   navigation, pull-down-to-dismiss back to the gallery, pinned floating top
+ *   toolbar, and a continuously draggable bottom info sheet that attaches flush
+ *   beneath the photo with zero gap.
  */
 export const PhotoViewer: FC<PhotoViewerProps> = ({
   photo,
@@ -86,6 +91,8 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
   );
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
   const [dragHeight, setDragHeight] = useState<number | null>(null);
+  const [dismissDragY, setDismissDragY] = useState(0);
+  const [isDismissing, setIsDismissing] = useState(false);
   const [viewerSize, setViewerSize] = useState<Dimensions>(() => ({
     width: typeof window !== "undefined" ? window.innerWidth : 0,
     height: typeof window !== "undefined" ? window.innerHeight : 0,
@@ -97,9 +104,20 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
   const sidebarWrapperRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const sidebarDragRef = useRef<SidebarDragState | null>(null);
+  const verticalIntentRef = useRef<VerticalDragIntent>(null);
+  const dismissTimerRef = useRef<number | null>(null);
   const wheelDeltaRef = useRef(0);
   const wheelResetTimerRef = useRef<number | null>(null);
   const idleTimerRef = useRef<number | null>(null);
+
+  const clearDismissTimer = useCallback(() => {
+    if (dismissTimerRef.current !== null) {
+      window.clearTimeout(dismissTimerRef.current);
+      dismissTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => clearDismissTimer, [clearDismissTimer]);
 
   useEffect(() => {
     const element = viewerRef.current;
@@ -126,9 +144,13 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: photo.id resets info panel scroll and transient drag on photo change
   useEffect(() => {
+    clearDismissTimer();
+    verticalIntentRef.current = null;
     setDragHeight(null);
+    setDismissDragY(0);
+    setIsDismissing(false);
     sidebarRef.current?.scrollTo({ top: 0, behavior: "instant" });
-  }, [photo.id]);
+  }, [photo.id, clearDismissTimer]);
 
   // Viewer-owned keyboard shortcuts (ArrowLeft / ArrowRight / Space / Escape)
   useEffect(() => {
@@ -264,11 +286,59 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
       ? 1
       : 0;
 
+  const isDraggingDismiss = !desktop && dismissDragY > 0 && !isDismissing;
+  const dismissDistance = Math.max(viewerSize.height, 400) * 0.45;
+  const dismissProgress = isDismissing
+    ? 1
+    : Math.min(1, Math.max(0, dismissDragY / dismissDistance));
+  const stageTranslateY = isDismissing
+    ? Math.round(dismissDistance)
+    : dismissDragY;
+  const stageScale = isDismissing ? 0.82 : 1 - dismissProgress * 0.14;
+  const stageOpacity = isDismissing ? 0 : 1;
+  const backdropOpacity = isDismissing
+    ? 0
+    : isDraggingDismiss
+      ? Math.max(0.08, 1 - dismissProgress * 0.92)
+      : 1;
+  const toolbarOpacity =
+    hideSlideshowChrome || isDismissing
+      ? 0
+      : isDraggingDismiss
+        ? Math.max(0, 1 - dismissProgress * 2.5)
+        : 1;
+
   const handleStageDragMove = useCallback(
     (deltaY: number) => {
-      if (desktop || isSlideShow || editMode || targetMobileInfoHeight <= 0) {
+      if (desktop || editMode || isDismissing) {
         return;
       }
+
+      if (verticalIntentRef.current === null) {
+        if (showSidebar) {
+          if (!isSlideShow && targetMobileInfoHeight > 0) {
+            verticalIntentRef.current = "sheet";
+          }
+        } else if (deltaY > 0) {
+          verticalIntentRef.current = "dismiss";
+        } else if (deltaY < 0 && !isSlideShow && targetMobileInfoHeight > 0) {
+          verticalIntentRef.current = "sheet";
+        }
+      }
+
+      if (verticalIntentRef.current === "dismiss") {
+        setDismissDragY(Math.max(0, deltaY));
+        return;
+      }
+
+      if (
+        verticalIntentRef.current !== "sheet" ||
+        isSlideShow ||
+        targetMobileInfoHeight <= 0
+      ) {
+        return;
+      }
+
       const startHeight = showSidebar ? targetMobileInfoHeight : 0;
       const nextHeight = Math.max(
         0,
@@ -276,15 +346,54 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
       );
       setDragHeight(nextHeight);
     },
-    [desktop, isSlideShow, editMode, showSidebar, targetMobileInfoHeight],
+    [
+      desktop,
+      editMode,
+      isDismissing,
+      isSlideShow,
+      showSidebar,
+      targetMobileInfoHeight,
+    ],
   );
 
   const handleStageDragEnd = useCallback(
     (deltaY: number, velocityY: number) => {
-      if (desktop || isSlideShow || editMode || targetMobileInfoHeight <= 0) {
+      const intent = verticalIntentRef.current;
+      verticalIntentRef.current = null;
+
+      if (desktop || editMode || isDismissing) {
+        setDragHeight(null);
+        setDismissDragY(0);
+        return;
+      }
+
+      if (intent === "dismiss") {
+        if (resolveDismissSnap(deltaY, viewerSize.height, velocityY)) {
+          const prefersReducedMotion =
+            typeof window !== "undefined" &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (prefersReducedMotion) {
+            setDismissDragY(0);
+            onClose();
+            return;
+          }
+          setIsDismissing(true);
+          clearDismissTimer();
+          dismissTimerRef.current = window.setTimeout(() => {
+            dismissTimerRef.current = null;
+            onClose();
+          }, DISMISS_EXIT_MS);
+        } else {
+          setDismissDragY(0);
+        }
+        return;
+      }
+
+      if (intent !== "sheet" || isSlideShow || targetMobileInfoHeight <= 0) {
         setDragHeight(null);
         return;
       }
+
       const startHeight = showSidebar ? targetMobileInfoHeight : 0;
       const currentHeight = Math.max(
         0,
@@ -299,11 +408,23 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
       setMobileInfoOpen(shouldOpen);
       setDragHeight(null);
     },
-    [desktop, isSlideShow, editMode, showSidebar, targetMobileInfoHeight],
+    [
+      desktop,
+      editMode,
+      isDismissing,
+      isSlideShow,
+      showSidebar,
+      targetMobileInfoHeight,
+      viewerSize.height,
+      clearDismissTimer,
+      onClose,
+    ],
   );
 
   const handleStageDragCancel = useCallback(() => {
+    verticalIntentRef.current = null;
     setDragHeight(null);
+    setDismissDragY(0);
   }, []);
 
   useEffect(
@@ -434,8 +555,7 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
       const drag = sidebarDragRef.current;
       sidebarDragRef.current = null;
       if (
-        !drag ||
-        !drag.dragging ||
+        !drag?.dragging ||
         e.changedTouches.length !== 1 ||
         targetMobileInfoHeight <= 0
       ) {
@@ -497,6 +617,7 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
     <Dialog
       open
       fullScreen
+      hideBackdrop
       onClose={(_event, reason) => {
         if (reason !== "escapeKeyDown") {
           onClose();
@@ -504,8 +625,11 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
       }}
       slotProps={{
         paper: {
+          elevation: 0,
           sx: {
-            bgcolor: "#000",
+            bgcolor: "transparent",
+            backgroundImage: "none",
+            boxShadow: "none",
             borderRadius: 0,
             overflow: "hidden",
             overscrollBehavior: "none",
@@ -524,7 +648,13 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
           height: "100%",
           overflow: "hidden",
           overscrollBehavior: "none",
-          bgcolor: "#000",
+          bgcolor: `rgba(0, 0, 0, ${backdropOpacity})`,
+          transition: isDraggingDismiss
+            ? "none"
+            : `background-color ${isDismissing ? DISMISS_EXIT_MS : 220}ms cubic-bezier(0.2, 0, 0, 1)`,
+          "@media (prefers-reduced-motion: reduce)": {
+            transition: "none",
+          },
           cursor: hideSlideshowChrome ? "none" : "default",
         }}
       >
@@ -553,9 +683,12 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
               left: 0,
               right: 0,
               zIndex: 3,
-              opacity: hideSlideshowChrome ? 0 : 1,
-              pointerEvents: hideSlideshowChrome ? "none" : "auto",
-              transition: "opacity 200ms ease",
+              opacity: toolbarOpacity,
+              pointerEvents:
+                hideSlideshowChrome || isDraggingDismiss || isDismissing
+                  ? "none"
+                  : "auto",
+              transition: isDraggingDismiss ? "none" : "opacity 180ms ease",
             }}
           >
             <PhotoViewerToolbar
@@ -572,20 +705,43 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
             />
           </Box>
 
-          <PhotoStage
-            photo={photo}
-            prevPhoto={prevPhoto}
-            nextPhoto={nextPhoto}
-            showNavArrows={showNavArrows}
-            hasPrev={hasPrev}
-            hasNext={hasNext}
-            onPrev={onPrev}
-            onNext={() => onNext(false)}
-            onVerticalDragMove={!desktop ? handleStageDragMove : undefined}
-            onVerticalDragEnd={!desktop ? handleStageDragEnd : undefined}
-            onVerticalDragCancel={!desktop ? handleStageDragCancel : undefined}
-            hideFaces={isSlideShow}
-          />
+          <Box
+            sx={{
+              flex: "1 1 0%",
+              minWidth: 0,
+              minHeight: 0,
+              display: "flex",
+              transform:
+                stageTranslateY > 0 || isDismissing
+                  ? `translate3d(0, ${stageTranslateY}px, 0) scale(${stageScale})`
+                  : "none",
+              opacity: stageOpacity,
+              transition: isDraggingDismiss
+                ? "none"
+                : `transform ${isDismissing ? DISMISS_EXIT_MS : 220}ms cubic-bezier(0.2, 0, 0, 1), opacity ${DISMISS_EXIT_MS}ms ease`,
+              willChange: !desktop ? "transform, opacity" : "auto",
+              "@media (prefers-reduced-motion: reduce)": {
+                transition: "none",
+              },
+            }}
+          >
+            <PhotoStage
+              photo={photo}
+              prevPhoto={prevPhoto}
+              nextPhoto={nextPhoto}
+              showNavArrows={showNavArrows}
+              hasPrev={hasPrev}
+              hasNext={hasNext}
+              onPrev={onPrev}
+              onNext={() => onNext(false)}
+              onVerticalDragMove={!desktop ? handleStageDragMove : undefined}
+              onVerticalDragEnd={!desktop ? handleStageDragEnd : undefined}
+              onVerticalDragCancel={
+                !desktop ? handleStageDragCancel : undefined
+              }
+              hideFaces={isSlideShow}
+            />
+          </Box>
         </Box>
 
         <Box

@@ -4,6 +4,7 @@ import {
   computeMobileInfoHeight,
   fitDimensions,
   MOBILE_TOOLBAR_OFFSET_PX,
+  resolveDismissSnap,
   resolveHorizontalSnap,
   resolveSheetSnap,
 } from "./imageFit";
@@ -80,5 +81,25 @@ describe("horizontal mobile swipe helpers", () => {
     expect(resolveHorizontalSnap(-40, 400, true, true, 0)).toBeNull();
     expect(resolveHorizontalSnap(-150, 400, true, false, -0.8)).toBeNull();
     expect(resolveHorizontalSnap(150, 400, false, true, 0.8)).toBeNull();
+  });
+});
+
+describe("resolveDismissSnap", () => {
+  it("dismisses on quick downward flick past minimum travel", () => {
+    expect(resolveDismissSnap(40, 800, 0.6)).toBe(true);
+    expect(resolveDismissSnap(16, 800, 0.6)).toBe(false);
+  });
+
+  it("dismisses on slow drag past threshold and cancels on short drag or upward flick", () => {
+    expect(resolveDismissSnap(145, 800, 0)).toBe(true);
+    expect(resolveDismissSnap(90, 800, 0)).toBe(false);
+    expect(resolveDismissSnap(200, 800, -0.5)).toBe(false);
+    expect(resolveDismissSnap(80, 400, 0)).toBe(true);
+  });
+
+  it("never dismisses for non-positive drag or invalid viewport height", () => {
+    expect(resolveDismissSnap(0, 800, 0.8)).toBe(false);
+    expect(resolveDismissSnap(-50, 800, 0.8)).toBe(false);
+    expect(resolveDismissSnap(200, 0, 0.8)).toBe(false);
   });
 });
