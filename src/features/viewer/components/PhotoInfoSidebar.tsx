@@ -84,14 +84,7 @@ export const PhotoInfoSidebar = forwardRef<
   HTMLDivElement,
   PhotoInfoSidebarProps
 >(({ photo, desktop, onCloseSidebar }, ref) => {
-  const {
-    events,
-    teams,
-    setYear,
-    setEvent,
-    setTeam,
-    setPerson: filterByPerson,
-  } = useGallery();
+  const { events, teams, setYear, setEvent, setTeam, setText } = useGallery();
   const {
     photoInfo,
     editMode,
@@ -199,7 +192,7 @@ export const PhotoInfoSidebar = forwardRef<
 
           <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
             {!editMode ? (
-              <Tooltip title="Edit tags">
+              <Tooltip title="Edit tags (E)">
                 <IconButton
                   size="small"
                   onClick={(e) => {
@@ -212,7 +205,7 @@ export const PhotoInfoSidebar = forwardRef<
                 </IconButton>
               </Tooltip>
             ) : (
-              <Tooltip title="Exit edit mode">
+              <Tooltip title="Exit edit mode (E)">
                 <IconButton
                   size="small"
                   onClick={(e) => {
@@ -227,7 +220,7 @@ export const PhotoInfoSidebar = forwardRef<
             )}
 
             {!editMode && onCloseSidebar && (
-              <Tooltip title="Close info panel">
+              <Tooltip title="Close info panel (I)">
                 <IconButton
                   size="small"
                   onClick={onCloseSidebar}
@@ -266,15 +259,31 @@ export const PhotoInfoSidebar = forwardRef<
 
             <Autocomplete
               multiple
+              freeSolo
               options={[]}
-              value={photoInfo.person.map((p) => p.name)}
-              onChange={(_e, val) => setPhotoPersons(val)}
+              value={photoInfo.photographer}
+              onChange={(_e, val) => setPhotographer(val)}
               renderInput={(params) => (
                 <TextField
                   {...params}
                   size="small"
-                  label="People"
-                  placeholder="Drag on photo to add face"
+                  label="Photographer"
+                  variant="filled"
+                />
+              )}
+            />
+
+            <Autocomplete
+              multiple
+              freeSolo
+              options={places.map(({ year }) => year)}
+              value={photoInfo.album}
+              onChange={(_e, val) => setAlbum(val)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  size="small"
+                  label="Album"
                   variant="filled"
                 />
               )}
@@ -314,31 +323,15 @@ export const PhotoInfoSidebar = forwardRef<
 
             <Autocomplete
               multiple
-              freeSolo
               options={[]}
-              value={photoInfo.photographer}
-              onChange={(_e, val) => setPhotographer(val)}
+              value={sortedPersons.map((p) => p.name)}
+              onChange={(_e, val) => setPhotoPersons(val)}
               renderInput={(params) => (
                 <TextField
                   {...params}
                   size="small"
-                  label="Photographer"
-                  variant="filled"
-                />
-              )}
-            />
-
-            <Autocomplete
-              multiple
-              freeSolo
-              options={places.map(({ year }) => year)}
-              value={photoInfo.album}
-              onChange={(_e, val) => setAlbum(val)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size="small"
-                  label="Album"
+                  label="People"
+                  placeholder="Drag on photo to add face"
                   variant="filled"
                 />
               )}
@@ -477,7 +470,7 @@ export const PhotoInfoSidebar = forwardRef<
                     clickable
                     onMouseEnter={() => setFace(person)}
                     onMouseLeave={() => setFace(null)}
-                    onClick={() => filterByPerson(person.name)}
+                    onClick={() => setText(person.name)}
                   />
                 ))}
               </InfoSection>

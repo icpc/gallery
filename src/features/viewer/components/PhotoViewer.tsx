@@ -7,6 +7,7 @@ import {
   useState,
   type WheelEvent,
 } from "react";
+import { FLICKR_IMAGE_PREFIX } from "@/config/gallery";
 import { useGallery } from "@/features/gallery/state/GalleryContext";
 import {
   DEFAULT_SLIDESHOW_INTERVAL_MS,
@@ -20,6 +21,7 @@ import {
   resolveDismissSnap,
   resolveSheetSnap,
 } from "@/features/viewer/utils/imageFit";
+import { resolveViewerHotkey } from "@/features/viewer/utils/viewerHotkeys";
 import { useLocalStorageBoolean } from "@/shared/hooks/useLocalStorage";
 import type { Photo } from "@/types/gallery";
 import { PhotoInfoSidebar } from "./PhotoInfoSidebar";
@@ -152,44 +154,6 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
     sidebarRef.current?.scrollTo({ top: 0, behavior: "instant" });
   }, [photo.id, clearDismissTimer]);
 
-  // Viewer-owned keyboard shortcuts (ArrowLeft / ArrowRight / Space / Escape)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.isContentEditable)
-      ) {
-        return;
-      }
-      switch (e.key) {
-        case "ArrowLeft":
-          if (!editMode) onPrev();
-          break;
-        case "ArrowRight":
-          if (!editMode) onNext(false);
-          break;
-        case " ":
-          if (!editMode) {
-            e.preventDefault();
-            setIsSlideShow(!isSlideShow);
-          }
-          break;
-        case "Escape":
-          onClose();
-          break;
-        default:
-          break;
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [editMode, isSlideShow, onPrev, onNext, setIsSlideShow, onClose]);
-
   // Auto-hide toolbar and cursor during slideshow after mouse inactivity
   const bumpSlideshowActivity = useCallback(() => {
     if (!isSlideShow) return;
@@ -249,6 +213,86 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
       setMobileInfoOpen((prev) => !prev);
     }
   }, [desktop, setDesktopInfoOpen]);
+
+  // Viewer-owned keyboard shortcuts (Arrows, Space, Escape, I, D, F, E)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      const action = resolveViewerHotkey(e, { editMode, isSlideShow });
+      if (!action) {
+        return;
+      }
+
+      switch (action) {
+        case "prev":
+          onPrev();
+          break;
+        case "next":
+          onNext(false);
+          break;
+        case "toggleSlideshow":
+          e.preventDefault();
+          setIsSlideShow(!isSlideShow);
+          break;
+        case "close":
+          e.preventDefault();
+          onClose();
+          break;
+        case "toggleInfo":
+          e.preventDefault();
+          handleToggleInfo();
+          break;
+        case "download": {
+          e.preventDefault();
+          const link = document.createElement("a");
+          link.href = photo.origin ?? photo.src.url;
+          link.download = "";
+          link.target = "_blank";
+          link.rel = "noreferrer";
+          link.click();
+          break;
+        }
+        case "openFlickr":
+          e.preventDefault();
+          window.open(
+            `${FLICKR_IMAGE_PREFIX}${photo.id}`,
+            "_blank",
+            "noopener,noreferrer",
+          );
+          break;
+        case "toggleEdit":
+          e.preventDefault();
+          setEditMode(!editMode);
+          break;
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [
+    editMode,
+    isSlideShow,
+    photo.id,
+    photo.origin,
+    photo.src.url,
+    onPrev,
+    onNext,
+    setIsSlideShow,
+    onClose,
+    handleToggleInfo,
+    setEditMode,
+  ]);
 
   const infoOpen = desktop ? desktopInfoOpen : mobileInfoOpen;
   const showSidebar = !isSlideShow && (infoOpen || editMode);
@@ -618,11 +662,7 @@ export const PhotoViewer: FC<PhotoViewerProps> = ({
       open
       fullScreen
       hideBackdrop
-      onClose={(_event, reason) => {
-        if (reason !== "escapeKeyDown") {
-          onClose();
-        }
-      }}
+      onClose={() => onClose()}
       slotProps={{
         paper: {
           elevation: 0,

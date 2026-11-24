@@ -119,7 +119,7 @@ export const PhotoViewerToolbar: FC<PhotoViewerToolbarProps> = ({
 
         {!isSlideShow && !editMode && (
           <>
-            <Tooltip title="Download original">
+            <Tooltip title="Download original (D)">
               <IconButton
                 href={photo.origin ?? photo.src.url}
                 download
@@ -132,7 +132,7 @@ export const PhotoViewerToolbar: FC<PhotoViewerToolbarProps> = ({
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Open on Flickr">
+            <Tooltip title="Open on Flickr (F)">
               <IconButton
                 href={`${FLICKR_IMAGE_PREFIX}${photo.id}`}
                 target="_blank"
@@ -144,7 +144,7 @@ export const PhotoViewerToolbar: FC<PhotoViewerToolbarProps> = ({
               </IconButton>
             </Tooltip>
 
-            <Tooltip title={infoOpen ? "Hide info" : "Show info"}>
+            <Tooltip title={infoOpen ? "Hide info (I)" : "Show info (I)"}>
               <IconButton
                 onClick={onToggleInfo}
                 aria-label={infoOpen ? "Hide info" : "Show info"}
