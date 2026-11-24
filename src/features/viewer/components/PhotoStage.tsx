@@ -49,12 +49,28 @@ function pickPreviewUrl(photo: Photo): string | null {
   return picked.url;
 }
 
+function buildCandidateUrls(photo: Photo): string[] {
+  const urls: string[] = [];
+  if (photo.src.url) {
+    urls.push(photo.src.url);
+  }
+  for (let i = photo.sources.length - 1; i >= 0; i -= 1) {
+    const candidate = photo.sources[i]?.url;
+    if (candidate && !urls.includes(candidate)) {
+      urls.push(candidate);
+    }
+  }
+  return urls;
+}
+
 const AdjacentSlide: FC<{
   photo: Photo;
   containerSize: Dimensions;
   side: "prev" | "next";
 }> = ({ photo, containerSize, side }) => {
+  const [loadedPhotoId, setLoadedPhotoId] = useState<string | null>(null);
   const previewUrl = pickPreviewUrl(photo);
+  const isLoaded = loadedPhotoId === photo.id;
   const fitted = fitDimensions(
     photo.src.width,
     photo.src.height,
@@ -115,6 +131,7 @@ const AdjacentSlide: FC<{
           alt=""
           draggable={false}
           decoding="async"
+          onLoad={() => setLoadedPhotoId(photo.id)}
           sx={{
             position: "relative",
             display: "block",
@@ -123,6 +140,7 @@ const AdjacentSlide: FC<{
             maxWidth: "100%",
             maxHeight: "100%",
             objectFit: "contain",
+            opacity: isLoaded ? 1 : 0,
           }}
         />
       </Box>
@@ -173,14 +191,20 @@ export const PhotoStage: FC<PhotoStageProps> = ({
   const { photoInfo, editMode, face, setFace, appendPerson } = usePhotoInfo();
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const mainImgRef = useRef<HTMLImageElement>(null);
   const [containerSize, setContainerSize] = useState<Dimensions>({
     width: 0,
     height: 0,
   });
   const [loadedMeta, setLoadedMeta] = useState<{
     photoId: string;
+    url: string;
     size: Dimensions;
   } | null>(null);
+  const [fallbackState, setFallbackState] = useState<{
+    photoId: string;
+    index: number;
+  }>({ photoId: photo.id, index: 0 });
   const [crop, setCrop] = useState<Crop | undefined>(undefined);
   const [horizontalDragX, setHorizontalDragX] = useState(0);
   const [horizontalSnap, setHorizontalSnap] =
@@ -242,10 +266,32 @@ export const PhotoStage: FC<PhotoStageProps> = ({
     return () => observer.disconnect();
   }, []);
 
+  const candidateUrls = buildCandidateUrls(photo);
+  const activeFallbackIndex =
+    fallbackState.photoId === photo.id ? fallbackState.index : 0;
+  const activeUrl = candidateUrls[activeFallbackIndex] ?? photo.src.url;
+
   const currentLoadedSize =
-    loadedMeta?.photoId === photo.id ? loadedMeta.size : null;
-  const isFullResLoaded = loadedMeta?.photoId === photo.id;
+    loadedMeta?.photoId === photo.id && loadedMeta.url === activeUrl
+      ? loadedMeta.size
+      : null;
+  const isFullResLoaded =
+    loadedMeta?.photoId === photo.id && loadedMeta.url === activeUrl;
   const previewUrl = pickPreviewUrl(photo);
+
+  useEffect(() => {
+    const img = mainImgRef.current;
+    if (img?.complete && img.naturalWidth > 0) {
+      setLoadedMeta({
+        photoId: photo.id,
+        url: activeUrl,
+        size: {
+          width: img.naturalWidth,
+          height: img.naturalHeight,
+        },
+      });
+    }
+  }, [photo.id, activeUrl]);
 
   const naturalWidth =
     photo.src.width > 0 ? photo.src.width : (currentLoadedSize?.width ?? 0);
@@ -263,11 +309,21 @@ export const PhotoStage: FC<PhotoStageProps> = ({
     const img = e.currentTarget;
     setLoadedMeta({
       photoId: photo.id,
+      url: activeUrl,
       size: {
         width: img.naturalWidth,
         height: img.naturalHeight,
       },
     });
+  };
+
+  const handleImageError = () => {
+    if (activeFallbackIndex + 1 < candidateUrls.length) {
+      setFallbackState({
+        photoId: photo.id,
+        index: activeFallbackIndex + 1,
+      });
+    }
   };
 
   const handleCreatePerson = (name: string | null, currentCrop: Crop) => {
@@ -483,11 +539,13 @@ export const PhotoStage: FC<PhotoStageProps> = ({
           >
             <Box
               component="img"
-              key={photo.id}
-              src={photo.src.url}
+              ref={mainImgRef}
+              key={`${photo.id}-${activeUrl}`}
+              src={activeUrl}
               alt={`Gallery item ${photo.id}`}
               draggable={false}
               onLoad={handleImageLoad}
+              onError={handleImageError}
               sx={{
                 position: "relative",
                 display: "block",
@@ -496,6 +554,7 @@ export const PhotoStage: FC<PhotoStageProps> = ({
                 maxWidth: "100%",
                 maxHeight: "100%",
                 objectFit: "contain",
+                opacity: isFullResLoaded ? 1 : 0,
                 touchAction: editMode || !desktop ? "none" : "auto",
               }}
             />
