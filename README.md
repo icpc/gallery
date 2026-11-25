@@ -1,114 +1,119 @@
-# [ICPC.global](https://icpc.global) World Finals Photo Gallery V2022
+# [ICPC.global](https://icpc.global) Photo Gallery
 
-Created to substitute [news.icpc.global/gallery](https://news.icpc.global/gallery) photoarchive.
+Static, no-backend React + TypeScript single-page photo gallery backed by the Flickr REST API, powering [news.icpc.global/gallery](https://news.icpc.global/gallery) and regional ICPC galleries.
 
-[Figma mockups](https://www.figma.com/file/MvNh0jm8dj0LXOh9vsVUbK/ICPC-Live?node-id=0%3A1)
+- [Figma mockups](https://www.figma.com/file/MvNh0jm8dj0LXOh9vsVUbK/ICPC-Live?node-id=0%3A1)
+- [Flickr tagging tutorial](https://docs.google.com/document/d/1yBeLEYyGG2FpZGjBmAHP37gJAnKGtA56hAf1XjW8d18/edit#heading=h.iv1qq69p60ub)
 
-Important features to keep:
+## Features
 
-- no-backend flickr-based solution
-- photos are classified based on public flickr tags: year, event, team
-- individuals are tagged as "Firstname Lastname (location)"
-- show metadata information: photographer, year, event, team, tagged individuals, highlight tag locations
-- search by substring over all tags
-- easy image download
-- adaptive interface for larger screens
-- mobile version
+- **No-backend Flickr integration**: fetches albums and metadata directly from the public Flickr REST API with progressive page-1-first loading and persistent `localStorage` caching (`@tanstack/react-query`).
+- **Multi-region builds**: one codebase builds 9 regional gallery instances (`data`, `dataNAC`, `dataNERC`, `dataLAC`, `dataAE`, `dataAW`, `dataAP`, `dataEU`, `dataACPC`).
+- **Metadata & face tagging**: parses Flickr tags for photographer, album/year, event, team, and face coordinates (`Firstname Lastname(rect64)`), highlighting tagged faces on hover and allowing users to suggest tag/face edits via Gmail, email, or raw tag copy.
+- **Responsive fullscreen viewer & slideshow**:
+  - **Desktop**: collapsible right-hand Info rail, hover navigation arrows, and full keyboard navigation.
+  - **Mobile**: continuous horizontal swipe carousel between photos, pull-up bottom Info sheet attached flush beneath the photo, pull-down on the Info pane to close it, and pull-down on the photo (when Info is closed) to dismiss back to the gallery.
+- **Filtering & global search**: filter within any year by event, team, or person, or search by keyword across all years.
+- **Build-time SEO**: generates `sitemap.txt` and `robots.txt` for every regional bundle.
 
-# User guide
+## User Guide
 
-Welcome to the updated icpc gallery. All official photos from ICPC World Finals are stored here. If you would like to contribute your photos, email to lidia@icpc.global.
+All official photos from ICPC World Finals and regional contests are archived here. If you would like to contribute photos, email `lidia@icpc.global`.
 
-## Year Filter
+### Filtering & Search
 
-Select a year! Selector is located on the left on desktop and in the upper menu on mobile/ By default, when selectin a year with no other filters preset, you will enter a `Photo Tour`.
+- **Year**: Pick a year from the left navigation rail on desktop or the top header menu on mobile. Selecting a year opens `Photo Tour` by default when no other filter is active.
+- **Event**: Filter photos within the selected year by event (e.g., `Photo Tour`, `Opening Ceremony`, `Team Photos`, `World Finals`, `Closing Ceremony`).
+- **Team**: Pick or type a team name to view all photos tagged with that team in the selected year.
+- **People**: Pick or type an individual's name to view their photos in the selected year, or click any person's chip in the photo Info panel to run a global search across all years.
+- **Global Search**: Enter any keyword in the Search bar (e.g., `Bill`, `Opening`, `trophy`) to search across all years.
 
-## Event Filter
+### Photo Viewer Keyboard Shortcuts
 
-Photos from each year are classified into multiple events. Select the appropriate event in the `Events` filter. Some noteworthy filters are `Opening Ceremony`. `Team Photos`, `World Finals` and `Closing Ceremony`.
+| Key | Action |
+| --- | --- |
+| `←` / `→` | Previous / next photo |
+| `Space` | Play / pause slideshow |
+| `I` | Toggle Info panel |
+| `D` | Download original photo |
+| `F` | Open photo on Flickr |
+| `E` | Toggle tag & face edit mode |
+| `Esc` | Close photo viewer |
 
-## Team Filter
+*(Letter shortcuts use physical key positions so they work regardless of keyboard layout.)*
 
-Pictures may have specific teams tagged in them. Select the team name from the list (or type a few letters to narrow your search) to get all images of that team in the selected year.
+## Flickr Tagging Format
 
-## People Filter
+All gallery metadata is stored as public Flickr tags:
 
-To select the images with recognised individuals, pick a name from the list of suggestions, or type a few letters to narrow your search.
+- **Album (year)**: `album$2001`
+- **Event**: `event$Team Photos`
+- **Team**: `team$Aalto University`
+- **Photographer**: `photographer$Bob Smith`
+- **Person (with optional face box)**: `Bill Poucher(1761524d3f579a4d)`
 
-## General Search
+### Picasa Standard Face Tag
 
-To search by a keyword just type it into the Search field. For example, `Bill`, `Opening` or `Champions`
+The 16 hexadecimal characters inside parentheses encode a 64-bit integer split into four 16-bit unsigned values (`left`, `top`, `right`, `bottom`). Dividing each 16-bit value by `65535` yields normalized coordinates in `[0, 1]`, allowing face overlays to scale accurately at any image size.
 
-# Development
+### Flickr Tag Notes
 
-The gallery is built on top of the flickr api backend. All metadata is stored in photo exif tags. Tag types are:
+- Enclose multi-word or punctuated tags in quotes when entering them manually on Flickr (e.g. `"team$Aalto University"`), otherwise Flickr splits them on spaces.
+- Flickr strips spaces and punctuation when matching tags during search; the gallery normalizes tags to match Flickr's behavior.
+- Preserve UTF-8 encoding on names so diacritics display consistently.
 
-- year, for example `album$2001`
-- event, for example `event$Team Photos`
-- team, for example `team$Aalto University`
-- person, for example `Bill Poucher(1761524d3f579a4d)`. The data in parenthesis denotes face location within the image in Picasa standard.
+## Development
 
-Visit [tutorial](https://docs.google.com/document/d/1yBeLEYyGG2FpZGjBmAHP37gJAnKGtA56hAf1XjW8d18/edit#heading=h.iv1qq69p60ub) for more info.
+### Tech Stack
 
-## Picasa Standard Face Tag
+- **Runtime, package manager & test runner**: [Bun](https://bun.sh)
+- **Frontend**: React 19, TypeScript 7 (strict), Material UI (MUI v9) + Emotion, React Router 8
+- **Data fetching & caching**: `@tanstack/react-query` + `localStorage` persister
+- **Bundler**: Vite 8 (Rolldown)
+- **Linting & formatting**: Biome 2.6
 
-The 16 characters enclosed in rect64(…) is a 64-bit hexadecimal number which can be broken up into four 16-bit numbers used to identify the position of the rectangle used to mark the face.
+### Local Setup & Commands
 
-If you divide each of the four 16-bit numbers by the maximum unsigned 16-bit number (65535), you’ll get four numbers between 0 and 1 which give the relative coordinates for the face rectangle in the order: left, top, right, bottom.
+Requires [Bun](https://bun.sh) installed locally.
 
-To calculate the absolute coordinates, multiply the left and right relative coordinates by the width of the image and multiply the top and bottom relative coordinates by the height of the image. This way the faces will always be identified even when the image is re-sized.
-
-## Flickr Tag Processing
-
-Even though flickr stores tags in their initial form, it is important to remember the following
-
-- by default, manually entered tags are split into separate words. Enclose the tag in quotes `"team$Aalto University"` to keep tag intact
-- flickr eliminates all spaces and non-letter sybmols from tags for the filtering purposes
-- make sure to keep correct encoding on tags, specifically in people names, to consistently process diacritic symbols
-- make sure to enclose all university names with punctuation in quotes
-
-## Configuration
-
-[`src/const.js`](https://github.com/icpc/gallery/blob/main/data/consts.js) contais access detail and general year setup.
-
-This repository supports multiple galleries, each with its own dedicated [`/data/`](https://github.com/icpc/gallery/tree/main/data) folder.
-Each year is represented by three files in this folder: `.event`, `.people` and `.team` with one item per line.
-
-## Production Deployment Guide
-
-1. After every commit Action [Publish Release](https://github.com/icpc/gallery/actions) will run automatically.
-1. Open the Action page for the corresponding run. Wait for it to finish
-1. Download the created `all_raw` on the bottom of the page
-1. Upload the acquired `all_raw.zip` archive into Bluehost -> Advanced -> File Manager -> under `home/public_html/newsicpc/` folder
-1. Select `all_raw.zip` in the bluehost filemanager webinterface and press the `Extract` button
-1. All new galleries are deployed, good job!
-
-## Development Deployment Guide
-
-Requires: Node 18+
-
-Select gallery instance and build
-
-```
-set version=
-
-set PUBLIC_URL=gallery%version%
-
-set VITE_DATA_FOLDER=data%version%
-
-echo "Making bundle with public_url=%PUBLIC_URL% and data=%VITE_DATA_FOLDER%"
-
-npm run build -- --base=/%PUBLIC_URL%
+```bash
+bun install                                                         # Install dependencies
+bun run dev                                                         # Local dev server on http://localhost:3000 (uses data/)
+bun run check                                                       # Biome lint, format, and import check
+bun run check:fix                                                   # Auto-fix Biome issues
+bun run typecheck                                                   # Strict TypeScript check (tsc --noEmit)
+bun test                                                            # Run unit tests
+PUBLIC_URL=gallery VITE_DATA_FOLDER=data bun run build -- --base=/gallery
 ```
 
-3. this will produce a folder named %PUBLIC_URL%
-4. upload this folder to your server
+To build a specific regional gallery locally (including a `.zip` archive):
 
-## Future Work:
+```bash
+PUBLIC_URL=galleryNAC VITE_DATA_FOLDER=dataNAC ./build.sh
+```
 
-- easy interface to suggest a photo tag change
-- (?) support universities changing names
-- rename events for better consistence (correct flickr tags)
-- release badge recognition tool
-- release tag embedding tool
-- support a face recognition tool
+On Windows, `build.bat` builds the selected `PUBLIC_URL` / `VITE_DATA_FOLDER` bundle, and `build-interactive.sh` offers an interactive regional selector.
+
+### Regional Data Configuration
+
+Each regional gallery lives in its own root `data*/` folder (`data`, `dataNAC`, `dataNERC`, `dataLAC`, `dataAE`, `dataAW`, `dataAP`, `dataEU`, `dataACPC`):
+
+- [`data/consts.js`](data/consts.js) defines Flickr credentials/photosets, tag prefixes, suggestion email, and the list of years/places.
+- Each year has three newline-delimited list files: `<year>.event`, `<year>.team`, and `<year>.people`.
+
+Offline helper tools for face recognition and tag review live in [`flickr-face-recog/`](flickr-face-recog/) and [`flickr-tag-reviewer/`](flickr-tag-reviewer/).
+
+## CI & Deployment
+
+All workflows live in [`.github/workflows/`](.github/workflows/):
+
+- **CI (`ci.yml`)**: Runs on every push and pull request to `main` — executes `bun run check`, `bun run typecheck`, `bun test`, and verifies the production build.
+- **GitHub Pages (`pages.yml`)**: Automatically builds all 9 regional galleries on push to `main` (or manual dispatch), repacks them, and deploys to GitHub Pages.
+- **FTP Production Deploy (`publish.yml`)**: Manually triggered (`workflow_dispatch`) to build all 9 regional galleries and deploy them via FTPS to `ftp.u.icpc.global`.
+- **Release Bundle (`release.yml`)**: Manually triggered (`workflow_dispatch`) to build and merge all 9 regional galleries into a single downloadable `all` artifact.
+
+## Roadmap / Future Work
+
+- Handle universities renaming across years cleanly
+- Standardize legacy event tag names on Flickr for consistency
+- Further automate face-recognition and tag-embedding workflows
